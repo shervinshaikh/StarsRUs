@@ -31,9 +31,11 @@ public class DataConnection {
 		
 		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 		
-		//depositMoney(1022, 500);
+		//depositMoney(1022, 10000);
 		
 		//validCustomer("billy", "cl");
+		
+		withdrawMoney(1022, 500);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -132,7 +134,7 @@ public class DataConnection {
 		
 		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
 		if(rs.next()){
-			System.out.println(rs.getInt("balance"));
+			//System.out.println(rs.getInt("balance"));
 			amount += rs.getInt("balance");
 		}
 		rs.close();
@@ -146,6 +148,41 @@ public class DataConnection {
 		
 		// Execute updates
 		pre_statement.executeUpdate();
+
+		pre_statement.close();
+		conn.close();
+		
+		return amount;
+	}
+	
+	public static double withdrawMoney(int taxid, double value) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		
+		double amount = value;
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
+		if(rs.next()){
+			amount = rs.getInt("balance") - amount;
+		}
+		rs.close();
+		
+		if(amount < 0){
+			System.out.println("error! can't be done!");
+			conn.close();
+			return -1;
+		}
+		
+		PreparedStatement pre_statement;
+		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
+		pre_statement = conn.prepareStatement(updateSuppSQL);
+		
+		pre_statement.setDouble(1, amount);
+		pre_statement.setInt(2, taxid);
+		
+		// Execute updates
+		pre_statement.executeUpdate();
+		System.out.println("Account now at:" + amount);
 
 		pre_statement.close();
 		conn.close();
