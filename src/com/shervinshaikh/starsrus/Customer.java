@@ -9,7 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Customer extends JPanel implements ActionListener {
+public class Customer implements ActionListener {
 
 	JButton depositB, withdrawB, buyB, submit;
 	JPanel buttons;

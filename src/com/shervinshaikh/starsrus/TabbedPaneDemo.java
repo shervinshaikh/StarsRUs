@@ -8,16 +8,23 @@ package com.shervinshaikh.starsrus;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
  
@@ -29,36 +36,57 @@ public class TabbedPaneDemo extends JPanel {
         JTabbedPane tabbedPane = new JTabbedPane();
         //ImageIcon icon = createImageIcon("images/middle.gif");
         //JComponent panel1 = makeTextPanel("Panel #1");
-        
         JButton submitD = new JButton("Submit");
         JTextField amountD = new JTextField(20);
-		//buyB.addActionListener(this);
+		submitD.addActionListener(new DepositListener());
+		
         JPanel p1 = new JPanel();
-        
         p1.add(amountD);
         p1.add(submitD);
         
         
         tabbedPane.addTab("Deposit", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
-        JButton submitW = new JButton("Submit");
-        JTextField amountW = new JTextField(20);
-		//buyB.addActionListener(this);
-        JPanel p2 = new JPanel();
         
-        p2.add(amountW);
-        p2.add(submitW);
         
         
         // WITHDRAW PANEL
+        JButton submitW = new JButton("Submit");
+        JTextField amountW = new JTextField(20);
+		
+        submitW.addActionListener(new WithdrawListener());
+		
+        JPanel p2 = new JPanel();
+        p2.add(amountW);
+        p2.add(submitW);
+        
         //JComponent panel2 = makeTextPanel("Panel #2");
         tabbedPane.addTab("Withdraw", p2);
         tabbedPane.setMnemonicAt(1, KeyEvent.VK_2);
          
         
+        
         // BUY PANEL
-        JComponent panel3 = makeTextPanel("Panel #3");
-        tabbedPane.addTab("Buy", panel3);
+        //JComponent panel3 = makeTextPanel("Panel #3");
+        JPanel p3 = new JPanel();
+        p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
+        JTextField sharesB = new JTextField(20);
+        
+        String [] stockSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values from the database
+        JList list = new JList(stockSymbols);
+        JScrollPane symbolScroll = new JScrollPane(list);
+        symbolScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        symbolScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list.setVisibleRowCount(4);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        JButton purchase = new JButton("Purchase");
+        purchase.addActionListener(new BuyListener());
+        
+        p3.add(sharesB);
+        p3.add(symbolScroll);
+        p3.add(purchase);
+        tabbedPane.addTab("Buy", p3);
         tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
          
         
@@ -68,9 +96,28 @@ public class TabbedPaneDemo extends JPanel {
         tabbedPane.addTab("Sell", panel4);
         tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
          
+        
+        
+        // MARKET ACCOUNT
+        
+        
+        
+        // STOCK ACCOUNT
+        
+        
+        
+        // STOCK PROFILE
+        
+        
+        
+        
+        // MOVIE PROFILE
+        
+        
+        
+        
         //Add the tabbed pane to this panel.
         add(tabbedPane);
-         
         //The following line enables to use scrolling tabs.
         tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
     }
@@ -94,6 +141,41 @@ public class TabbedPaneDemo extends JPanel {
             return null;
         }
     }
+    
+    
+    // LISTENER CLASSES
+    class DepositListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// Call a function that accesses the database and adds money to account
+			
+		}
+
+    }
+    
+    class WithdrawListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			// call function to subtract money from account (if possible)
+			
+		}
+    	
+    }
+    
+    class BuyListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent arg0) {
+			
+			
+		}
+    	
+    }
+    
+    
+    
      
     /**
      * Create the GUI and show it.  For thread safety,
