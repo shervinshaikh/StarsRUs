@@ -90,6 +90,9 @@ public class GuiApp1 {
       guiFrame.add(listPanel, BorderLayout.CENTER);
       guiFrame.add(vegFruitBut,BorderLayout.SOUTH);
       
+      
+      
+      
       //make sure the JFrame is visible
       guiFrame.setVisible(true);
   }

@@ -1,6 +1,7 @@
 package com.shervinshaikh.starsrus;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 
@@ -37,6 +38,16 @@ class ChildExample{
 
 		mainPanel.add(textArea);
 		mainPanel.add(loginFrame);
+		String[] fruitOptions = {"Apple", "Apricot", "Banana"
+	              ,"Cherry", "Date", "Kiwi", "Orange", "Pear", "Strawberry"};
+		final JPanel comboPanel = new JPanel();
+	      JLabel comboLbl = new JLabel("Fruits:");
+	      JComboBox fruits = new JComboBox(fruitOptions);
+	      
+	      mainPanel.add(comboLbl);
+	      mainPanel.add(fruits);
+		
+		
 		loginPanel.add(usernameLbl);
 		loginPanel.add(usernameTxt);
 		loginPanel.add(passwordLbl);
