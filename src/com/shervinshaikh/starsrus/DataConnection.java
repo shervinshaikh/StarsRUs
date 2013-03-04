@@ -28,7 +28,8 @@ public class DataConnection {
 		
 		// 2. Test functions for each query
 		//print_all();
-		registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
+		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
+		depositMoney(1022, 500);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -78,65 +79,70 @@ public class DataConnection {
 	}
 	
 	
-	public static int depositMoney(int id, double value) throws SQLException{
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-				
-		// Create a Statement
-		Statement stmt = conn.createStatement();
-				
-		// Specify the SQL Query to run
-		ResultSet rs = stmt.executeQuery ("SELECT balance FROM Customer C WHERE C.id =" + id);
-		
-		int balance = rs.getInt("BALANCE");
-		rs.close();
-		
-		balance += value;
-		
-		PreparedStatement pre_statement;
-		String updateSuppSQL = "update tablename set columnName = ? where id = ?";
-		pre_statement = conn.prepareStatement(updateSuppSQL);
-		
-		// Replace the first ? with value
-		pre_statement.setDouble(1, balance);
-		
-		// Replace the second ? with id
-		pre_statement.setInt(2, id);
-		
-		// Execute updates
-		int n = pre_statement.executeUpdate();
-		System.out.println("updates :" + n );
-		pre_statement.close();
-		return n;
-	}
 	
 	
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
 				String username, String pw, String address, String state) throws SQLException{
 		int ismanager = 0;
-		Statement stmt = null;
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		      System.out.println("Connected database successfully...");
-		      
-		      //STEP 4: Execute a query
-		      System.out.println("Inserting Cindy into the table...");
-		stmt = conn.createStatement();
+		Statement stmt = conn.createStatement();
 		      
 		String sql = "INSERT INTO Customer(taxID, ssn, phone, cname, email, username, pw, address, state, ismanager)" +
 				"VALUES(" + taxid + ", '" + ssn + "', '" + phone + "', '" + cname + "', '" + email + "', '" + username +"', '" + pw + "', '" + address + "', '" + state + "', " + ismanager + ")";
-		
-		//String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
-		    //		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
 		stmt.executeUpdate(sql);
+		
+			//String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
+		    //		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
+
 		      //sql = "INSERT INTO Registration " + "VALUES (101, 'Mahnaz', 'Fatma', 25)";
 		      //stmt.executeUpdate(sql);
-		      //sql = "INSERT INTO Registration " + "VALUES (102, 'Zaid', 'Khan', 30)";
-		      //stmt.executeUpdate(sql);
-		      //sql = "INSERT INTO Registration " + "VALUES(103, 'Sumit', 'Mittal', 28)";
-		      //stmt.executeUpdate(sql);
-		   	  System.out.println("Goodbye!");
 		   
 		conn.close();
 		return true;
 	}
+	
+	public static boolean validCustomer(String username, String pw) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		
+		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Customer WHERE username =" + username + " AND pw=" + pw);
+		
+		if(rs.next()){
+			if(rs.getInt(1) == 1) return true;
+		}
+		
+		rs.close();
+		conn.close();
+		return false;
+	}
 
+	public static double depositMoney(int taxid, double value) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		
+		double amount = value;
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
+		if(rs.next()){
+			System.out.println(rs.getInt("balance"));
+			amount += rs.getInt("balance");
+		}
+		rs.close();
+		
+		PreparedStatement pre_statement;
+		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
+		pre_statement = conn.prepareStatement(updateSuppSQL);
+		
+		pre_statement.setDouble(1, amount);
+		pre_statement.setInt(2, taxid);
+		
+		// Execute updates
+		pre_statement.executeUpdate();
+
+		pre_statement.close();
+		conn.close();
+		
+		return amount;
+	}
+	
 }
