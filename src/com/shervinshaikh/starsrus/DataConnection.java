@@ -27,8 +27,8 @@ public class DataConnection {
 		}
 		
 		// 2. Test functions for each query
-		print_all();
-		registerCustomer();
+		//print_all();
+		registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 	}
 	
 	public static void print_all() throws SQLException {
@@ -110,35 +110,30 @@ public class DataConnection {
 	}
 	
 	
-	public static boolean registerCustomer() throws SQLException{
+	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
+				String username, String pw, String address, String state) throws SQLException{
+		int ismanager = 0;
 		Statement stmt = null;
-		//conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		
-		      //STEP 2: Register JDBC driver
-		      //Class.forName("com.mysql.jdbc.Driver");
-
-		      //STEP 3: Open a connection
-		      System.out.println("Connecting to a selected database...");
-		      conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		      System.out.println("Connected database successfully...");
 		      
 		      //STEP 4: Execute a query
-		      System.out.println("Inserting records into the table...");
-		      stmt = conn.createStatement();
+		      System.out.println("Inserting Cindy into the table...");
+		stmt = conn.createStatement();
 		      
-		      
-		      String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
-		    		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
-		      stmt.executeUpdate(sql);
+		String sql = "INSERT INTO Customer(taxID, ssn, phone, cname, email, username, pw, address, state, ismanager)" +
+				"VALUES(" + taxid + ", '" + ssn + "', '" + phone + "', '" + cname + "', '" + email + "', '" + username +"', '" + pw + "', '" + address + "', '" + state + "', " + ismanager + ")";
+		
+		//String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
+		    //		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
+		stmt.executeUpdate(sql);
 		      //sql = "INSERT INTO Registration " + "VALUES (101, 'Mahnaz', 'Fatma', 25)";
 		      //stmt.executeUpdate(sql);
 		      //sql = "INSERT INTO Registration " + "VALUES (102, 'Zaid', 'Khan', 30)";
 		      //stmt.executeUpdate(sql);
 		      //sql = "INSERT INTO Registration " + "VALUES(103, 'Sumit', 'Mittal', 28)";
 		      //stmt.executeUpdate(sql);
-		      System.out.println("Inserted records into the table...");
-		      conn.close();
-		   System.out.println("Goodbye!");
+		   	  System.out.println("Goodbye!");
 		   
 		conn.close();
 		return true;
