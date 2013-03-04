@@ -12,6 +12,9 @@ public class DataConnection {
 
 	//common elements throughout the entire program
 	static Connection conn;
+	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
+	static String strUsername = "cs174a_shervinshaikh";
+	static String strPassword = "computer";
 	
 	public static void main(String[] args) throws SQLException{
 		
@@ -25,13 +28,12 @@ public class DataConnection {
 		
 		// 2. Test functions for each query
 		print_all();
+		registerCustomer();
 	}
 	
 	public static void print_all() throws SQLException {
 		// Connect to the database
-		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "cs174a_shervinshaikh";
-		String strPassword = "computer";
+
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		
 		// Create a Statement
@@ -77,10 +79,6 @@ public class DataConnection {
 	
 	
 	public static int depositMoney(int id, double value) throws SQLException{
-		// Connect to the database
-		String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
-		String strUsername = "cs174a_shervinshaikh";
-		String strPassword = "computer";
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 				
 		// Create a Statement
@@ -109,6 +107,41 @@ public class DataConnection {
 		System.out.println("updates :" + n );
 		pre_statement.close();
 		return n;
+	}
+	
+	
+	public static boolean registerCustomer() throws SQLException{
+		Statement stmt = null;
+		//conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		
+		      //STEP 2: Register JDBC driver
+		      //Class.forName("com.mysql.jdbc.Driver");
+
+		      //STEP 3: Open a connection
+		      System.out.println("Connecting to a selected database...");
+		      conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		      System.out.println("Connected database successfully...");
+		      
+		      //STEP 4: Execute a query
+		      System.out.println("Inserting records into the table...");
+		      stmt = conn.createStatement();
+		      
+		      
+		      String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
+		    		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
+		      stmt.executeUpdate(sql);
+		      //sql = "INSERT INTO Registration " + "VALUES (101, 'Mahnaz', 'Fatma', 25)";
+		      //stmt.executeUpdate(sql);
+		      //sql = "INSERT INTO Registration " + "VALUES (102, 'Zaid', 'Khan', 30)";
+		      //stmt.executeUpdate(sql);
+		      //sql = "INSERT INTO Registration " + "VALUES(103, 'Sumit', 'Mittal', 28)";
+		      //stmt.executeUpdate(sql);
+		      System.out.println("Inserted records into the table...");
+		      conn.close();
+		   System.out.println("Goodbye!");
+		   
+		conn.close();
+		return true;
 	}
 
 }
