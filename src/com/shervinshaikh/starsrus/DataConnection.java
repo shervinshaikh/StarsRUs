@@ -86,7 +86,7 @@ public class DataConnection {
 	
 	
 	
-	
+	// TO-DO create a MarketAccount & place money into it when registering the customer
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
 				String username, String pw, String address, String state) throws SQLException{
 		int ismanager = 0;
@@ -189,5 +189,7 @@ public class DataConnection {
 		
 		return amount;
 	}
+	
+	
 	
 }
