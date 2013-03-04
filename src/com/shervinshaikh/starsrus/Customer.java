@@ -1,6 +1,6 @@
 package com.shervinshaikh.starsrus;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -25,6 +25,9 @@ public class Customer implements ActionListener {
 	
 	public void go(){
 		JFrame frame = new JFrame();
+		//set minimum size
+		frame.setMinimumSize(new Dimension(600, 300));
+		
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		depositB = new JButton("Deposit");
