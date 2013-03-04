@@ -28,8 +28,12 @@ public class DataConnection {
 		
 		// 2. Test functions for each query
 		//print_all();
+		
 		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
-		depositMoney(1022, 500);
+		
+		//depositMoney(1022, 500);
+		
+		//validCustomer("billy", "cl");
 	}
 	
 	public static void print_all() throws SQLException {
@@ -104,11 +108,15 @@ public class DataConnection {
 	public static boolean validCustomer(String username, String pw) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
-		
-		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Customer WHERE username =" + username + " AND pw=" + pw);
+		//System.out.println("connection complete");
+		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Customer WHERE username ='" + username + "' AND pw='" + pw + "'");
+		//System.out.println("Query run");
 		
 		if(rs.next()){
-			if(rs.getInt(1) == 1) return true;
+			if(rs.getInt(1) == 1){
+				//System.out.println("login successful!");
+				return true;
+			}
 		}
 		
 		rs.close();
