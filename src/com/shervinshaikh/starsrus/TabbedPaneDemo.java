@@ -38,7 +38,7 @@ public class TabbedPaneDemo extends JPanel {
         JPanel p1 = new JPanel();
         p1.add(amountD);
         p1.add(submitD);
-
+        
 
         tabbedPane.addTab("Deposit", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -210,17 +210,17 @@ public class TabbedPaneDemo extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Call a function that accesses the database and adds money to account
-            int id = 1; //get actual ID
+            int id = 1022; //get actual ID
             double amount = Double.parseDouble(amountD.getText());
 
            // CONNECTION AND DATA INPUT GOES HERE
 
-           /* try {
-                //DataConnection.depositMoney(id, amount);
+           try {
+                DataConnection.depositMoney(id, amount);
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
-            }*/
+            }
             JOptionPane.showMessageDialog(null, "Deposit Done!");
         }
 
