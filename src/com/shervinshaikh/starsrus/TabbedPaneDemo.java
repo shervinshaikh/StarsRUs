@@ -64,8 +64,11 @@ public class TabbedPaneDemo extends JPanel {
         // BUY PANEL
         //JComponent panel3 = makeTextPanel("Panel #3");
         JPanel p3 = new JPanel();
-        p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
+        //p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
+        p3.setLayout(null);
         JTextField sharesB = new JTextField(20);
+        JLabel buylabel = new JLabel("# Shares:");
+        //sharesB.setText("0");
 
         String [] stockSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values from the database
         JList list = new JList(stockSymbols);
@@ -78,9 +81,16 @@ public class TabbedPaneDemo extends JPanel {
         JButton purchase = new JButton("Purchase");
         purchase.addActionListener(new BuyListener());
 
+        sharesB.setBounds(105,50, 60, 20);
+        buylabel.setBounds(50,50,55,20);
+        symbolScroll.setBounds(50,75,350,150);
+        purchase.setBounds(410,180,90,30);
+
+        p3.add(buylabel);
         p3.add(sharesB);
         p3.add(symbolScroll);
         p3.add(purchase);
+
         tabbedPane.addTab("Buy", p3);
         tabbedPane.setMnemonicAt(2, KeyEvent.VK_3);
 
@@ -88,6 +98,35 @@ public class TabbedPaneDemo extends JPanel {
         // SELL PANEL
         JComponent panel4 = makeTextPanel("Panel #4");
         panel4.setPreferredSize(new Dimension(410, 50));
+
+        panel4.setLayout(null);
+        JTextField sharesS = new JTextField(20);
+        JLabel selllabel = new JLabel("# Shares:");
+        //sharesB.setText("0");
+
+        String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
+        JList list2 = new JList(userSymbols);
+        JScrollPane symbolScroll2 = new JScrollPane(list2);
+        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list.setVisibleRowCount(4);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        JButton sells = new JButton("Sell");
+        purchase.addActionListener(new BuyListener());
+
+        sharesS.setBounds(105,50, 60, 20);
+        selllabel.setBounds(50,50,55,20);
+        symbolScroll2.setBounds(50,75,350,150);
+        sells.setBounds(410,180,90,30);
+
+        panel4.add(selllabel);
+        panel4.add(sharesS);
+        panel4.add(symbolScroll2);
+        panel4.add(sells);
+
+
+
         tabbedPane.addTab("Sell", panel4);
         tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
 
@@ -96,6 +135,20 @@ public class TabbedPaneDemo extends JPanel {
         // SHOW BALANCE
         JComponent panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
+        panel5.setLayout(null);
+
+        JLabel labelUserId = new JLabel("User ID: ");
+        JLabel labelMarketBal = new JLabel("Market Balance: ");
+        JLabel labelStockBal = new JLabel("Stock Balance: ");
+
+        labelUserId.setBounds(20,30, 150, 20);
+        labelMarketBal.setBounds(20,55,150,20);
+        labelStockBal.setBounds(20,80,150,20);
+
+        panel5.add(labelUserId);
+        panel5.add(labelMarketBal);
+        panel5.add(labelStockBal);
+
         tabbedPane.addTab("Show Balance", panel5);
         tabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
 
@@ -187,7 +240,7 @@ public class TabbedPaneDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-
+            JOptionPane.showMessageDialog(null, "Purchase Done!");
 
         }
 
