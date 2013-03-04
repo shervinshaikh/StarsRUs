@@ -23,21 +23,25 @@ public class registerframe extends JFrame {
     JLabel taxidl = new JLabel("Tax id");
     JLabel userl = new JLabel("Username");
     JLabel passl = new JLabel("Password");
+    JLabel addrl = new JLabel("Address");
+    JLabel ssnl = new JLabel("Social Security No.");
 
     JButton bregister = new JButton("Register");
     JButton bback = new JButton("Back");
     JPanel panel = new JPanel();
-    JTextField fullname = new JTextField(15);
+    JTextField fullname = new JTextField(30);
     JTextField state = new JTextField(2);
     JTextField phoneno = new JTextField(10);
-    JTextField email = new JTextField(20);
-    JTextField taxid = new JTextField(15);
-    JTextField user = new JTextField(15);
-    JPasswordField pass = new JPasswordField(15);
+    JTextField email = new JTextField(30);
+    JTextField taxid = new JTextField(10);
+    JTextField user = new JTextField(20);
+    JTextField addr = new JTextField(40);
+    JTextField ssn = new JTextField(11);
+    JPasswordField pass = new JPasswordField(30);
 
     registerframe(){
         super("Register new account");
-        setSize(300,400);
+        setSize(300,450);
         setLocation(500,280);
         panel.setLayout (null);
 
@@ -48,6 +52,8 @@ public class registerframe extends JFrame {
         taxidl.setBounds(70,155,150,15);
         userl.setBounds(70,190,150,15);
         passl.setBounds(70,225,150,15);
+        addrl.setBounds(70,260,150,15);
+        ssnl.setBounds(70,295,150,15);
 
         fullname.setBounds(70,30,150,20);
         state.setBounds(70,65,150,20);
@@ -56,8 +62,12 @@ public class registerframe extends JFrame {
         taxid.setBounds(70,170,150,20);
         user.setBounds(70,205,150,20);
         pass.setBounds(70,240,150,20);
-        bregister.setBounds(105,280,85,20);
-        bback.setBounds(105,300,85,20);
+        addr.setBounds(70,275,150,20);
+        ssn.setBounds(70,310,150,20);
+
+        bregister.setBounds(105,340,85,20);
+        bback.setBounds(105,360,85,20);
+
 
         panel.add(namel);
         panel.add(statel);
@@ -66,6 +76,8 @@ public class registerframe extends JFrame {
         panel.add(taxidl);
         panel.add(userl);
         panel.add(passl);
+        panel.add(addrl);
+        panel.add(ssnl);
 
         panel.add(fullname);
         panel.add(email);
@@ -74,6 +86,9 @@ public class registerframe extends JFrame {
         panel.add(user);
         panel.add(state);
         panel.add(taxid);
+        panel.add(addr);
+        panel.add(ssn);
+
         panel.add(bregister);
         panel.add(bback);
 
