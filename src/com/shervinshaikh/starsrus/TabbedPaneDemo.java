@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.sql.SQLException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
@@ -29,6 +30,9 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
  
 public class TabbedPaneDemo extends JPanel {
+	JTextField amountD;
+	
+	
     public TabbedPaneDemo() {
         super(new GridLayout(1, 1));
          
@@ -37,7 +41,7 @@ public class TabbedPaneDemo extends JPanel {
         //ImageIcon icon = createImageIcon("images/middle.gif");
         //JComponent panel1 = makeTextPanel("Panel #1");
         JButton submitD = new JButton("Submit");
-        JTextField amountD = new JTextField(20);
+        amountD = new JTextField(20);
 		submitD.addActionListener(new DepositListener());
 		
         JPanel p1 = new JPanel();
@@ -149,7 +153,14 @@ public class TabbedPaneDemo extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			// Call a function that accesses the database and adds money to account
-			
+			int id = 1; //get actual ID
+			double amount = Double.parseDouble(amountD.getText());
+			try {
+				DataConnection.depositMoney(id, amount);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 
     }
