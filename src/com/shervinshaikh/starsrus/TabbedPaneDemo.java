@@ -1,10 +1,11 @@
-package com.shervinshaikh.starsrus;
 
 /*
  * TabbedPaneDemo.java requires one additional file:
  *   images/middle.gif.
  */
 
+ package com.shervinshaikh.starsrus;
+ 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -26,6 +27,7 @@ public class TabbedPaneDemo extends JPanel {
 
         // DEPOSIT PANEL
         JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(600,400));
         //set size
         //tabbedPane.setMinimumSize(new Dimension(800,500));
 
@@ -38,7 +40,7 @@ public class TabbedPaneDemo extends JPanel {
         JPanel p1 = new JPanel();
         p1.add(amountD);
         p1.add(submitD);
-        
+
 
         tabbedPane.addTab("Deposit", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -109,8 +111,8 @@ public class TabbedPaneDemo extends JPanel {
         JScrollPane symbolScroll2 = new JScrollPane(list2);
         symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        list.setVisibleRowCount(4);
-        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        list2.setVisibleRowCount(4);
+        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JButton sells = new JButton("Sell");
         purchase.addActionListener(new BuyListener());
@@ -156,6 +158,23 @@ public class TabbedPaneDemo extends JPanel {
         // STOCK HISTORY
         JComponent panel6 = makeTextPanel("Panel #6");
         panel6.setPreferredSize(new Dimension(410, 50));
+
+        panel6.setLayout(null);
+
+        SimpleTableDemo newContentPane = new SimpleTableDemo();
+        newContentPane.setOpaque(true); //content panes must be opaque
+        panel6.add(newContentPane);
+        newContentPane.setBounds(0,0,400,300);
+        //frame.setContentPane(newContentPane);
+
+        //Display the window.
+        //frame.pack();
+        //frame.setVisible(true);
+
+
+
+
+
         tabbedPane.addTab("Stock History", panel6);
         tabbedPane.setMnemonicAt(5, KeyEvent.VK_6);
 
@@ -210,17 +229,17 @@ public class TabbedPaneDemo extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Call a function that accesses the database and adds money to account
-            int id = 1022; //get actual ID
+            int id = 1; //get actual ID
             double amount = Double.parseDouble(amountD.getText());
 
            // CONNECTION AND DATA INPUT GOES HERE
 
-           try {
-                DataConnection.depositMoney(id, amount);
+           /* try {
+                //DataConnection.depositMoney(id, amount);
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
-            }
+            }*/
             JOptionPane.showMessageDialog(null, "Deposit Done!");
         }
 
