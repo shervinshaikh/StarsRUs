@@ -35,7 +35,7 @@ public class DataConnection {
 		
 		//validCustomer("billy", "cl");
 		
-		withdrawMoney(1022, 500);
+		//withdrawMoney(1022, 500);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -155,6 +155,38 @@ public class DataConnection {
 		return amount;
 	}
 	
+	
+	public static double depositShares(int taxid, int nshares) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		
+		//double amount = value;
+		
+		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
+		if(rs.next()){
+			//System.out.println(rs.getInt("balance"));
+			amount += rs.getInt("balance");
+		}
+		rs.close();
+		
+		PreparedStatement pre_statement;
+		String updateSuppSQL = "UPDATE StockAccounts SET balance = ? WHERE taxID = ?";
+		pre_statement = conn.prepareStatement(updateSuppSQL);
+		
+		pre_statement.setDouble(1, amount);
+		pre_statement.setInt(2, taxid);
+		
+		// Execute updates
+		pre_statement.executeUpdate();
+
+		pre_statement.close();
+		conn.close();
+		
+		return amount;
+	}
+	
+	
+	// if cannot be done then return -1
 	public static double withdrawMoney(int taxid, double value) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
@@ -191,5 +223,37 @@ public class DataConnection {
 	}
 	
 	
+	public static double buyStocks(int taxid, int nshares, String symbol) throws SQLException{
+		double value = 20;
+		double stockPrice = 0;
+		int marketID = 0;
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		
+		// WITHDRAW money from Market Account if possible
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Stock WHERE symbol='" + symbol + "' ");
+		if(rs.next()){
+			stockPrice = rs.getInt("currentprice");
+		}
+		rs.close();
+		value += stockPrice*nshares;
+		double balance = withdrawMoney(taxid, value);
+		if(balance == -1){
+			return balance;
+		}
+		
+		// DEPOSIT shares into Stock Account
+		// get the marketID
+		ResultSet rs2 = stmt.executeQuery("SELECT marketid FROM marketaccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			marketID = rs.getInt(1);
+		}
+		rs2.close();
+		
+		
+		
+		
+		return balance;
+	}
 	
 }
