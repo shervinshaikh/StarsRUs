@@ -7,7 +7,11 @@
  */
  
  package com.shervinshaikh.starsrus;
-import javax.swing.*;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 public class TopMovieBoard extends JFrame
 {
 
@@ -18,12 +22,19 @@ public class TopMovieBoard extends JFrame
         setResizable( false );
 
         String[] columnNames = {"Movie Name"};
-        Object[][] data = {
+        String[][] data = {
                 {"Kathy"},
                 {"Jane"},
                 {"Joe"}
         };
-
+        
+        
+       try{
+        	data = DataConnection.topMovies(starting_date, ending_date);
+        } catch (SQLException e){
+            System.out.println("ERROR");
+        }
+        
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
 

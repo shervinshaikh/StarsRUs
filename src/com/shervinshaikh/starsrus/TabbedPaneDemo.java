@@ -7,8 +7,6 @@
 package com.shervinshaikh.starsrus;
  
 import java.awt.*;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.*;
 import java.sql.SQLException;
 
@@ -32,7 +30,7 @@ public class TabbedPaneDemo extends JPanel {
 
         // DEPOSIT PANEL
         tabbedPane = new JTabbedPane();
-        tabbedPane.setPreferredSize(new Dimension(600, 400));
+        tabbedPane.setPreferredSize(new Dimension(800, 600));
         //set size
         //tabbedPane.setMinimumSize(new Dimension(800,500));
 
@@ -251,16 +249,23 @@ public class TabbedPaneDemo extends JPanel {
         yearFromLabel.setBounds(0,280,50,20);
         panel8.add(yearFromLabel);
         JLabel yearToLabel = new JLabel ("To:");
-        yearToLabel.setBounds(120,280,50,20);
+        yearToLabel.setBounds(130,280,50,20);
         panel8.add(yearToLabel);
 
         int currentYear = 2013;
 
-        JSpinner sp1 = new JSpinner(new SpinnerNumberModel(currentYear, currentYear-100,currentYear+100,1));
-        JSpinner sp2 = new JSpinner(new SpinnerNumberModel(currentYear,currentYear-100,currentYear+100,1));
+        int[] years = {1900, 2020};
+        try{
+        	years = DataConnection.getYears();
+        } catch (SQLException e){
+        	System.out.println("ERROR");
+        }
+        
+        JSpinner sp1 = new JSpinner(new SpinnerNumberModel(years[0], years[0],years[1],1));
+        JSpinner sp2 = new JSpinner(new SpinnerNumberModel(years[1],years[0],years[1],1));
         //If we're cycling, hook this model up to the month model.
-        sp1.setBounds(50,280,60,20);
-        sp2.setBounds(160,280,60,20);
+        sp1.setBounds(50,280,80,20);
+        sp2.setBounds(160,280,80,20);
         sp1.addChangeListener(new firstYear());
         sp2.addChangeListener(new secondYear());
         panel8.add(sp1);

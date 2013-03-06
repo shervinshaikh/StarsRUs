@@ -51,7 +51,7 @@ public class DataConnection {
 
 		//topMovies(1997, 2005);
 		
-		getBalances(1022);
+		//getBalances(1022);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -485,7 +485,7 @@ public class DataConnection {
 		return years;
 	}
 
-	public static String[] topMovies(int beg, int end) throws SQLException{
+	public static String[][] topMovies(int beg, int end) throws SQLException{
 		int nMovies = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
@@ -498,11 +498,11 @@ public class DataConnection {
 		}
 
 		// place movies in they array
-		String[] movies = new String[nMovies];
+		String[][] movies = new String[nMovies][0];
 		rs = s.executeQuery("SELECT m_name FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end + " AND m_ranking=5.0");
 		for(int i=0; rs.next(); i++){
-			movies[i] = rs.getString(1);
-			System.out.println(movies[i]);
+			movies[i][0] = rs.getString(1);
+			System.out.println(movies[i][0]);
 		}
 
 		return movies;
