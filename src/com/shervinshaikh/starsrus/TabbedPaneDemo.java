@@ -13,12 +13,16 @@ import java.awt.event.*;
 import java.sql.SQLException;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 public class TabbedPaneDemo extends JPanel {
     JTabbedPane tabbedPane;
     JTextField amountD;
     StockTable stockInfoPane;
     JComponent panel7;
+    int first_top_date=0;
+    int second_top_date=0;
 
 
     public TabbedPaneDemo() {
@@ -205,7 +209,7 @@ public class TabbedPaneDemo extends JPanel {
         //petList.addActionListener(this);
 
         selectStockLabel.setBounds(20,0,80,20);
-        stockInfoList.setBounds(20,20,80,20);
+        stockInfoList.setBounds(20, 20, 80, 20);
         panel7.add(stockInfoList);
         panel7.add(selectStockLabel);
 
@@ -235,12 +239,32 @@ public class TabbedPaneDemo extends JPanel {
 
         JButton viewReviews = new JButton("Get Reviews");
         viewReviews.addActionListener(new reviewButtonListener());
-        viewReviews.setBounds(0,260,120,20);
+        viewReviews.setBounds(0, 260, 120, 20);
 
 
         JButton viewTopMovies = new JButton("Top Movies");
         viewTopMovies.addActionListener(new topMovButtonListener());
-        viewTopMovies.setBounds(0,280,120,20);
+        viewTopMovies.setBounds(0,300,120,20);
+
+        //top movies stuff
+        JLabel yearFromLabel = new JLabel("From:");
+        yearFromLabel.setBounds(0,280,50,20);
+        panel8.add(yearFromLabel);
+        JLabel yearToLabel = new JLabel ("To:");
+        yearToLabel.setBounds(120,280,50,20);
+        panel8.add(yearToLabel);
+
+        int currentYear = 2013;
+
+        JSpinner sp1 = new JSpinner(new SpinnerNumberModel(currentYear, currentYear-100,currentYear+100,1));
+        JSpinner sp2 = new JSpinner(new SpinnerNumberModel(currentYear,currentYear-100,currentYear+100,1));
+        //If we're cycling, hook this model up to the month model.
+        sp1.setBounds(50,280,60,20);
+        sp2.setBounds(160,280,60,20);
+        sp1.addChangeListener(new firstYear());
+        sp2.addChangeListener(new secondYear());
+        panel8.add(sp1);
+        panel8.add(sp2);
 
 
         panel8.add(viewTopMovies);
@@ -337,7 +361,7 @@ public class TabbedPaneDemo extends JPanel {
     class topMovButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-            TopMovieBoard topBoard = new TopMovieBoard();
+            TopMovieBoard topBoard = new TopMovieBoard(first_top_date,second_top_date);
             //do stuff here
         }
     }
@@ -348,6 +372,25 @@ public class TabbedPaneDemo extends JPanel {
             if (event.getStateChange() == ItemEvent.SELECTED) {
                 Object item = event.getItem();
             }
+        }
+    }
+    class firstYear implements ChangeListener {
+        @Override
+        public void stateChanged(ChangeEvent e){
+            JSpinner spinner = ( JSpinner ) e.getSource();
+            SpinnerModel spinnerModel = spinner.getModel();
+            //System.out.println(spinnerModel.getValue());
+            first_top_date = Integer.parseInt(spinnerModel.getValue().toString());
+            //System.out.println(first_top_date);
+        }
+    }
+    class secondYear implements ChangeListener {
+        @Override
+        public void stateChanged(ChangeEvent e){
+            JSpinner spinner = ( JSpinner ) e.getSource();
+            SpinnerModel spinnerModel = spinner.getModel();
+            System.out.println(spinnerModel.getValue());
+            second_top_date = Integer.parseInt(spinnerModel.getValue().toString());
         }
     }
 

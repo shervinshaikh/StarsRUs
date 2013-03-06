@@ -11,13 +11,31 @@ import javax.swing.*;
 public class TopMovieBoard extends JFrame
 {
 
-    public TopMovieBoard()
+    public TopMovieBoard(int starting_date, int ending_date)
     {
         setTitle( "Creating a new Panel" );
         setSize( 350,300 );
         setResizable( false );
 
-        add( new JPanel() );
+        String[] columnNames = {"Movie Name"};
+        Object[][] data = {
+                {"Kathy"},
+                {"Jane"},
+                {"Joe"}
+        };
+
+        final JTable table = new JTable(data, columnNames);
+        table.setFillsViewportHeight(true);
+
+        //Create the scroll pane and add the table to it.
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        //Add the scroll pane to this panel.
+        add(scrollPane);
+
+
+
+        //add( new JPanel() );
 
         setVisible( true );
         setLocationRelativeTo( null );
