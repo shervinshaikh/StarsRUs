@@ -31,15 +31,24 @@ public class StockTable extends JPanel {
             "Year",
             "Contract"};
 
-    public StockTable(Integer x, Integer y, String a, String b, String c, String d, String e, String f) {
+    public StockTable(String x, String y, String a, String b, String c, String d, String e, String f) {
         super(new GridLayout(1,0));
-
+        
+//        Object [][] newdata = {
+//                {si},
+//
+//        };
 
 
         Object [][] newdata = {
                 {x,y, a, b,c,d,e,f},
 
         };
+        data = newdata;
+        for(int i=0; i<8; i++){
+        	System.out.println("0," + i + ": " + data[0][i]);
+        }
+        
         data = newdata;
 
         table = new JTable(data, columnNames);

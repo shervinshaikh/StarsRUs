@@ -16,24 +16,35 @@ import javax.swing.event.ChangeListener;
 
 public class TabbedPaneDemo extends JPanel {
     JTabbedPane tabbedPane;
-    JTextField amountD;
+    JTextField amountD, amountW;
+    JTextField sharesB;
     StockTable stockInfoPane;
     JComponent panel7;
     int first_top_date;
     int second_top_date;
     String[] movieInfo;
+    String[] stockSymbols;
     String movieName;
     int taxid = 1022;
+    Object[] balances;
+    Object si[] = new Object[8];
 
     //String prod_date_plus="";
     //String ranking_plus="";
     JLabel movProdYear;
     JLabel movRanking;
+    
+    JLabel labelUserId;
+    JLabel labelMarketBal;
+    JLabel labelStockBal;
 
 
     public TabbedPaneDemo() {
 
         super(new GridLayout(1, 1));
+        
+        // Initialize global variables
+        try { stockSymbols = DataConnection.getStockSymbols(); } catch (SQLException e1){ System.out.println("ERROR getting Stock Symbols"); }
 
 
         // DEPOSIT PANEL
@@ -60,7 +71,7 @@ public class TabbedPaneDemo extends JPanel {
 
         // WITHDRAW PANEL
         JButton submitW = new JButton("Submit");
-        JTextField amountW = new JTextField(20);
+        amountW = new JTextField(20);
 
         submitW.addActionListener(new WithdrawListener());
 
@@ -75,15 +86,17 @@ public class TabbedPaneDemo extends JPanel {
 
 
         // BUY PANEL
+        // TODO FIX - completes buy action twice in a row when clicking the purchase button
         //JComponent panel3 = makeTextPanel("Panel #3");
         JPanel p3 = new JPanel();
         //p3.setLayout(new BoxLayout(p3, BoxLayout.Y_AXIS));
         p3.setLayout(null);
-        JTextField sharesB = new JTextField(20);
+        sharesB = new JTextField(20);
         JLabel buylabel = new JLabel("# Shares:");
         //sharesB.setText("0");
 
-        String [] stockSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values from the database
+        //String [] symbols = {"GOOG", "AAPL", "YAHOO"}; // Get values from the database
+        
         JList list = new JList(stockSymbols);
         JScrollPane symbolScroll = new JScrollPane(list);
         symbolScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -157,16 +170,16 @@ public class TabbedPaneDemo extends JPanel {
 
         int nAccounts = 0;
         try{ nAccounts = DataConnection.getNAccounts(taxid);
-        } catch (SQLException e){ System.out.println("ERROR getting number of Accounts");}
+        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
         
-        Object[] balances = new Object[nAccounts];
+        balances = new Object[nAccounts];
         
         try{ balances = DataConnection.getBalances(taxid);
-        } catch (SQLException e){ System.out.println("ERROR getting balances of all accounts");}
+        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
         
-        JLabel labelUserId = new JLabel("User ID: " + taxid);
-        JLabel labelMarketBal = new JLabel("Market Balance: " + balances[1]);
-        JLabel labelStockBal = new JLabel("Stock Balance: " + balances[3]);
+        labelUserId = new JLabel("User ID: " + taxid);
+        labelMarketBal = new JLabel("Market Balance: " + balances[1]);
+        labelStockBal = new JLabel("Stock Balance: " + balances[3]);
 
         labelUserId.setBounds(20,30, 150, 20);
         labelMarketBal.setBounds(20,55,150,20);
@@ -180,7 +193,7 @@ public class TabbedPaneDemo extends JPanel {
         tabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
 
 
-        // STOCK HISTORY
+        // Transaction HISTORY
         JComponent panel6 = makeTextPanel("Panel #6");
         panel6.setPreferredSize(new Dimension(410, 50));
 
@@ -200,7 +213,7 @@ public class TabbedPaneDemo extends JPanel {
 
 
 
-        tabbedPane.addTab("Stock History", panel6);
+        tabbedPane.addTab("Transaction History", panel6);
         tabbedPane.setMnemonicAt(5, KeyEvent.VK_6);
 
 
@@ -212,10 +225,13 @@ public class TabbedPaneDemo extends JPanel {
         JLabel selectStockLabel = new JLabel("Select stock:");
 
         String[] petStrings = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
-        try{ petStrings = DataConnection.getStockSymbols();
-        } catch (SQLException e){ System.out.println("ERROR getting Stock Symbols");}
+        //try{ stockSymbols = DataConnection.getStockSymbols();
+        //} catch (SQLException e){ System.out.println("ERROR getting Stock Symbols");}
 
-        stockInfoPane = new StockTable(111,111,"a","b","c","d","e","f");
+        //stockInfoPane = new StockTable(111,111,"a","b","c","d","e","f");
+
+        try{ si = DataConnection.getStockInfo(stockSymbols[0]); } catch (SQLException e) { System.out.println("ERROR unable to retrieve stock profile");}
+        stockInfoPane = new StockTable(si[0].toString(), si[1].toString(), si[2].toString(), si[3].toString(), si[4].toString(), si[5].toString(), si[6].toString(), si[7].toString());
         stockInfoPane.setOpaque(true); //content panes must be opaque
         panel7.add(stockInfoPane);
         stockInfoPane.setBounds(0, 60, 600, 300);
@@ -223,7 +239,7 @@ public class TabbedPaneDemo extends JPanel {
         //Create the combo box, select item at index 4.
         //Indices start at 0, so 4 specifies the pig.
 
-        JComboBox stockInfoList = new JComboBox(petStrings);
+        JComboBox stockInfoList = new JComboBox(stockSymbols);
 
         stockInfoList.addItemListener(new StockSelect());
 
@@ -352,18 +368,19 @@ public class TabbedPaneDemo extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Call a function that accesses the database and adds money to account
-            int id = 1; //get actual ID
+            int id = 1022; // TODO get actual ID
             double amount = Double.parseDouble(amountD.getText());
 
            // CONNECTION AND DATA INPUT GOES HERE
 
-           /* try {
-                //DataConnection.depositMoney(id, amount);
+           try {
+                DataConnection.depositMoney(id, amount);
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
-            }*/
-            JOptionPane.showMessageDialog(null, "Deposit Done!");
+                System.out.println("ERROR unable to deposite money");
+            }
+            JOptionPane.showMessageDialog(null, "Deposit of $" + amount + " Complete!");
         }
 
     }
@@ -372,8 +389,23 @@ public class TabbedPaneDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-            // call function to subtract money from account (if possible)
-            JOptionPane.showMessageDialog(null, "Withdraw Done!");
+        	int id = 1022; // TODO get actual ID
+            double amount = Double.parseDouble(amountW.getText());
+
+           // CONNECTION AND DATA INPUT GOES HERE
+            double balance = 0;
+           try {
+                balance = DataConnection.withdrawMoney(id, amount);
+            } catch (SQLException e1) {
+                e1.printStackTrace();
+                System.out.println("ERROR unable to withdraw money");
+            }
+           if(balance > 0){
+        	   JOptionPane.showMessageDialog(null, "Withdrawal of $" + amount + " Complete!");
+           }
+           else {
+        	   JOptionPane.showMessageDialog(null, "Unable to complete withdrawal, funds too low");
+           }
         }
 
     }
@@ -382,7 +414,16 @@ public class TabbedPaneDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-            JOptionPane.showMessageDialog(null, "Purchase Done!");
+        	double v = 0;
+        	try{ 
+        		v = DataConnection.buyStocks(1022, Integer.parseInt(sharesB.getText()), "SKB");
+        	} catch (SQLException e) { System.out.println("ERROR unable to buy stocks"); }
+        	if(v == -1){
+        		JOptionPane.showMessageDialog(null, "Not enough funds to complete purchase");
+        	}
+    		else{ 
+    			JOptionPane.showMessageDialog(null, "Purchase Done!");
+    		}
 
         }
 
@@ -444,7 +485,18 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-		
+			int nAccounts = 0;
+	        try{ nAccounts = DataConnection.getNAccounts(taxid);
+	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
+	        
+	        balances = new Object[nAccounts];
+	        
+	        try{ balances = DataConnection.getBalances(taxid);
+	        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
+	        
+	        labelUserId.setText("User ID: " + taxid);
+	        labelMarketBal.setText("Market Balance: " + balances[1]);
+	        labelStockBal.setText("Stock Balance: " + balances[3]);
 		}
 	
 	}
@@ -457,20 +509,27 @@ public class TabbedPaneDemo extends JPanel {
                 Object item = event.getItem();
                 //JOptionPane.showMessageDialog(null, "Something happened!");
                 // do something with object
-                if(item.toString() == "Apple"){
-                    StockTable blah = new StockTable(30,22,"a","b","c","d","e","f");
-                    blah.setOpaque(true); //content panes must be opaque
-                    panel7.remove(stockInfoPane);
-                    panel7.add(blah);
-                    blah.setBounds(0, 60, 600, 300);
-                }
-                if(item.toString() == "Microsoft"){
-                    StockTable blah = new StockTable(11,55,"a","b","c","d","e","f");
-                    blah.setOpaque(true); //content panes must be opaque
-                    panel7.remove(stockInfoPane);
-                    panel7.add(blah);
-                    blah.setBounds(0, 60, 600, 300);
-                }
+//                if(item.toString() == "Apple"){
+//                    StockTable blah = new StockTable(30,22,"a","b","c","d","e","f");
+//                    blah.setOpaque(true); //content panes must be opaque
+//                    panel7.remove(stockInfoPane);
+//                    panel7.add(blah);
+//                    blah.setBounds(0, 60, 600, 300);
+//                }
+//                if(item.toString() == "Microsoft"){
+//                    StockTable blah = new StockTable(11,55,"a","b","c","d","e","f");
+//                    blah.setOpaque(true); //content panes must be opaque
+//                    panel7.remove(stockInfoPane);
+//                    panel7.add(blah);
+//                    blah.setBounds(0, 60, 600, 300);
+//                }
+                try{ si = DataConnection.getStockInfo(item.toString()); } catch (SQLException e) { System.out.println("ERROR unable to retrieve stock profile");}
+                
+                StockTable blah = new StockTable(si[0].toString(), si[1].toString(), si[2].toString(), si[3].toString(), si[4].toString(), si[5].toString(), si[6].toString(), si[7].toString());
+                blah.setOpaque(true); //content panes must be opaque
+                panel7.remove(stockInfoPane);
+                panel7.add(blah);
+                blah.setBounds(0, 60, 600, 300);
                 //if(item.toString() != null)
                 //    JOptionPane.showMessageDialog(null, item.toString());
             }

@@ -40,7 +40,7 @@ public class DataConnection {
 		// if == -1 then unable to withdraw money
 		//withdrawMoney(1022, 100);
 
-		//if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
+		//if(buyStocks(1022, 2, "SKB") == -1){ System.out.println("unable to complete purchase"); }
 		//else{ System.out.println("purchase complete"); }
 		
 		//getMovieReviews("Chicago");
@@ -49,7 +49,9 @@ public class DataConnection {
 
 		//getMovies();
 
-		topMovies(1997, 2005);
+		//topMovies(1997, 2005);
+		
+		//getStockInfo("SKB");
 		
 		//getBalances(1022);
 	}
@@ -206,7 +208,7 @@ public class DataConnection {
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
 		pstmt = conn.prepareStatement(updateSuppSQL);
 		
-		pstmt.setDouble(1, 100);
+		pstmt.setDouble(1, amount);
 		pstmt.setInt(2, taxid);
 		// Execute updates
 		System.out.println("about to execute update");
@@ -237,9 +239,8 @@ public class DataConnection {
 			stockPrice = rs.getInt("currentprice");
 			System.out.println("stock Price = " + stockPrice);
 		}
-		
 		System.out.println("withdrawing money from MarketAccount");
-		value += stockPrice*nshares;
+		value += stockPrice*(Double.parseDouble("" + nshares));
 		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
 			return balance;
@@ -554,8 +555,31 @@ public class DataConnection {
 			nAccounts += (rs.getInt(1) * 3);
 			System.out.println("# of Stock & Market Acounts: " + nAccounts);
 		}
-		
 		return nAccounts;
+	}
+	
+	public static Object[] getStockInfo(String symbol) throws SQLException {
+		//data = {0currentPrice, 1closePrice, 2name, 3DoB, 4movie, 5role, 6year, 7contract}
+		Object[] data = new Object[8];
+		
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		
+		ResultSet rs = s.executeQuery("SELECT * FROM Stock WHERE symbol='" + symbol +"'");
+		if(rs.next()){
+			data[0] = rs.getDouble("currentPrice");
+			data[1] = rs.getDouble("closePrice");
+			data[2] = rs.getString("sname");
+			data[3] = rs.getString("DOB");
+			data[4] = rs.getString("mtitle");
+			data[5] = rs.getString("srole");
+			data[6] = "" + rs.getInt("syear");
+			data[7] = "" + rs.getDouble("contract");
+			System.out.println("Stock Profile for: " + symbol);
+			System.out.println("curPrice: " +data[0]+", closePrice: " +data[1]+ ", name: " +data[2]+ ", DOB: " +data[3]+ ", Movie Title: " +data[4]+ ", Role: " +data[5]+ ", Year: " +data[6]+ ", Contract: " + data[7]);
+		}
+		
+		return data;
 	}
 	
 }
