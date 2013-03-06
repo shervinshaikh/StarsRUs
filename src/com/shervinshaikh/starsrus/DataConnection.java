@@ -369,12 +369,13 @@ public class DataConnection {
 	
 	// TO-DO double check
 	public static String[] getStockSymbols() throws SQLException{
+		System.out.println("running getStockSymbols");
 		int nStocks = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		
 		// get number of stocks in database
-		ResultSet rs = s.executeQuery("SELECT symbol FROM Stock");
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Stock");
 		if(rs.next()){
 			nStocks = rs.getInt(1);
 			System.out.println("Number of stock in the database: " + nStocks);

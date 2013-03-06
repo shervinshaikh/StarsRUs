@@ -21,6 +21,7 @@ public class TabbedPaneDemo extends JPanel {
     JComponent panel7;
     int first_top_date=0;
     int second_top_date=0;
+    String[] movieInfo;
 
 
     public TabbedPaneDemo() {
@@ -190,6 +191,8 @@ public class TabbedPaneDemo extends JPanel {
         JLabel selectStockLabel = new JLabel("Select stock:");
 
         String[] petStrings = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
+        try{ petStrings = DataConnection.getStockSymbols();
+        } catch (SQLException e){ System.out.println("ERROR getting Stock Symbols");}
 
         stockInfoPane = new StockTable(111,111,"a","b","c","d","e","f");
         stockInfoPane.setOpaque(true); //content panes must be opaque
@@ -222,16 +225,19 @@ public class TabbedPaneDemo extends JPanel {
         panel8.setLayout(null);
 
         String[] movieOptions = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
+        try{ movieOptions = DataConnection.getMovies();
+        } catch (SQLException e){ System.out.println("ERROR getting movie names");}
 
         JComboBox moviePicker = new JComboBox(movieOptions);
         moviePicker.addItemListener(new MoviePickListener());
         moviePicker.setBounds(50,0,100,20);
-        JLabel movTitleLabel = new JLabel("Title:");
+        // movieInfo[4] = {id, name, prod year, ranking}
+        JLabel movTitleLabel = new JLabel("Title:" + movieInfo[3]);
         movTitleLabel.setBounds(0,0,50,20);
-        JLabel movProdYear = new JLabel("Prod year:");
-        movProdYear.setBounds(0,20,70,20);
-        JLabel movRanking = new JLabel("Ranking:");
-        movRanking.setBounds(0,40,50,20);
+        JLabel movProdYear = new JLabel("Prod year:" + movieInfo[2]);
+        movProdYear.setBounds(0,20,170,20);
+        JLabel movRanking = new JLabel("Ranking:" + movieInfo[3]);
+        movRanking.setBounds(0,40,150,20);
 
 
 
@@ -375,7 +381,11 @@ public class TabbedPaneDemo extends JPanel {
         @Override
         public void itemStateChanged(ItemEvent event){
             if (event.getStateChange() == ItemEvent.SELECTED) {
-                Object item = event.getItem();
+                String item = event.getItem().toString();
+                try{ movieInfo = DataConnection.getMovieInfo(item); }
+                catch (SQLException e){ System.out.println("Error getting movie info for " + item);}
+                // movieinfo[4] = {id, name, year, ranking}
+
             }
         }
     }
