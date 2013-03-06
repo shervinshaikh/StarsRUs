@@ -37,7 +37,7 @@ public class DataConnection {
 		
 		//withdrawMoney(1022, 500);
 		System.out.println("starting buy stocks");
-		buyStocks(1022, 1, "STC");
+		buyStocks(1022, 3, "SKB");
 		System.out.println("purchase complete");
 	}
 	
@@ -201,7 +201,7 @@ public class DataConnection {
 	public static double buyStocks(int taxid, int nshares, String symbol) throws SQLException{
 		double value = 20;
 		double stockPrice = 0;
-		int marketID=0, stockID = 0, pshares = 0;
+		int marketID=0, stockID = 0, oldshares = 0, pshares = nshares;
 		String date = "";
 		
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
@@ -232,8 +232,8 @@ public class DataConnection {
 		// get stockID & current nshares and add it to the nshares that they're buying
 		rs = stmt.executeQuery("SELECT * FROM StockAccounts WHERE taxid =" + taxid + "AND symbol = '" + symbol + "'");
 		if(rs.next()){
-			pshares += rs.getInt(3);
-			nshares += pshares;
+			oldshares = rs.getInt(3);
+			nshares += oldshares;
 			System.out.println("number of shares now in the stock account:" + nshares);
 			stockID = rs.getInt(1);
 			System.out.println("stockID = " + stockID);
@@ -242,51 +242,53 @@ public class DataConnection {
 		// UPDATE StockAccounts with new nshares values
 		PreparedStatement pstmt;
 		String updateSuppSQL;
-		if(pshares > 0){ 
-			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = '?'";
+		if(oldshares > 0){ 
+			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = ?";
+			System.out.println("updating current StockAccount");
 		}
 		else {
 			int newStockID = 1;
 			rs = stmt.executeQuery("SELECT MAX(stockID) FROM StockAccounts");
 			if(rs.next()){
 				newStockID = rs.getInt(1) + 1;
-				System.out.println("new stock id =" + newStockID);
+				System.out.println("new stock id = " + newStockID);
 			}
-			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, '?', " + newStockID + ")";
+			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, ?, " + newStockID + ")";
+			System.out.println("Creating new stock account");
 		}
 		// up
-		System.out.println("line 258 setting pstmt");
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		pstmt = conn.prepareStatement(updateSuppSQL);
-		System.out.println("statement prepared");
 		// set values in statement
-		pstmt.setDouble(1, nshares);
+		pstmt.setInt(1, nshares);
 		pstmt.setInt(2, taxid);
 		pstmt.setString(3, symbol);
-		// Execute updates
-		System.out.println("executing update to StockAccount");
+		// Execute update
 		pstmt.executeUpdate();
-		System.out.println(" updated StockAccount with new nshare value");
 		//
 		// get current date
 		rs = stmt.executeQuery("SELECT cDate FROM Operations");
 		if(rs.next()){
 			date = rs.getString(1);
 		}
-		System.out.println("current date is:" + date);
+		// convert date to proper format
+		date = "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
 
+		// checking to see if stocks are added to stock account before we record the transaction
+		
+		
 		// RECORD transaction in table
 		pstmt = conn.prepareStatement("INSERT INTO Transactions(marketID, stockID, taxID, ttype, symbol, nshares, price , tdate, earnings)" +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			"VALUES (?, ?, ?, ?, ?, ?, ?, "+ date +", ?)");
 		System.out.println("create new connection line 278");
 		pstmt.setInt(1, marketID);
 		pstmt.setInt(2, stockID);
 		pstmt.setInt(3, taxid);
-		pstmt.setString(4, "'buy'");
+		pstmt.setString(4, "buy");
 		pstmt.setString(5, symbol);
-		pstmt.setInt(6, nshares);
+		pstmt.setInt(6, pshares);
 		pstmt.setDouble(7, stockPrice);
-		pstmt.setString(8, date);
-		pstmt.setDouble(9, 0);
+		pstmt.setDouble(8, 0);
 		pstmt.executeUpdate();
 
 		rs.close();
