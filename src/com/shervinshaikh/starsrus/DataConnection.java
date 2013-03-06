@@ -40,8 +40,8 @@ public class DataConnection {
 		// if == -1 then unable to withdraw money
 		//withdrawMoney(1022, 500);
 
-		//if(buyStocks(1022, 3000, "STC") == -1){ System.out.println("unable to complete purchase"); }
-		//else{ System.out.println("purchase complete"); }
+		if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
+		else{ System.out.println("purchase complete"); }
 	}
 	
 	public static void print_all() throws SQLException {
@@ -219,7 +219,6 @@ public class DataConnection {
 			stockPrice = rs.getInt("currentprice");
 			System.out.println("stock Price = " + stockPrice);
 		}
-		//rs.close();
 		value += stockPrice*nshares;
 		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
@@ -243,6 +242,8 @@ public class DataConnection {
 			stockID = rs.getInt(1);
 			System.out.println("stockID = " + stockID);
 		}
+		
+		// Add Commission to MarketAccount
 		
 		// UPDATE StockAccounts with new nshares values
 		PreparedStatement pstmt;
@@ -271,14 +272,8 @@ public class DataConnection {
 		pstmt.setString(3, symbol);
 		// Execute update
 		pstmt.executeUpdate();
-		//
+
 		// get current date
-		rs = stmt.executeQuery("SELECT cDate FROM Operations");
-		if(rs.next()){
-			date = rs.getString(1);
-		}
-		// convert date to proper format
-		date = "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
 		date = getTodaysDate();
 		
 		rs.close();
@@ -287,7 +282,6 @@ public class DataConnection {
 		conn.close();
 		
 		recordTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
-		
 		return balance;
 	}
 	
@@ -301,7 +295,6 @@ public class DataConnection {
 		PreparedStatement pstmt2 = conn.prepareStatement(insertTransaction);
 		
 		pstmt2.setInt(1, marketid);
-		// ISSUE IS HERE!!! foreign key to stockID - integrity constraint (CS174A_SHERVINSHAIKH.SYS_C009568) violated - parent key not found
 		pstmt2.setInt(2, stockid);
 		pstmt2.setInt(3, taxid);
 		pstmt2.setString(4, ttype);
@@ -315,8 +308,16 @@ public class DataConnection {
 		conn.close();
 	}
 	
-	public static String getTodaysDate(){
+	public static String getTodaysDate() throws SQLException{
+		String date = "";
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT cDate FROM Operations");
+		if(rs.next()){
+			date = rs.getString(1);
+		}
 		
+		return "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
 	}
 	
 }

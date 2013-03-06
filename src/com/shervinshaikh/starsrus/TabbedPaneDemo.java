@@ -4,7 +4,7 @@
  *   images/middle.gif.
  */
 
- package com.shervinshaikh.starsrus;
+package com.shervinshaikh.starsrus;
  
 import java.awt.BorderLayout;
 import java.awt.Dimension;
