@@ -43,13 +43,13 @@ public class DataConnection {
 		//if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
 		//else{ System.out.println("purchase complete"); }
 		
-		getMovieReviews("Chicago");
+		//getMovieReviews("Chicago");
 
 		//getMovieInfo("Head of State");
 
 		//getMovies();
 
-		//topMovies(1997, 2005);
+		topMovies(1997, 2005);
 		
 		//getBalances(1022);
 	}
@@ -492,18 +492,18 @@ public class DataConnection {
 		Statement s = conn.createStatement();
 
 		// get number of movies in that range
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end);
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end + " AND m_ranking=5.0");
 		if(rs.next()){
 			nMovies = rs.getInt(1);
-			System.out.println("Number of movies within that range: " + nMovies);
+			System.out.println("Number of movies within " + beg + " to " + end + ": " + nMovies);
 		}
 
 		// place movies in they array
-		String[][] movies = new String[nMovies][0];
+		String[][] movies = new String[nMovies][1];
 		rs = s.executeQuery("SELECT m_name FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end + " AND m_ranking=5.0");
 		for(int i=0; rs.next(); i++){
 			movies[i][0] = rs.getString(1);
-			System.out.println(movies[i][0]);
+			System.out.println("top movie: " + movies[i][0]);
 		}
 
 		return movies;

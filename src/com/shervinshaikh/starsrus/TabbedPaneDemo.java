@@ -19,8 +19,8 @@ public class TabbedPaneDemo extends JPanel {
     JTextField amountD;
     StockTable stockInfoPane;
     JComponent panel7;
-    int first_top_date=0;
-    int second_top_date=0;
+    int first_top_date;
+    int second_top_date;
     String[] movieInfo;
     String movieName;
 
@@ -149,7 +149,13 @@ public class TabbedPaneDemo extends JPanel {
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
 
-        JLabel labelUserId = new JLabel("User ID: ");
+        int nAccounts
+        try{ nAccounts = DataConnection.getNAccounts(taxid);
+        } catch (SQLException e){ System.out.println("ERROR getting number of Accounts");}
+        
+        Object[] balances = new Object[nAccounts];
+        
+        JLabel labelUserId = new JLabel("User ID: " +);
         JLabel labelMarketBal = new JLabel("Market Balance: ");
         JLabel labelStockBal = new JLabel("Stock Balance: ");
 
@@ -237,12 +243,15 @@ public class TabbedPaneDemo extends JPanel {
         JComboBox moviePicker = new JComboBox(movieOptions);
         moviePicker.addItemListener(new MoviePickListener());
         moviePicker.setBounds(50,0,100,20);
+        movieName = movieOptions[0];
         // movieInfo[4] = {id, name, prod year, ranking}
+        try{ movieInfo = DataConnection.getMovieInfo(movieOptions[0]); }
+                catch (SQLException e){ System.out.println("Error getting movie info for " + movieOptions[0]);}
         JLabel movTitleLabel = new JLabel("Title:" );
         movTitleLabel.setBounds(0,0,50,20);
-        movProdYear = new JLabel("Production year:");
+        movProdYear = new JLabel("Production year: " + movieInfo[2]);
         movProdYear.setBounds(0,20,250,20);
-        movRanking = new JLabel("Ranking:");
+        movRanking = new JLabel("Ranking: " + movieInfo[3]);
         movRanking.setBounds(0,40,150,20);
 
 
@@ -272,6 +281,8 @@ public class TabbedPaneDemo extends JPanel {
         } catch (SQLException e){
         	System.out.println("ERROR");
         }
+        first_top_date = years[0];
+        second_top_date = years[1];
         
         JSpinner sp1 = new JSpinner(new SpinnerNumberModel(years[0], years[0],years[1],1));
         JSpinner sp2 = new JSpinner(new SpinnerNumberModel(years[1],years[0],years[1],1));
@@ -379,7 +390,7 @@ public class TabbedPaneDemo extends JPanel {
     class topMovButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-            TopMovieBoard topBoard = new TopMovieBoard(first_top_date,second_top_date);
+            TopMovieBoard topBoard = new TopMovieBoard(first_top_date, second_top_date);
             //do stuff here
         }
     }
