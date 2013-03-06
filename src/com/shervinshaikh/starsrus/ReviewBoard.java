@@ -19,7 +19,7 @@ public class ReviewBoard extends JFrame
     {
 
 
-        setTitle( "Creating a new Panel" );
+        setTitle( "List of Reviews" );
         setSize( 350,300 );
         setResizable( false );
 

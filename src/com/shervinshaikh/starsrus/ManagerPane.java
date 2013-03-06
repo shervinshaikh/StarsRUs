@@ -21,6 +21,7 @@ import javax.swing.event.ChangeListener;
 
 public class ManagerPane extends JPanel {
     JTabbedPane tabbedPane;
+    JPanel p1;
 
     public ManagerPane(){
 
@@ -29,7 +30,7 @@ public class ManagerPane extends JPanel {
         tabbedPane = new JTabbedPane();
         tabbedPane.setPreferredSize(new Dimension(600, 400));
 
-        JPanel p1 = new JPanel();
+        p1 = new JPanel();
         p1.setLayout(null);
         JButton addInterest = new JButton("Add Interest");
         addInterest.setBounds(0,20,100,20);
@@ -145,7 +146,9 @@ public class ManagerPane extends JPanel {
     class listActiveListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"List stuff!");
+            ActiveCustomerTable activeTab = new ActiveCustomerTable();
+
+            //JOptionPane.showMessageDialog(null,"List stuff!");
         }
     }
     class genDTERListener implements ActionListener{

@@ -17,7 +17,7 @@ public class TopMovieBoard extends JFrame
 
     public TopMovieBoard(int starting_date, int ending_date)
     {
-        setTitle( "Creating a new Panel" );
+        setTitle( "Top Movies" );
         setSize( 350,300 );
         setResizable( false );
 
