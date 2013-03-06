@@ -6,18 +6,19 @@
 
  package com.shervinshaikh.starsrus;
  
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.sql.SQLException;
 
 import javax.swing.*;
 
 public class TabbedPaneDemo extends JPanel {
+    JTabbedPane tabbedPane;
     JTextField amountD;
+    StockTable stockInfoPane;
+    JComponent panel7;
 
 
     public TabbedPaneDemo() {
@@ -26,8 +27,8 @@ public class TabbedPaneDemo extends JPanel {
 
 
         // DEPOSIT PANEL
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setPreferredSize(new Dimension(600,400));
+        tabbedPane = new JTabbedPane();
+        tabbedPane.setPreferredSize(new Dimension(600, 400));
         //set size
         //tabbedPane.setMinimumSize(new Dimension(800,500));
 
@@ -180,7 +181,7 @@ public class TabbedPaneDemo extends JPanel {
 
 
         // STOCK PROFILE
-        JComponent panel7 = makeTextPanel("Panel #7");
+        panel7 = makeTextPanel("Panel #7");
         panel7.setPreferredSize(new Dimension(410, 50));
         panel7.setLayout(null);
 
@@ -188,16 +189,24 @@ public class TabbedPaneDemo extends JPanel {
 
         String[] petStrings = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
 
+        stockInfoPane = new StockTable(111,111,"a","b","c","d","e","f");
+        stockInfoPane.setOpaque(true); //content panes must be opaque
+        panel7.add(stockInfoPane);
+        stockInfoPane.setBounds(0, 60, 600, 300);
+
         //Create the combo box, select item at index 4.
         //Indices start at 0, so 4 specifies the pig.
 
-        JComboBox petList = new JComboBox(petStrings);
-        petList.setSelectedIndex(4);
+        JComboBox stockInfoList = new JComboBox(petStrings);
+
+        stockInfoList.addItemListener(new StockSelect());
+
+        stockInfoList.setSelectedIndex(4);
         //petList.addActionListener(this);
 
         selectStockLabel.setBounds(20,0,80,20);
-        petList.setBounds(20,20,80,20);
-        panel7.add(petList);
+        stockInfoList.setBounds(20,20,80,20);
+        panel7.add(stockInfoList);
         panel7.add(selectStockLabel);
 
         tabbedPane.addTab("Stock Info", panel7);
@@ -282,6 +291,34 @@ public class TabbedPaneDemo extends JPanel {
         }
 
     }
+    class StockSelect implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent event){
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                Object item = event.getItem();
+                //JOptionPane.showMessageDialog(null, "Something happened!");
+                // do something with object
+                if(item.toString() == "Apple"){
+                    StockTable blah = new StockTable(30,22,"a","b","c","d","e","f");
+                    blah.setOpaque(true); //content panes must be opaque
+                    panel7.remove(stockInfoPane);
+                    panel7.add(blah);
+                    blah.setBounds(0, 60, 600, 300);
+                }
+                if(item.toString() == "Microsoft"){
+                    StockTable blah = new StockTable(11,55,"a","b","c","d","e","f");
+                    blah.setOpaque(true); //content panes must be opaque
+                    panel7.remove(stockInfoPane);
+                    panel7.add(blah);
+                    blah.setBounds(0, 60, 600, 300);
+                }
+                //if(item.toString() != null)
+                //    JOptionPane.showMessageDialog(null, item.toString());
+            }
+        }
+    }
+
 
 
 
