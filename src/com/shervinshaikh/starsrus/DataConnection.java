@@ -509,7 +509,34 @@ public class DataConnection {
 		return movies;
 	}
 
+
 	public static Object[] getBalances(int taxid) throws SQLException{
+		int nAccounts = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		try{ nAccounts = getNAccounts(taxid);} catch (SQLException e){ System.out.println("ERROR getting number of accounts");}
+		
+		Object[] b = new Object[nAccounts];
+		// places market account ID & Balance into double array
+		ResultSet rs = s.executeQuery("SELECT marketID, balance FROM MarketAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			b[0] = 0.0 + rs.getInt(1);
+			b[1] = rs.getDouble(2);
+			System.out.println("Market Account ID: " + b[0] + "; Balance $" + b[1]);
+		}
+		// place stock accounts IDs & Balances into doubles array
+		rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxID =" + taxid);
+		for(int i=2; rs.next(); i+=3){
+			b[i] = rs.getInt(1);
+			b[i+1] = rs.getInt(3);
+			b[i+2] = rs.getString(4);
+			System.out.println("Stock Account ID: " + b[i] + ",  # Shares: " + b[i+1] + ", Symbol: " + b[i+2]);
+		}
+		return b;
+	}
+
+	public static int getNAccounts(int taxid) throws SQLException{
 		int nAccounts = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
@@ -527,27 +554,8 @@ public class DataConnection {
 			nAccounts += (rs.getInt(1) * 3);
 			System.out.println("# of Stock & Market Acounts: " + nAccounts);
 		}
-
 		
-		Object[] b = new Object[nAccounts];
-		// places market account ID & Balance into double array
-		rs = s.executeQuery("SELECT marketID, balance FROM MarketAccounts WHERE taxid =" + taxid);
-		if(rs.next()){
-			b[0] = 0.0 + rs.getInt(1);
-			b[1] = rs.getDouble(2);
-			System.out.println("Market Account ID: " + b[0] + "; Balance $" + b[1]);
-		}
-		// place stock accounts IDs & Balances into doubles array
-		rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxID =" + taxid);
-		for(int i=2; rs.next(); i+=3){
-			b[i] = rs.getInt(1);
-			b[i+1] = rs.getInt(3);
-			b[i+2] = rs.getString(4);
-			System.out.println("Stock Account ID: " + b[i] + ",  # Shares: " + b[i+1] + ", Symbol: " + b[i+2]);
-		}
-
-
-		return b;
+		return nAccounts;
 	}
 	
 }

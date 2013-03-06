@@ -23,6 +23,7 @@ public class TabbedPaneDemo extends JPanel {
     int second_top_date;
     String[] movieInfo;
     String movieName;
+    int taxid = 1022;
 
     //String prod_date_plus="";
     //String ranking_plus="";
@@ -149,15 +150,15 @@ public class TabbedPaneDemo extends JPanel {
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
 
-        int nAccounts
+        int nAccounts = 0;
         try{ nAccounts = DataConnection.getNAccounts(taxid);
         } catch (SQLException e){ System.out.println("ERROR getting number of Accounts");}
         
         Object[] balances = new Object[nAccounts];
         
-        JLabel labelUserId = new JLabel("User ID: " +);
-        JLabel labelMarketBal = new JLabel("Market Balance: ");
-        JLabel labelStockBal = new JLabel("Stock Balance: ");
+        JLabel labelUserId = new JLabel("User ID: " + taxid);
+        JLabel labelMarketBal = new JLabel("Market Balance: " + balances[1]);
+        JLabel labelStockBal = new JLabel("Stock Balance: " + balances[3]);
 
         labelUserId.setBounds(20,30, 150, 20);
         labelMarketBal.setBounds(20,55,150,20);
