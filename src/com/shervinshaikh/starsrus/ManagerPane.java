@@ -90,6 +90,21 @@ public class ManagerPane extends JPanel {
         submitNewDate.addActionListener(new dateButtonListener());
         p1.add(submitNewDate);
 
+
+        String[] stockSymbols = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
+        JComboBox stockNameList = new JComboBox(stockSymbols);
+        stockNameList.setBounds(400,180,100,20);
+        stockNameList.addItemListener(new StockNameListener());
+        p1.add(stockNameList);
+
+        JTextField inputPrice = new JTextField(20);
+        inputPrice.setBounds(400,200,100,20);
+        p1.add(inputPrice);
+        JButton setPrice = new JButton("Set Price");
+        setPrice.setBounds(400,220,100,20);
+        setPrice.addActionListener(new SetPriceListener());
+        p1.add(setPrice);
+
         tabbedPane.addTab("Main menu", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
@@ -180,6 +195,22 @@ public class ManagerPane extends JPanel {
         @Override
         public void actionPerformed(ActionEvent arg0){
             JOptionPane.showMessageDialog(null,"Change date!");
+        }
+
+    }
+
+    class StockNameListener implements ItemListener{
+        @Override
+        public void itemStateChanged(ItemEvent event){
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                Object item = event.getItem();
+            }
+        }
+    }
+    class SetPriceListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            JOptionPane.showMessageDialog(null,"set price!");
         }
 
     }
