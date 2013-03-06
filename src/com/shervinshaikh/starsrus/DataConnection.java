@@ -43,7 +43,7 @@ public class DataConnection {
 		//if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
 		//else{ System.out.println("purchase complete"); }
 		
-		//getMovieReviews(3);
+		getMovieReviews("Chicago");
 
 		//getMovieInfo("Head of State");
 
@@ -415,7 +415,7 @@ public class DataConnection {
 	}
 
 
-	public static String[][] getMovieReviews(int movieName) throws SQLException {
+	public static String[][] getMovieReviews(String movieName) throws SQLException {
 		int nReviews = 0, movieid = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();

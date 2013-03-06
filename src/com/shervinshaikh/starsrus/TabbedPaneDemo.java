@@ -22,6 +22,12 @@ public class TabbedPaneDemo extends JPanel {
     int first_top_date=0;
     int second_top_date=0;
     String[] movieInfo;
+    String movieName;
+
+    //String prod_date_plus="";
+    //String ranking_plus="";
+    JLabel movProdYear;
+    JLabel movRanking;
 
 
     public TabbedPaneDemo() {
@@ -206,7 +212,7 @@ public class TabbedPaneDemo extends JPanel {
 
         stockInfoList.addItemListener(new StockSelect());
 
-        stockInfoList.setSelectedIndex(4);
+        //stockInfoList.setSelectedIndex(4);
         //petList.addActionListener(this);
 
         selectStockLabel.setBounds(20,0,80,20);
@@ -232,11 +238,11 @@ public class TabbedPaneDemo extends JPanel {
         moviePicker.addItemListener(new MoviePickListener());
         moviePicker.setBounds(50,0,100,20);
         // movieInfo[4] = {id, name, prod year, ranking}
-        JLabel movTitleLabel = new JLabel("Title:" + movieInfo[3]);
+        JLabel movTitleLabel = new JLabel("Title:" );
         movTitleLabel.setBounds(0,0,50,20);
-        JLabel movProdYear = new JLabel("Prod year:" + movieInfo[2]);
-        movProdYear.setBounds(0,20,170,20);
-        JLabel movRanking = new JLabel("Ranking:" + movieInfo[3]);
+        movProdYear = new JLabel("Production year:");
+        movProdYear.setBounds(0,20,250,20);
+        movRanking = new JLabel("Ranking:");
         movRanking.setBounds(0,40,150,20);
 
 
@@ -258,7 +264,7 @@ public class TabbedPaneDemo extends JPanel {
         yearToLabel.setBounds(130,280,50,20);
         panel8.add(yearToLabel);
 
-        int currentYear = 2013;
+        //int currentYear = 2013;
 
         int[] years = {1900, 2020};
         try{
@@ -364,8 +370,9 @@ public class TabbedPaneDemo extends JPanel {
     class reviewButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-            ReviewBoard revBoard = new ReviewBoard();
+            ReviewBoard revBoard = new ReviewBoard(movieName);
             // DO STUFF HERE
+            
         }
     }
 
@@ -385,7 +392,12 @@ public class TabbedPaneDemo extends JPanel {
                 try{ movieInfo = DataConnection.getMovieInfo(item); }
                 catch (SQLException e){ System.out.println("Error getting movie info for " + item);}
                 // movieinfo[4] = {id, name, year, ranking}
-
+                //prod_date_plus=movieInfo[2];
+                //ranking_plus=movieInfo[3];
+                movProdYear.setText("Production Year: " + movieInfo[2]);
+                movRanking.setText("Ranking: " + movieInfo[3]);
+                
+                movieName = movieInfo[1];
             }
         }
     }

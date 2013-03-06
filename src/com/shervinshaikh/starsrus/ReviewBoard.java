@@ -15,7 +15,7 @@ import javax.swing.JTable;
 public class ReviewBoard extends JFrame
 {
 
-    public ReviewBoard()
+    public ReviewBoard(String movieName)
     {
 
 
@@ -31,7 +31,7 @@ public class ReviewBoard extends JFrame
         };
         //
         try{
-        	data = DataConnection.getMovieReviews(1);
+        	data = DataConnection.getMovieReviews(movieName);
         } catch (SQLException e){
         	System.out.println("ERROR");
         }
