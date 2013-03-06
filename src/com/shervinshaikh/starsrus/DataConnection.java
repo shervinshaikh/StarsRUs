@@ -36,6 +36,9 @@ public class DataConnection {
 		//validCustomer("billy", "cl");
 		
 		//withdrawMoney(1022, 500);
+		System.out.println("starting buy stocks");
+		buyStocks(1022, 1, "STC");
+		System.out.println("purchase complete");
 	}
 	
 	public static void print_all() throws SQLException {
@@ -67,20 +70,20 @@ public class DataConnection {
 	
 	
 	public static int testPreStmt(int id, double value) throws SQLException{
-		PreparedStatement pre_statement;
+		PreparedStatement pstmt;
 		String updateSuppSQL = "update tablename set columnName = ? where id = ?";
-		pre_statement = conn.prepareStatement(updateSuppSQL);
+		pstmt = conn.prepareStatement(updateSuppSQL);
 		
 		// Replace the first ? with value
-		pre_statement.setDouble(1, value);
+		pstmt.setDouble(1, value);
 		
 		// Replace the second ? with id
-		pre_statement.setInt(2, id);
+		pstmt.setInt(2, id);
 		
 		// Execute updates
-		int n = pre_statement.executeUpdate();
+		int n = pstmt.executeUpdate();
 		System.out.println("updates :" + n );
-		pre_statement.close();
+		pstmt.close();
 		return n;
 	}
 	
@@ -139,51 +142,23 @@ public class DataConnection {
 		}
 		rs.close();
 		
-		PreparedStatement pre_statement;
+		PreparedStatement pstmt;
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
-		pre_statement = conn.prepareStatement(updateSuppSQL);
+		pstmt = conn.prepareStatement(updateSuppSQL);
 		
-		pre_statement.setDouble(1, amount);
-		pre_statement.setInt(2, taxid);
+		pstmt.setDouble(1, amount);
+		pstmt.setInt(2, taxid);
 		
 		// Execute updates
-		pre_statement.executeUpdate();
+		pstmt.executeUpdate();
 
-		pre_statement.close();
+		pstmt.close();
 		conn.close();
 		
 		return amount;
 	}
 	
-	
-	public static double depositShares(int taxid, int nshares) throws SQLException{
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		Statement stmt = conn.createStatement();
-		
-		//double amount = value;
-		
-		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
-		if(rs.next()){
-			//System.out.println(rs.getInt("balance"));
-			amount += rs.getInt("balance");
-		}
-		rs.close();
-		
-		PreparedStatement pre_statement;
-		String updateSuppSQL = "UPDATE StockAccounts SET balance = ? WHERE taxID = ?";
-		pre_statement = conn.prepareStatement(updateSuppSQL);
-		
-		pre_statement.setDouble(1, amount);
-		pre_statement.setInt(2, taxid);
-		
-		// Execute updates
-		pre_statement.executeUpdate();
 
-		pre_statement.close();
-		conn.close();
-		
-		return amount;
-	}
 	
 	
 	// if cannot be done then return -1
@@ -205,18 +180,18 @@ public class DataConnection {
 			return -1;
 		}
 		
-		PreparedStatement pre_statement;
+		PreparedStatement pstmt;
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
-		pre_statement = conn.prepareStatement(updateSuppSQL);
+		pstmt = conn.prepareStatement(updateSuppSQL);
 		
-		pre_statement.setDouble(1, amount);
-		pre_statement.setInt(2, taxid);
+		pstmt.setDouble(1, amount);
+		pstmt.setInt(2, taxid);
 		
 		// Execute updates
-		pre_statement.executeUpdate();
+		pstmt.executeUpdate();
 		System.out.println("Account now at:" + amount);
 
-		pre_statement.close();
+		pstmt.close();
 		conn.close();
 		
 		return amount;
@@ -226,31 +201,98 @@ public class DataConnection {
 	public static double buyStocks(int taxid, int nshares, String symbol) throws SQLException{
 		double value = 20;
 		double stockPrice = 0;
-		int marketID = 0;
+		int marketID=0, stockID = 0, pshares = 0;
+		String date = "";
+		
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
 		
-		// WITHDRAW money from Market Account if possible
+		// WITHDRAW money from Market Account if possible else return -1
+		//
 		ResultSet rs = stmt.executeQuery("SELECT * FROM Stock WHERE symbol='" + symbol + "' ");
 		if(rs.next()){
 			stockPrice = rs.getInt("currentprice");
+			System.out.println("stock Price = " + stockPrice);
 		}
-		rs.close();
+		//rs.close();
 		value += stockPrice*nshares;
 		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
 			return balance;
 		}
-		
-		// DEPOSIT shares into Stock Account
 		// get the marketID
-		ResultSet rs2 = stmt.executeQuery("SELECT marketid FROM marketaccounts WHERE taxid =" + taxid);
+		rs = stmt.executeQuery("SELECT marketid FROM marketaccounts WHERE taxid =" + taxid);
 		if(rs.next()){
 			marketID = rs.getInt(1);
+			System.out.println("market id = " + marketID);
 		}
-		rs2.close();
+
+		// DEPOSIT shares into Stock Account
+		//
+		// get stockID & current nshares and add it to the nshares that they're buying
+		rs = stmt.executeQuery("SELECT * FROM StockAccounts WHERE taxid =" + taxid + "AND symbol = '" + symbol + "'");
+		if(rs.next()){
+			pshares += rs.getInt(3);
+			nshares += pshares;
+			System.out.println("number of shares now in the stock account:" + nshares);
+			stockID = rs.getInt(1);
+			System.out.println("stockID = " + stockID);
+		}
 		
-		
+		// UPDATE StockAccounts with new nshares values
+		PreparedStatement pstmt;
+		String updateSuppSQL;
+		if(pshares > 0){ 
+			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = '?'";
+		}
+		else {
+			int newStockID = 1;
+			rs = stmt.executeQuery("SELECT MAX(stockID) FROM StockAccounts");
+			if(rs.next()){
+				newStockID = rs.getInt(1) + 1;
+				System.out.println("new stock id =" + newStockID);
+			}
+			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, '?', " + newStockID + ")";
+		}
+		// up
+		System.out.println("line 258 setting pstmt");
+		pstmt = conn.prepareStatement(updateSuppSQL);
+		System.out.println("statement prepared");
+		// set values in statement
+		pstmt.setDouble(1, nshares);
+		pstmt.setInt(2, taxid);
+		pstmt.setString(3, symbol);
+		// Execute updates
+		System.out.println("executing update to StockAccount");
+		pstmt.executeUpdate();
+		System.out.println(" updated StockAccount with new nshare value");
+		//
+		// get current date
+		rs = stmt.executeQuery("SELECT cDate FROM Operations");
+		if(rs.next()){
+			date = rs.getString(1);
+		}
+		System.out.println("current date is:" + date);
+
+		// RECORD transaction in table
+		pstmt = conn.prepareStatement("INSERT INTO Transactions(marketID, stockID, taxID, ttype, symbol, nshares, price , tdate, earnings)" +
+			"VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+		System.out.println("create new connection line 278");
+		pstmt.setInt(1, marketID);
+		pstmt.setInt(2, stockID);
+		pstmt.setInt(3, taxid);
+		pstmt.setString(4, "'buy'");
+		pstmt.setString(5, symbol);
+		pstmt.setInt(6, nshares);
+		pstmt.setDouble(7, stockPrice);
+		pstmt.setString(8, date);
+		pstmt.setDouble(9, 0);
+		pstmt.executeUpdate();
+
+		rs.close();
+		stmt.close();
+		pstmt.close();
+		conn.close();
 		
 		
 		return balance;
