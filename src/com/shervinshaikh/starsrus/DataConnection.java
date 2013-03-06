@@ -32,16 +32,18 @@ public class DataConnection {
 		// TO-DO also create a market account for the person
 		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 		
-		//depositMoney(1022, 10000);
+		//depositMoney(1022, 100);
 		
 		// TO-DO returns a boolean value
 		// validUser("billy", "cl");
 		
 		// if == -1 then unable to withdraw money
-		//withdrawMoney(1022, 500);
+		//withdrawMoney(1022, 100);
 
-		if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
-		else{ System.out.println("purchase complete"); }
+		//if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
+		//else{ System.out.println("purchase complete"); }
+		
+		getMovieReviews(3);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -140,12 +142,15 @@ public class DataConnection {
 		
 		double amount = value;
 		
-		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
+		ResultSet rs = stmt.executeQuery("SELECT balance FROM MarketAccounts WHERE taxID=" + taxid);
 		if(rs.next()){
-			//System.out.println(rs.getInt("balance"));
-			amount += rs.getInt("balance");
+			double dep = rs.getDouble(1);
+			System.out.println("current balance before deposit: " + dep);
+			amount += dep;
 		}
 		rs.close();
+		
+		System.out.println("new balance after deposit: " + amount);
 		
 		PreparedStatement pstmt;
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
@@ -155,7 +160,9 @@ public class DataConnection {
 		pstmt.setInt(2, taxid);
 		
 		// Execute updates
+		System.out.println("about to execute");
 		pstmt.executeUpdate();
+		System.out.println("update complete");
 
 		pstmt.close();
 		conn.close();
@@ -165,37 +172,40 @@ public class DataConnection {
 	
 
 	
-	
+	// TO-DO fix!!!
 	// if cannot be done then return -1
 	public static double withdrawMoney(int taxid, double value) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
 		
-		double amount = value;
+		double amount = 0;
 		
-		ResultSet rs = stmt.executeQuery("SELECT * FROM MarketAccounts WHERE taxID=" + taxid);
+		ResultSet rs = stmt.executeQuery("SELECT balance FROM MarketAccounts WHERE taxID=" + taxid);
 		if(rs.next()){
-			amount = rs.getInt("balance") - amount;
+			amount = rs.getInt(1);
+			System.out.println("current balance is: "+ amount + " value is at: " + value);
+			amount -= value;
+			System.out.println("new balance is: " + amount);
 		}
-		rs.close();
 		
 		if(amount < 0){
 			System.out.println("error! can't be done!");
 			conn.close();
 			return -1;
 		}
-		
+
 		PreparedStatement pstmt;
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
 		pstmt = conn.prepareStatement(updateSuppSQL);
 		
-		pstmt.setDouble(1, amount);
+		pstmt.setDouble(1, 100);
 		pstmt.setInt(2, taxid);
-		
 		// Execute updates
+		System.out.println("about to execute update");
 		pstmt.executeUpdate();
 		System.out.println("Account now at:" + amount);
 
+		rs.close();
 		pstmt.close();
 		conn.close();
 		
@@ -219,13 +229,17 @@ public class DataConnection {
 			stockPrice = rs.getInt("currentprice");
 			System.out.println("stock Price = " + stockPrice);
 		}
+		
+		System.out.println("withdrawing money from MarketAccount");
 		value += stockPrice*nshares;
 		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
 			return balance;
 		}
+		System.out.println("withdrawMoney complete!");
+		
 		// get the marketID
-		rs = stmt.executeQuery("SELECT marketid FROM marketaccounts WHERE taxid =" + taxid);
+		rs = stmt.executeQuery("SELECT marketid FROM MarketAccounts WHERE taxid =" + taxid);
 		if(rs.next()){
 			marketID = rs.getInt(1);
 			System.out.println("market id = " + marketID);
@@ -244,6 +258,7 @@ public class DataConnection {
 		}
 		
 		// Add Commission to MarketAccount
+		addCommission(taxid);
 		
 		// UPDATE StockAccounts with new nshares values
 		PreparedStatement pstmt;
@@ -318,6 +333,77 @@ public class DataConnection {
 		}
 		
 		return "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
+	}
+	
+	public static void addCommission(int taxid) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+
+		// Add Commission of $20 to MarketAccount
+		int commission = 20;
+
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT Commission FROM MarketAccounts WHERE taxid=" + taxid);
+		if(rs.next()){
+			commission += rs.getInt(1);
+		}
+		rs.close();
+		stmt.close();
+		
+		PreparedStatement pstmt = conn.prepareStatement("UPDATE MarketAccounts SET Commission=? WHERE taxid=?");
+		pstmt.setInt(1, commission);
+		pstmt.setInt(2, taxid);
+		pstmt.executeUpdate();
+		System.out.println("Commission updated to:" + commission);
+		pstmt.close();
+		conn.close();
+	}
+	
+	
+	// TO-DO double check
+	public static String[] getStockSymbols() throws SQLException{
+		int numStocks = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		
+		// get number of stocks in database
+		ResultSet rs = s.executeQuery("SELECT symbol FROM Stock");
+		if(rs.next()){
+			numStocks = rs.getInt(1);
+			System.out.println("Number of stock in the database: " + numStocks);
+		}
+		
+		// place each stock symbol into the array
+		String[] symbols = new String[numStocks];
+		rs = s.executeQuery("SELECT symbol FROM Stock");
+		for(int i=0; rs.next(); i++){
+			symbols[i] = rs.getString(1);
+		}
+		
+		return symbols;
+	}
+
+
+	public static String[][] getMovieReviews(int movieid) throws SQLException {
+		int numReviews = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		ResultSet rs = s.executeQuery("SELECT Count(*) FROM CS174A.reviews WHERE r_mid =" + movieid);
+		if(rs.next()){
+			numReviews = rs.getInt(1);
+			System.out.println("Number of reviews for this movie: " + numReviews);
+		}
+
+		String[][] movieReviews = new String[2][numReviews];
+		rs = s.executeQuery("SELECT * FROM CS174A.reviews WHERE r_mid=" + movieid);
+		for(int i=0; rs.next(); i++){
+			movieReviews[0][i] = rs.getString(2);
+			System.out.print("author: " + rs.getString(2));
+			movieReviews[1][i] = rs.getString(3);
+			System.out.println(" review: " + rs.getString(3));
+		}
+
+		return movieReviews;
 	}
 	
 }
