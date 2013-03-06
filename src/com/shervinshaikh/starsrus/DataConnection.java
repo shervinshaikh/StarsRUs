@@ -396,12 +396,12 @@ public class DataConnection {
 			System.out.println("Number of reviews for this movie: " + numReviews);
 		}
 
-		String[][] movieReviews = new String[2][numReviews];
+		String[][] movieReviews = new String[numReviews][2];
 		rs = s.executeQuery("SELECT * FROM CS174A.reviews WHERE r_mid=" + movieid);
 		for(int i=0; rs.next(); i++){
-			movieReviews[0][i] = rs.getString(2);
+			movieReviews[i][0] = rs.getString(2);
 			System.out.print("author: " + rs.getString(2));
-			movieReviews[1][i] = rs.getString(3);
+			movieReviews[i][1] = rs.getString(3);
 			System.out.println(" review: " + rs.getString(3));
 		}
 
@@ -430,5 +430,8 @@ public class DataConnection {
 
 		return movieInfo;
 	}
+	
+	
+	//public 
 	
 }

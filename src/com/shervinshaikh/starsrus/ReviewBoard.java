@@ -7,7 +7,11 @@
  */
  
  package com.shervinshaikh.starsrus;
-import javax.swing.*;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 public class ReviewBoard extends JFrame
 {
 
@@ -21,10 +25,17 @@ public class ReviewBoard extends JFrame
 
         String[] columnNames = {"Author",
                 "Review"};
-        Object[][] data = {
+        String[][] data = {
                 {"Dark Knight", "average"},
                 {"Inception", "good"}
         };
+        //
+        try{
+        	data = DataConnection.getMovieReviews(1);
+        } catch (SQLException e){
+        	System.out.println("ERROR");
+        }
+        
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
 
