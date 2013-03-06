@@ -217,6 +217,39 @@ public class TabbedPaneDemo extends JPanel {
         // MOVIE PROFILE
         JComponent panel8 = makeTextPanel("Panel #8");
         panel8.setPreferredSize(new Dimension(410, 50));
+        panel8.setLayout(null);
+
+        String[] movieOptions = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
+
+        JComboBox moviePicker = new JComboBox(movieOptions);
+        moviePicker.addItemListener(new MoviePickListener());
+        moviePicker.setBounds(50,0,100,20);
+        JLabel movTitleLabel = new JLabel("Title:");
+        movTitleLabel.setBounds(0,0,50,20);
+        JLabel movProdYear = new JLabel("Prod year:");
+        movProdYear.setBounds(0,20,70,20);
+        JLabel movRanking = new JLabel("Ranking:");
+        movRanking.setBounds(0,40,50,20);
+
+
+
+        JButton viewReviews = new JButton("Get Reviews");
+        viewReviews.addActionListener(new reviewButtonListener());
+        viewReviews.setBounds(0,260,120,20);
+
+        panel8.add(viewReviews);
+        panel8.add(moviePicker);
+        panel8.add(movTitleLabel);
+        panel8.add(movProdYear);
+        panel8.add(movRanking);
+
+        JButton viewTopMovies = new JButton("Top Movies");
+        viewTopMovies.addActionListener(new topMovButtonListener());
+        viewTopMovies.setBounds(0,280,120,20);
+        panel8.add(viewTopMovies);
+
+
+
         tabbedPane.addTab("Movie Info", panel8);
         tabbedPane.setMnemonicAt(7, KeyEvent.VK_8);
 
@@ -291,6 +324,31 @@ public class TabbedPaneDemo extends JPanel {
         }
 
     }
+    class reviewButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            ReviewBoard revBoard = new ReviewBoard();
+            // DO STUFF HERE
+        }
+    }
+
+    class topMovButtonListener implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            TopMovieBoard topBoard = new TopMovieBoard();
+            //do stuff here
+        }
+    }
+
+    class MoviePickListener implements ItemListener {
+        @Override
+        public void itemStateChanged(ItemEvent event){
+            if (event.getStateChange() == ItemEvent.SELECTED) {
+                Object item = event.getItem();
+            }
+        }
+    }
+
     class StockSelect implements ItemListener {
 
         @Override
