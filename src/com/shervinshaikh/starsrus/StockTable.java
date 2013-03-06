@@ -1,3 +1,5 @@
+package com.shervinshaikh.starsrus;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Sprite
