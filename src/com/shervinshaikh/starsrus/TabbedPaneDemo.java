@@ -161,6 +161,9 @@ public class TabbedPaneDemo extends JPanel {
         
         Object[] balances = new Object[nAccounts];
         
+        try{ balances = DataConnection.getBalances(taxid);
+        } catch (SQLException e){ System.out.println("ERROR getting balances of all accounts");}
+        
         JLabel labelUserId = new JLabel("User ID: " + taxid);
         JLabel labelMarketBal = new JLabel("Market Balance: " + balances[1]);
         JLabel labelStockBal = new JLabel("Stock Balance: " + balances[3]);
@@ -248,7 +251,7 @@ public class TabbedPaneDemo extends JPanel {
 
         JComboBox moviePicker = new JComboBox(movieOptions);
         moviePicker.addItemListener(new MoviePickListener());
-        moviePicker.setBounds(50,0,100,20);
+        moviePicker.setBounds(50,0,200,20);
         movieName = movieOptions[0];
         // movieInfo[4] = {id, name, prod year, ranking}
         try{ movieInfo = DataConnection.getMovieInfo(movieOptions[0]); }
