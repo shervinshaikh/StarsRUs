@@ -13,11 +13,30 @@ public class ReviewBoard extends JFrame
 
     public ReviewBoard()
     {
+
+
         setTitle( "Creating a new Panel" );
         setSize( 350,300 );
         setResizable( false );
 
-        add( new JPanel() );
+        String[] columnNames = {"Author",
+                "Review"};
+        Object[][] data = {
+                {"Dark Knight", "average"},
+                {"Inception", "good"}
+        };
+        final JTable table = new JTable(data, columnNames);
+        table.setFillsViewportHeight(true);
+
+        //Create the scroll pane and add the table to it.
+        JScrollPane scrollPane = new JScrollPane(table);
+
+        //Add the scroll pane to this panel.
+        add(scrollPane);
+
+
+
+        //add( new JPanel() );
 
         setVisible( true );
         setLocationRelativeTo( null );

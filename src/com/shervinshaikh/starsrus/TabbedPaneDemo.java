@@ -237,16 +237,18 @@ public class TabbedPaneDemo extends JPanel {
         viewReviews.addActionListener(new reviewButtonListener());
         viewReviews.setBounds(0,260,120,20);
 
+
+        JButton viewTopMovies = new JButton("Top Movies");
+        viewTopMovies.addActionListener(new topMovButtonListener());
+        viewTopMovies.setBounds(0,280,120,20);
+
+
+        panel8.add(viewTopMovies);
         panel8.add(viewReviews);
         panel8.add(moviePicker);
         panel8.add(movTitleLabel);
         panel8.add(movProdYear);
         panel8.add(movRanking);
-
-        JButton viewTopMovies = new JButton("Top Movies");
-        viewTopMovies.addActionListener(new topMovButtonListener());
-        viewTopMovies.setBounds(0,280,120,20);
-        panel8.add(viewTopMovies);
 
 
 
