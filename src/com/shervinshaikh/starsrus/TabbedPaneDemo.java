@@ -149,6 +149,11 @@ public class TabbedPaneDemo extends JPanel {
         JComponent panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
+		
+		JButton refreshBalance = new JButton("Refresh");
+		refreshBalance.addActionListener(new RefreshListener());
+		refreshBalance.setBounds(20,105,150,20);
+		panel5.add(refreshBalance);
 
         int nAccounts = 0;
         try{ nAccounts = DataConnection.getNAccounts(taxid);
@@ -433,6 +438,14 @@ public class TabbedPaneDemo extends JPanel {
         }
     }
 
+	class RefreshListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent arg0){
+		
+		}
+	
+	}
+	
     class StockSelect implements ItemListener {
 
         @Override
