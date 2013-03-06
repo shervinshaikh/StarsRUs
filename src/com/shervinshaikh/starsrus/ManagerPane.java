@@ -61,6 +61,19 @@ public class ManagerPane extends JPanel {
         deleteTrans.addActionListener(new deleteTransListener());
         p1.add(deleteTrans);
 
+
+
+        //ADD TEST FUNCTIONS
+
+        JButton openMarket = new JButton ("Open Market");
+        JButton closeMarket = new JButton ("Close Market");
+        openMarket.setBounds(400,20,150,20);
+        closeMarket.setBounds(400,40,150,20);
+        openMarket.addActionListener(new openMarketListener());
+        closeMarket.addActionListener(new closeMarketListener());
+        p1.add(openMarket);
+        p1.add(closeMarket);
+
         tabbedPane.addTab("Main menu", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
@@ -123,6 +136,21 @@ public class ManagerPane extends JPanel {
         }
     }
 
+    //TEST FUNCTIONS
+    class openMarketListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            JOptionPane.showMessageDialog(null,"Open market!");
+        }
+    }
+    class closeMarketListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            JOptionPane.showMessageDialog(null,"Close market!");
+        }
+    }
+
+
     private static void createAndShowGUI() {
         //Create and set up the window.
         JFrame frame = new JFrame("ManagerPane");
@@ -135,6 +163,8 @@ public class ManagerPane extends JPanel {
         frame.pack();
         frame.setVisible(true);
     }
+
+
 
     public static void main(String[] args) {
         //Schedule a job for the event dispatch thread:
