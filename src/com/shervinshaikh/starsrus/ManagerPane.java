@@ -11,6 +11,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.*;
 import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -73,6 +75,20 @@ public class ManagerPane extends JPanel {
         closeMarket.addActionListener(new closeMarketListener());
         p1.add(openMarket);
         p1.add(closeMarket);
+
+
+        Calendar cal = Calendar.getInstance();
+        Date date = cal.getTime();
+        SpinnerDateModel model = new SpinnerDateModel();
+        model.setValue(date);
+        JSpinner spinner = new JSpinner(model);
+        spinner.setBounds(400,80,120,20);
+        spinner.addChangeListener(new dateListener());
+        p1.add(spinner);
+        JButton submitNewDate = new JButton("Set Date");
+        submitNewDate.setBounds(400,100,100,20);
+        submitNewDate.addActionListener(new dateButtonListener());
+        p1.add(submitNewDate);
 
         tabbedPane.addTab("Main menu", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
@@ -148,6 +164,24 @@ public class ManagerPane extends JPanel {
         public void actionPerformed(ActionEvent arg0){
             JOptionPane.showMessageDialog(null,"Close market!");
         }
+    }
+    class dateListener implements ChangeListener{
+        @Override
+        public void stateChanged(ChangeEvent e) {
+            Date date = (Date) ((JSpinner) e.getSource()).getValue();
+            //for (int i = 0; i < labels.length; i++) {
+            //    labels[i].setText(formats[i].format(date));
+            //}
+        }
+
+    }
+
+    class dateButtonListener implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+            JOptionPane.showMessageDialog(null,"Change date!");
+        }
+
     }
 
 
