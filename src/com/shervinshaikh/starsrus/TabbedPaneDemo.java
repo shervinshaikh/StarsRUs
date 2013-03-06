@@ -163,6 +163,11 @@ public class TabbedPaneDemo extends JPanel {
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
 		
+		BalanceTable balanceTable = new BalanceTable();
+        balanceTable.setOpaque(true); //content panes must be opaque
+        panel5.add(balanceTable);
+        balanceTable.setBounds(0,130,300,300);
+		
 		JButton refreshBalance = new JButton("Refresh");
 		refreshBalance.addActionListener(new RefreshListener());
 		refreshBalance.setBounds(20,105,150,20);
