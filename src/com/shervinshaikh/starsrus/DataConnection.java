@@ -43,7 +43,9 @@ public class DataConnection {
 		//if(buyStocks(1022, 30, "STC") == -1){ System.out.println("unable to complete purchase"); }
 		//else{ System.out.println("purchase complete"); }
 		
-		getMovieReviews(3);
+		//getMovieReviews(3);
+
+		getMovieInfo("Head of State");
 	}
 	
 	public static void print_all() throws SQLException {
@@ -404,6 +406,29 @@ public class DataConnection {
 		}
 
 		return movieReviews;
+	}
+	
+	// returns the movie profile info - movieInfo[4] = {id, name, year, ranking}
+	public static String[] getMovieInfo(String movieName) throws SQLException {
+		String[] movieInfo = new String[4];
+
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		ResultSet rs = s.executeQuery("SELECT * FROM CS174A.movies WHERE m_name = '" + movieName + "'");
+		if(rs.next()){
+			movieInfo[0]= "" + rs.getInt(1);
+			movieInfo[1]= rs.getString(2);
+			movieInfo[2]= "" + rs.getInt(3);
+			movieInfo[3]= "" + rs.getDouble(4);
+			System.out.println("id:" + movieInfo[0]);
+			System.out.println("name:" + movieInfo[1]);
+			System.out.println("production year:" + movieInfo[2]);
+			System.out.println("ranking:" + movieInfo[3]);
+		}
+
+
+		return movieInfo;
 	}
 	
 }
