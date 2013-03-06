@@ -45,7 +45,9 @@ public class DataConnection {
 		
 		//getMovieReviews(3);
 
-		getMovieInfo("Head of State");
+		//getMovieInfo("Head of State");
+
+		getMovies();
 	}
 	
 	public static void print_all() throws SQLException {
@@ -363,19 +365,19 @@ public class DataConnection {
 	
 	// TO-DO double check
 	public static String[] getStockSymbols() throws SQLException{
-		int numStocks = 0;
+		int nStocks = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		
 		// get number of stocks in database
 		ResultSet rs = s.executeQuery("SELECT symbol FROM Stock");
 		if(rs.next()){
-			numStocks = rs.getInt(1);
-			System.out.println("Number of stock in the database: " + numStocks);
+			nStocks = rs.getInt(1);
+			System.out.println("Number of stock in the database: " + nStocks);
 		}
 		
 		// place each stock symbol into the array
-		String[] symbols = new String[numStocks];
+		String[] symbols = new String[nStocks];
 		rs = s.executeQuery("SELECT symbol FROM Stock");
 		for(int i=0; rs.next(); i++){
 			symbols[i] = rs.getString(1);
@@ -384,19 +386,49 @@ public class DataConnection {
 		return symbols;
 	}
 
-
-	public static String[][] getMovieReviews(int movieid) throws SQLException {
-		int numReviews = 0;
+	public static String[] getMovies() throws SQLException{
+		int nMovies = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 
-		ResultSet rs = s.executeQuery("SELECT Count(*) FROM CS174A.reviews WHERE r_mid =" + movieid);
+		// get number of movies in database
+		ResultSet rs = s.executeQuery("SELECT Count(*) FROM CS174A.movies");
 		if(rs.next()){
-			numReviews = rs.getInt(1);
-			System.out.println("Number of reviews for this movie: " + numReviews);
+			nMovies = rs.getInt(1);
+			System.out.println("Number of movies in database: " + nMovies);
 		}
 
-		String[][] movieReviews = new String[numReviews][2];
+		// place each movie into string array
+		String movies[] = new String[nMovies];
+		rs = s.executeQuery("SELECT m_name FROM CS174A.movies");
+		for(int i=0; rs.next(); i++){
+			movies[i] = rs.getString(1);
+			System.out.println("Movie name: " + movies[i]);
+		}
+
+		return movies;
+	}
+
+
+	public static String[][] getMovieReviews(int movieName) throws SQLException {
+		int nReviews = 0, movieid = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		ResultSet rs = s.executeQuery("SELECT m_id FROM CS174A.movies WHERE m_name = '" + movieName +"'");
+		if(rs.next()){
+			movieid = rs.getInt(1);
+		}
+
+
+
+		rs = s.executeQuery("SELECT Count(*) FROM CS174A.reviews WHERE r_mid =" + movieid);
+		if(rs.next()){
+			nReviews = rs.getInt(1);
+			System.out.println("Number of reviews for this movie: " + nReviews);
+		}
+
+		String[][] movieReviews = new String[nReviews][2];
 		rs = s.executeQuery("SELECT * FROM CS174A.reviews WHERE r_mid=" + movieid);
 		for(int i=0; rs.next(); i++){
 			movieReviews[i][0] = rs.getString(2);
@@ -431,7 +463,26 @@ public class DataConnection {
 		return movieInfo;
 	}
 	
-	
-	//public 
+	public static int[] getYears() throws SQLException {
+		int[] years = new int[2];
+
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		ResultSet rs = s.executeQuery("SELECT MIN(m_year) FROM CS174A.movies");
+		if(rs.next()){
+			years[0] = rs.getInt(1);
+		}
+		rs = s.executeQuery("SELECT MAX(m_year) FROM CS174A.movies");
+		if(rs.next()){
+			years[1] = rs.getInt(1);
+		}
+
+		return years;
+	}
+
+	public static String[] topMovies(int beg, int end){
+
+	}
 	
 }
