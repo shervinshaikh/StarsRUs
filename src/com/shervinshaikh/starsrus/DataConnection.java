@@ -47,7 +47,11 @@ public class DataConnection {
 
 		//getMovieInfo("Head of State");
 
-		getMovies();
+		//getMovies();
+
+		//topMovies(1997, 2005);
+		
+		getBalances(1022);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -481,8 +485,68 @@ public class DataConnection {
 		return years;
 	}
 
-	public static String[] topMovies(int beg, int end){
+	public static String[] topMovies(int beg, int end) throws SQLException{
+		int nMovies = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
 
+		// get number of movies in that range
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end);
+		if(rs.next()){
+			nMovies = rs.getInt(1);
+			System.out.println("Number of movies within that range: " + nMovies);
+		}
+
+		// place movies in they array
+		String[] movies = new String[nMovies];
+		rs = s.executeQuery("SELECT m_name FROM CS174A.movies WHERE m_year >="+ beg +" AND m_year <=" + end + " AND m_ranking=5.0");
+		for(int i=0; rs.next(); i++){
+			movies[i] = rs.getString(1);
+			System.out.println(movies[i]);
+		}
+
+		return movies;
+	}
+
+	public static Object[] getBalances(int taxid) throws SQLException{
+		int nAccounts = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		// get number of market accounts
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM MarketAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			nAccounts += (rs.getInt(1) * 2);
+			System.out.println("# of Market Accounts: " + nAccounts);
+		}
+
+		// get number of stock accounts
+		rs = s.executeQuery("SELECT COUNT(*) FROM StockAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			nAccounts += (rs.getInt(1) * 3);
+			System.out.println("# of Stock & Market Acounts: " + nAccounts);
+		}
+
+		
+		Object[] b = new Object[nAccounts];
+		// places market account ID & Balance into double array
+		rs = s.executeQuery("SELECT marketID, balance FROM MarketAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			b[0] = 0.0 + rs.getInt(1);
+			b[1] = rs.getDouble(2);
+			System.out.println("Market Account ID: " + b[0] + "; Balance $" + b[1]);
+		}
+		// place stock accounts IDs & Balances into doubles array
+		rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxID =" + taxid);
+		for(int i=2; rs.next(); i+=3){
+			b[i] = rs.getInt(1);
+			b[i+1] = rs.getInt(3);
+			b[i+2] = rs.getString(4);
+			System.out.println("Stock Account ID: " + b[i] + ",  # Shares: " + b[i+1] + ", Symbol: " + b[i+2]);
+		}
+
+
+		return b;
 	}
 	
 }
