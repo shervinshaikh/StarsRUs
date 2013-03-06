@@ -29,20 +29,19 @@ public class DataConnection {
 		// 2. Test functions for each query
 		//print_all();
 		
+		// TO-DO also create a market account for the person
 		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 		
 		//depositMoney(1022, 10000);
 		
-		// returns a boolean value
-		//validUser("billy", "cl");
+		// TO-DO returns a boolean value
+		// validUser("billy", "cl");
 		
 		// if == -1 then unable to withdraw money
 		//withdrawMoney(1022, 500);
 
-		//if( buyStocks(1022, 3000, "STC") == -1){
-			//System.out.println("unable to complete purchase");
-		//}
-		//else {System.out.println("purchase complete");}
+		//if(buyStocks(1022, 3000, "STC") == -1){ System.out.println("unable to complete purchase"); }
+		//else{ System.out.println("purchase complete"); }
 	}
 	
 	public static void print_all() throws SQLException {
@@ -280,25 +279,20 @@ public class DataConnection {
 		}
 		// convert date to proper format
 		date = "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
-
-		// checking to see if stocks are added to stock account before we record the transaction
-		rs = stmt.executeQuery("Select stockid from stockaccounts where taxid = 1022");
-		while(rs.next()){
-			System.out.println("stock account created, here are the ids: " + rs.getInt(1));
-		}
+		date = getTodaysDate();
+		
 		rs.close();
 		stmt.close();
 		pstmt.close();
 		conn.close();
 		
-		//doTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0);
-		doTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
+		recordTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
 		
 		return balance;
 	}
 	
 	
-	public static void doTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
+	public static void recordTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		
 		// RECORD transaction in table
@@ -319,6 +313,10 @@ public class DataConnection {
 
 		pstmt2.close();
 		conn.close();
+	}
+	
+	public static String getTodaysDate(){
+		
 	}
 	
 }
