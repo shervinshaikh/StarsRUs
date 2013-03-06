@@ -182,6 +182,24 @@ public class TabbedPaneDemo extends JPanel {
         // STOCK PROFILE
         JComponent panel7 = makeTextPanel("Panel #7");
         panel7.setPreferredSize(new Dimension(410, 50));
+        panel7.setLayout(null);
+
+        JLabel selectStockLabel = new JLabel("Select stock:");
+
+        String[] petStrings = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
+
+        //Create the combo box, select item at index 4.
+        //Indices start at 0, so 4 specifies the pig.
+
+        JComboBox petList = new JComboBox(petStrings);
+        petList.setSelectedIndex(4);
+        //petList.addActionListener(this);
+
+        selectStockLabel.setBounds(20,0,80,20);
+        petList.setBounds(20,20,80,20);
+        panel7.add(petList);
+        panel7.add(selectStockLabel);
+
         tabbedPane.addTab("Stock Info", panel7);
         tabbedPane.setMnemonicAt(6, KeyEvent.VK_7);
 
