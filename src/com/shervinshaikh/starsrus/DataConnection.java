@@ -33,12 +33,16 @@ public class DataConnection {
 		
 		//depositMoney(1022, 10000);
 		
-		//validCustomer("billy", "cl");
+		// returns a boolean value
+		//validUser("billy", "cl");
 		
+		// if == -1 then unable to withdraw money
 		//withdrawMoney(1022, 500);
-		System.out.println("starting buy stocks");
-		buyStocks(1022, 3, "SKB");
-		System.out.println("purchase complete");
+
+		//if( buyStocks(1022, 3000, "STC") == -1){
+			//System.out.println("unable to complete purchase");
+		//}
+		//else {System.out.println("purchase complete");}
 	}
 	
 	public static void print_all() throws SQLException {
@@ -110,7 +114,9 @@ public class DataConnection {
 		return true;
 	}
 	
-	public static boolean validCustomer(String username, String pw) throws SQLException{
+	
+	// TO-DO check to see if person is a manager
+	public static boolean validUser(String username, String pw) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
 		//System.out.println("connection complete");
@@ -255,6 +261,7 @@ public class DataConnection {
 			}
 			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, ?, " + newStockID + ")";
 			System.out.println("Creating new stock account");
+			stockID = newStockID;
 		}
 		// up
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
@@ -275,29 +282,43 @@ public class DataConnection {
 		date = "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
 
 		// checking to see if stocks are added to stock account before we record the transaction
-		
-		
-		// RECORD transaction in table
-		pstmt = conn.prepareStatement("INSERT INTO Transactions(marketID, stockID, taxID, ttype, symbol, nshares, price , tdate, earnings)" +
-			"VALUES (?, ?, ?, ?, ?, ?, ?, "+ date +", ?)");
-		System.out.println("create new connection line 278");
-		pstmt.setInt(1, marketID);
-		pstmt.setInt(2, stockID);
-		pstmt.setInt(3, taxid);
-		pstmt.setString(4, "buy");
-		pstmt.setString(5, symbol);
-		pstmt.setInt(6, pshares);
-		pstmt.setDouble(7, stockPrice);
-		pstmt.setDouble(8, 0);
-		pstmt.executeUpdate();
-
+		rs = stmt.executeQuery("Select stockid from stockaccounts where taxid = 1022");
+		while(rs.next()){
+			System.out.println("stock account created, here are the ids: " + rs.getInt(1));
+		}
 		rs.close();
 		stmt.close();
 		pstmt.close();
 		conn.close();
 		
+		//doTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0);
+		doTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
 		
 		return balance;
+	}
+	
+	
+	public static void doTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		
+		// RECORD transaction in table
+		String insertTransaction = "INSERT INTO Transactions(marketID, stockID, taxID, ttype, symbol, nshares, price , tdate, earnings)" +
+				"VALUES (?, ?, ?, ?, ?, ?, ?, " + date + ", ?)";
+		PreparedStatement pstmt2 = conn.prepareStatement(insertTransaction);
+		
+		pstmt2.setInt(1, marketid);
+		// ISSUE IS HERE!!! foreign key to stockID - integrity constraint (CS174A_SHERVINSHAIKH.SYS_C009568) violated - parent key not found
+		pstmt2.setInt(2, stockid);
+		pstmt2.setInt(3, taxid);
+		pstmt2.setString(4, ttype);
+		pstmt2.setString(5, symbol);
+		pstmt2.setInt(6, pshares);
+		pstmt2.setDouble(7, price);
+		pstmt2.setDouble(8, 0);
+		pstmt2.executeUpdate();
+
+		pstmt2.close();
+		conn.close();
 	}
 	
 }
