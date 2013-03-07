@@ -57,11 +57,11 @@ public class ManagerPane extends JPanel {
         genDTER.addActionListener(new genDTERListener());
         p1.add(genDTER);
         JButton makeCustomerReport = new JButton("Gen customer report");
-        makeCustomerReport.setBounds(0,240,200,20);
+        makeCustomerReport.setBounds(0,100,200,20);
         makeCustomerReport.addActionListener(new makeReportListener());
         p1.add(makeCustomerReport);
         JButton deleteTrans = new JButton("Delete Transactions");
-        deleteTrans.setBounds(0,100,280,20);
+        deleteTrans.setBounds(0,240,200,20);
         deleteTrans.addActionListener(new deleteTransListener());
         p1.add(deleteTrans);
 
@@ -253,3 +253,4 @@ public class ManagerPane extends JPanel {
         });
     }
 }
+
