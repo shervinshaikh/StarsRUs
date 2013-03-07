@@ -58,6 +58,9 @@ public class DataConnection {
 		//openMarket();
 		
 		//setDate("25-Apr-13");
+		//setStockPrice("SKB", 50.0);
+		
+		getTransactionHistory(1022);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -108,7 +111,7 @@ public class DataConnection {
 	
 	
 	
-	// TO-DO create a MarketAccount & place money into it when registering the customer
+	// TODO create a MarketAccount & place money into it when registering the customer
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
 				String username, String pw, String address, String state) throws SQLException{
 		int ismanager = 0;
@@ -130,7 +133,7 @@ public class DataConnection {
 	}
 	
 	
-	// TO-DO check to see if person is a manager
+	// TODO check to see if person is a manager
 	public static boolean validUser(String username, String pw) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
@@ -313,7 +316,6 @@ public class DataConnection {
 		return balance;
 	}
 	
-	
 	public static void recordTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		
@@ -334,6 +336,45 @@ public class DataConnection {
 
 		pstmt2.close();
 		conn.close();
+	}
+
+	public static int getNumTrans(int taxid) throws SQLException {
+		int nTrans = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Transactions WHERE taxid=" + taxid);
+		if(rs.next()){
+			nTrans = rs.getInt(1);
+		}
+		conn.close();
+		System.out.println("number of transactions for taxid: " + taxid + " is " + nTrans);
+		return nTrans;
+	}
+	
+	public static String[][] getTransactionHistory(int taxid) throws SQLException {
+		int nTrans = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		
+		nTrans = getNumTrans(taxid);
+		String[][] trans = new String[7][nTrans];
+
+		ResultSet rs = s.executeQuery("SELECT * FROM Transactions WHERE taxid=" + taxid);
+		for(int i=0; rs.next(); i++){
+			trans[0][i]= "" + rs.getInt("stockID");
+			trans[1][i]= rs.getString("ttype");
+			trans[2][i]= rs.getString("symbol");
+			trans[3][i]= "" + rs.getInt("nshares");
+			trans[4][i]= "" + rs.getDouble("price");
+
+			// This could possible turn into an error:
+			trans[5][i]= rs.getString("tdate");
+			trans[6][i]= "" + rs.getDouble("earnings");
+			System.out.println("Trans History for TaxID: " + taxid);
+			System.out.println("stockID: " + trans[0][i] + ", transType: " + trans[1][i] + ", symbol: " + trans[2][i] + ", numShares: " + trans[3][i] + ", price: " + trans[4][i]);
+		}
+		
+		return trans;
 	}
 	
 	public static String getTodaysDate() throws SQLException{
@@ -373,7 +414,7 @@ public class DataConnection {
 	}
 	
 	
-	// TO-DO double check
+	// TODO double check
 	public static String[] getStockSymbols() throws SQLException{
 		System.out.println("running getStockSymbols");
 		int nStocks = 0;
@@ -600,7 +641,7 @@ public class DataConnection {
 
 	// TEST, DEBUG, DEMO OPERATIONS
 	
-	// open Market just sits at executeUpdate
+	// TODO test all of the methods below, ex: open Market just sits at executeUpdate
 	public static void openMarket() throws SQLException {
 		System.out.println("About to connect");
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
@@ -629,11 +670,13 @@ public class DataConnection {
 	}
 
 	public static void setStockPrice(String symbol, Double price) throws SQLException {
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		PreparedStatement p = conn.prepareStatement("UPDATE Stock SET currentPrice = ? WHERE Symbol = ?");
 		p.setDouble(1, price);
 		p.setString(2, symbol);
+		System.out.println("about to execute update");
 		p.executeUpdate();
+		System.out.println("New " + symbol + ": $" + price);
 	}
 
 
