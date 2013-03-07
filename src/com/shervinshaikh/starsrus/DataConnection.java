@@ -54,6 +54,10 @@ public class DataConnection {
 		//getStockInfo("SKB");
 		
 		//getBalances(1022);
+		
+		//openMarket();
+		
+		//setDate("25-Apr-13");
 	}
 	
 	public static void print_all() throws SQLException {
@@ -341,6 +345,7 @@ public class DataConnection {
 			date = rs.getString(1);
 		}
 		
+		conn.close();
 		return "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
 	}
 	
@@ -388,7 +393,9 @@ public class DataConnection {
 		for(int i=0; rs.next(); i++){
 			symbols[i] = rs.getString(1);
 		}
-		
+		rs.close();
+		s.close();
+		conn.close();
 		return symbols;
 	}
 
@@ -412,6 +419,7 @@ public class DataConnection {
 			System.out.println("Movie name: " + movies[i]);
 		}
 
+		conn.close();
 		return movies;
 	}
 
@@ -443,6 +451,7 @@ public class DataConnection {
 			System.out.println(" review: " + rs.getString(3));
 		}
 
+		conn.close();
 		return movieReviews;
 	}
 	
@@ -465,7 +474,7 @@ public class DataConnection {
 			System.out.println("ranking:" + movieInfo[3]);
 		}
 
-
+		conn.close();
 		return movieInfo;
 	}
 	
@@ -484,6 +493,7 @@ public class DataConnection {
 			years[1] = rs.getInt(1);
 		}
 
+		conn.close();
 		return years;
 	}
 
@@ -507,6 +517,7 @@ public class DataConnection {
 			System.out.println("top movie: " + movies[i][0]);
 		}
 
+		conn.close();
 		return movies;
 	}
 
@@ -534,6 +545,7 @@ public class DataConnection {
 			b[i+2] = rs.getString(4);
 			System.out.println("Stock Account ID: " + b[i] + ",  # Shares: " + b[i+1] + ", Symbol: " + b[i+2]);
 		}
+		conn.close();
 		return b;
 	}
 
@@ -555,6 +567,7 @@ public class DataConnection {
 			nAccounts += (rs.getInt(1) * 3);
 			System.out.println("# of Stock & Market Acounts: " + nAccounts);
 		}
+		conn.close();
 		return nAccounts;
 	}
 	
@@ -578,8 +591,70 @@ public class DataConnection {
 			System.out.println("Stock Profile for: " + symbol);
 			System.out.println("curPrice: " +data[0]+", closePrice: " +data[1]+ ", name: " +data[2]+ ", DOB: " +data[3]+ ", Movie Title: " +data[4]+ ", Role: " +data[5]+ ", Year: " +data[6]+ ", Contract: " + data[7]);
 		}
-		
+		conn.close();
 		return data;
 	}
+
+
 	
+
+	// TEST, DEBUG, DEMO OPERATIONS
+	
+	// open Market just sits at executeUpdate
+	public static void openMarket() throws SQLException {
+		System.out.println("About to connect");
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		System.out.println("connected and now creating statement");
+		Statement s = conn.createStatement();
+		System.out.println("about to execute update");
+		s.executeUpdate("UPDATE Operations SET isOpen = 1");
+		System.out.println("Market Opened!");
+		s.close();
+		conn.close();
+	}
+
+	public static void closeMarket() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		PreparedStatement p = conn.prepareStatement("UPDATE operations SET isOpen = 0");
+		p.executeUpdate();
+		System.out.println("Market Closed!");
+	}
+	
+	public static void setDate(String date) throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
+		p.setString(1, date);
+		p.executeUpdate();
+		System.out.println("Date updated to " + date);
+	}
+
+	public static void setStockPrice(String symbol, Double price) throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		PreparedStatement p = conn.prepareStatement("UPDATE Stock SET currentPrice = ? WHERE Symbol = ?");
+		p.setDouble(1, price);
+		p.setString(2, symbol);
+		p.executeUpdate();
+	}
+
+
+	public static boolean isMarketOpen() throws SQLException {
+		boolean isOpen = true;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT isOpen FROM Operations");
+		
+		
+		conn.close();
+		return isOpen;
+	}
 }
+
+
+
+
+
+
+
+
+
+
