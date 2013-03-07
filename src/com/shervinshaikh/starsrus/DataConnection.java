@@ -791,6 +791,48 @@ public class DataConnection {
 		conn.close();
 		return isOpen;
 	}
+	
+	
+	// MANAGER INTERFACE
+	//
+	//
+	public static String[] getCustomers() throws SQLException {
+		int nCustomers = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		// get number of market accounts
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+		if(rs.next()){
+			nCustomers = (rs.getInt(1));
+			System.out.println("# of Customer Accounts: " + nCustomers);
+		}
+		
+		String[] customers = new String[nCustomers];
+		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
+		for(int i=0; rs.next(); i++){
+			customers[i] = rs.getString(1);
+		}
+		
+		return customers;
+	}
+	
+	// list of customers who have bought or sold at least 1,000 shares in the current month
+	public static String[][] getActiveCustomers() throws SQLException {
+		int numActiveCustomer = 0;
+		// get number of active customers in current month
+		
+		
+		// place active customers (cname, taxid) into string array
+		String[][] activeCustomers = new String[numActiveCustomer][2];
+		
+		return activeCustomers;
+	}
+	
+	// empty the Transactions table
+	public static void deleteTransactions() throws SQLException {
+		
+	}
 }
 
 

@@ -40,6 +40,7 @@ public class ManagerPane extends JPanel {
 
 
         String[] customerList = { "Nivedh", "Sherv"};
+        try { customerList = DataConnection.getCustomers(); } catch(SQLException e) { System.out.println("ERROR getting list of customers"); }
         JComboBox customerPicker = new JComboBox(customerList);
         customerPicker.addItemListener(new customerPickListener());
         customerPicker.setBounds(0,60,100,20);
@@ -182,13 +183,15 @@ public class ManagerPane extends JPanel {
     class openMarketListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"Open market!");
+        	try { DataConnection.openMarket(); } catch(SQLException e){ System.out.println("ERROR unable to open market"); }
+            JOptionPane.showMessageDialog(null,"Market Opened!");
         }
     }
     class closeMarketListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"Close market!");
+        	try { DataConnection.closeMarket(); } catch(SQLException e) { System.out.println("ERROR unable to close market"); }
+            JOptionPane.showMessageDialog(null,"Market Closed");
         }
     }
     class dateListener implements ChangeListener{
