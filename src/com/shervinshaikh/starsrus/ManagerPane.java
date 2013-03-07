@@ -140,7 +140,8 @@ public class ManagerPane extends JPanel {
     class genStatementListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null, "Generate Statement!");
+            MonthlyStatementBoard msBoard = new MonthlyStatementBoard("NAME HERE");
+            //JOptionPane.showMessageDialog(null, "Generate Statement!");
         }
     }
     class listActiveListener implements ActionListener{
