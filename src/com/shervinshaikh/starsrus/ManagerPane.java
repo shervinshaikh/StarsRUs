@@ -154,7 +154,9 @@ public class ManagerPane extends JPanel {
     class genDTERListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"gen DTER!");
+            ReportBoard repBoard = new ReportBoard();
+
+            //JOptionPane.showMessageDialog(null,"gen DTER!");
         }
     }
     class makeReportListener implements ActionListener{
