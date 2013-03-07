@@ -1,10 +1,14 @@
 
  package com.shervinshaikh.starsrus;
  
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,6 +19,7 @@ import java.awt.event.MouseEvent;
  */
 public class BalanceTable extends JPanel {
     private boolean DEBUG = false;
+    int taxid= 1022;
 
     public BalanceTable() {
         super(new GridLayout(1,0));
@@ -25,8 +30,27 @@ public class BalanceTable extends JPanel {
         Object[][] data = {
                 {"YAHOO", "200"}
         };
+        
+        int nAccounts = 0;
+        try{ nAccounts = DataConnection.getNAccounts(taxid); } catch (SQLException e) { System.out.println("unable to get num accounts");} 
+        //Object[][] data2;// = new Object[nAccounts][1];
+       
+        try{
+        	data = DataConnection.getBalances(taxid);
+        } catch(SQLException e){ System.out.println("ERROR unable to get balances for account: " + taxid); }
+        
+        //int nAccounts2 = (nAccounts - 2)/3;
+        Object[][] data3 = new Object[nAccounts][3];
+        int j = 0;
+        System.out.println("number of accounts: " + nAccounts);
+        for(int i=2; i<nAccounts; i+=3){
+        	data3[j][0] = data[i][0];
+        	data3[j][1] = data[i+1][0];
+        	data3[j][2] =data[i+2][0];
+        }
+        j++;
 
-        final JTable table = new JTable(data, columnNames);
+        final JTable table = new JTable(data3, columnNames);
         //table.setPreferredScrollableViewportSize(new Dimension(500, 400));
         table.setFillsViewportHeight(true);
 

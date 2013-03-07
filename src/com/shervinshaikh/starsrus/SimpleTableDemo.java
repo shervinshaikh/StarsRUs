@@ -1,16 +1,17 @@
 package com.shervinshaikh.starsrus;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 public class SimpleTableDemo extends JPanel {
     private boolean DEBUG = false;
+    int taxid = 1022;
 
     public SimpleTableDemo() {
         super(new GridLayout(1,0));
@@ -23,12 +24,14 @@ public class SimpleTableDemo extends JPanel {
                 "date",
                 "earnings"};
 
-        Object[][] data = {
+        String[][] data = {
                 {"Kathy", "Smith",
                         "Snowboarding", "blah", "blah", "blah", "blah"},
 
 
         };
+        
+        try { data = DataConnection.getTransactionHistory(taxid); } catch (SQLException e) { System.out.println("ERROR getting transaction history"); }
 
         final JTable table = new JTable(data, columnNames);
         //table.setPreferredScrollableViewportSize(new Dimension(500, 400));

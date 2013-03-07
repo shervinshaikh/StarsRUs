@@ -357,21 +357,21 @@ public class DataConnection {
 		Statement s = conn.createStatement();
 		
 		nTrans = getNumTrans(taxid);
-		String[][] trans = new String[7][nTrans];
+		String[][] trans = new String[nTrans][7];
 
 		ResultSet rs = s.executeQuery("SELECT * FROM Transactions WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
-			trans[0][i]= "" + rs.getInt("stockID");
-			trans[1][i]= rs.getString("ttype");
-			trans[2][i]= rs.getString("symbol");
-			trans[3][i]= "" + rs.getInt("nshares");
-			trans[4][i]= "" + rs.getDouble("price");
+			trans[i][0]= "" + rs.getInt("stockID");
+			trans[i][1]= rs.getString("ttype");
+			trans[i][2]= rs.getString("symbol");
+			trans[i][3]= "" + rs.getInt("nshares");
+			trans[i][4]= "" + rs.getDouble("price");
 
 			// This could possible turn into an error:
-			trans[5][i]= rs.getString("tdate");
-			trans[6][i]= "" + rs.getDouble("earnings");
+			trans[i][5]= rs.getString("tdate").substring(0,10);
+			trans[i][6]= "" + rs.getDouble("earnings");
 			System.out.println("Trans History for TaxID: " + taxid);
-			System.out.println("stockID: " + trans[0][i] + ", transType: " + trans[1][i] + ", symbol: " + trans[2][i] + ", numShares: " + trans[3][i] + ", price: " + trans[4][i]);
+			System.out.println("stockID: " + trans[i][0] + ", transType: " + trans[i][1] + ", symbol: " + trans[i][2] + ", numShares: " + trans[i][3] + ", price: " + trans[i][4]);
 		}
 		
 		return trans;
@@ -563,28 +563,28 @@ public class DataConnection {
 	}
 
 
-	public static Object[] getBalances(int taxid) throws SQLException{
+	public static Object[][] getBalances(int taxid) throws SQLException{
 		int nAccounts = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 
 		try{ nAccounts = getNAccounts(taxid);} catch (SQLException e){ System.out.println("ERROR getting number of accounts");}
 		
-		Object[] b = new Object[nAccounts];
+		Object[][] b = new Object[nAccounts][1];
 		// places market account ID & Balance into double array
 		ResultSet rs = s.executeQuery("SELECT marketID, balance FROM MarketAccounts WHERE taxid =" + taxid);
 		if(rs.next()){
-			b[0] = 0.0 + rs.getInt(1);
-			b[1] = rs.getDouble(2);
+			b[0][0] = 0.0 + rs.getInt(1);
+			b[1][0] = rs.getDouble(2);
 			System.out.println("Market Account ID: " + b[0] + "; Balance $" + b[1]);
 		}
 		// place stock accounts IDs & Balances into doubles array
 		rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxID =" + taxid);
 		for(int i=2; rs.next(); i+=3){
-			b[i] = rs.getInt(1);
-			b[i+1] = rs.getInt(3);
-			b[i+2] = rs.getString(4);
-			System.out.println("Stock Account ID: " + b[i] + ",  # Shares: " + b[i+1] + ", Symbol: " + b[i+2]);
+			b[i][0] = rs.getInt(1);
+			b[i+1][0] = rs.getInt(3);
+			b[i+2][0] = rs.getString(4);
+			System.out.println("Stock Account ID: " + b[i][0] + ",  # Shares: " + b[i+1][0] + ", Symbol: " + b[i+2][0]);
 		}
 		conn.close();
 		return b;

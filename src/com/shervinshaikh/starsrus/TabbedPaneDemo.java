@@ -26,7 +26,7 @@ public class TabbedPaneDemo extends JPanel {
     String[] stockSymbols;
     String movieName;
     int taxid = 1022;
-    Object[] balances;
+    Object[][] balances;
     Object si[] = new Object[8];
 
     //String prod_date_plus="";
@@ -162,6 +162,15 @@ public class TabbedPaneDemo extends JPanel {
         JComponent panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
+        
+        int nAccounts = 0;
+        try{ nAccounts = DataConnection.getNAccounts(taxid);
+        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
+        
+        balances = new Object[nAccounts][1];
+        
+        try{ balances = DataConnection.getBalances(taxid);
+        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
 		
 		BalanceTable balanceTable = new BalanceTable();
         balanceTable.setOpaque(true); //content panes must be opaque
@@ -173,18 +182,10 @@ public class TabbedPaneDemo extends JPanel {
 		refreshBalance.setBounds(20,105,150,20);
 		panel5.add(refreshBalance);
 
-        int nAccounts = 0;
-        try{ nAccounts = DataConnection.getNAccounts(taxid);
-        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
-        
-        balances = new Object[nAccounts];
-        
-        try{ balances = DataConnection.getBalances(taxid);
-        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
         
         labelUserId = new JLabel("User ID: " + taxid);
-        labelMarketBal = new JLabel("Market Balance: " + balances[1]);
-        labelStockBal = new JLabel("Stock Balance: " + balances[3]);
+        labelMarketBal = new JLabel("Market Balance: " + balances[1][0]);
+        labelStockBal = new JLabel("Stock Balance: " + balances[3][0]);
 
         labelUserId.setBounds(20,30, 150, 20);
         labelMarketBal.setBounds(20,55,150,20);
@@ -494,7 +495,7 @@ public class TabbedPaneDemo extends JPanel {
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
 	        
-	        balances = new Object[nAccounts];
+	        balances = new Object[nAccounts][1];
 	        
 	        try{ balances = DataConnection.getBalances(taxid);
 	        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
