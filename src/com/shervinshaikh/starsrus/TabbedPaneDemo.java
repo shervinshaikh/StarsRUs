@@ -29,6 +29,7 @@ public class TabbedPaneDemo extends JPanel {
     int taxid = 1022;
     Object[][] balances;
     Object si[] = new Object[8];
+    JList list;
 
     //String prod_date_plus="";
     //String ranking_plus="";
@@ -98,7 +99,7 @@ public class TabbedPaneDemo extends JPanel {
 
         //String [] symbols = {"GOOG", "AAPL", "YAHOO"}; // Get values from the database
         
-        JList list = new JList(stockSymbols);
+        list = new JList(stockSymbols);
         JScrollPane symbolScroll = new JScrollPane(list);
         symbolScroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         symbolScroll.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -423,7 +424,7 @@ public class TabbedPaneDemo extends JPanel {
         public void actionPerformed(ActionEvent arg0) {
         	double v = 0;
         	try{ 
-        		v = DataConnection.buyStocks(1022, Integer.parseInt(sharesB.getText()), "SKB");
+        		v = DataConnection.buyStocks(1022, Integer.parseInt(sharesB.getText()), list.getSelectedValue().toString());
         	} catch (SQLException e) { System.out.println("ERROR unable to buy stocks"); }
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough funds to complete purchase");
