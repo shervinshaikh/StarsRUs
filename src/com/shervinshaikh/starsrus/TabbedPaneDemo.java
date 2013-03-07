@@ -4,8 +4,6 @@
  *   images/middle.gif.
  */
 
-package com.shervinshaikh.starsrus;
- 
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -493,7 +491,8 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			balanceTable = new BalanceTable();
+			balanceTable.updateTable();
+            tabbedPane.repaint();
 			balanceTable.repaint();
 			panel5.repaint();
 			int nAccounts = 0;
@@ -538,8 +537,13 @@ public class TabbedPaneDemo extends JPanel {
                 
                 StockTable blah = new StockTable(si[0].toString(), si[1].toString(), si[2].toString(), si[3].toString(), si[4].toString(), si[5].toString(), si[6].toString(), si[7].toString());
                 blah.setOpaque(true); //content panes must be opaque
+
                 panel7.remove(stockInfoPane);
                 panel7.add(blah);
+                tabbedPane.repaint();
+                panel7.repaint();
+                blah.repaint();
+
                 blah.setBounds(0, 60, 600, 300);
                 //if(item.toString() != null)
                 //    JOptionPane.showMessageDialog(null, item.toString());
