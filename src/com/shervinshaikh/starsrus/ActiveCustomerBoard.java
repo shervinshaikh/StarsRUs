@@ -1,5 +1,3 @@
-
- package com.shervinshaikh.starsrus;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,10 +11,10 @@ import java.awt.event.MouseEvent;
  * To change this template use File | Settings | File Templates.
  */
 
-public class ActiveCustomerTable extends JFrame
+public class ActiveCustomerBoard extends JFrame
 {
 
-    public ActiveCustomerTable()
+    public ActiveCustomerBoard()
     {
 
 

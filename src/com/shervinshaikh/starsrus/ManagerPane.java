@@ -146,7 +146,7 @@ public class ManagerPane extends JPanel {
     class listActiveListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            ActiveCustomerTable activeTab = new ActiveCustomerTable();
+            ActiveCustomerBoard activeTab = new ActiveCustomerBoard();
 
             //JOptionPane.showMessageDialog(null,"List stuff!");
         }
