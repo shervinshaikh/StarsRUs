@@ -179,6 +179,7 @@ public class TabbedPaneDemo extends JPanel {
 		
 		JButton refreshBalance = new JButton("Refresh");
 		refreshBalance.addActionListener(new RefreshListener());
+        refreshBalance.addActionListener(new RefreshListener());
 		refreshBalance.setBounds(20,105,150,20);
 		panel5.add(refreshBalance);
 
