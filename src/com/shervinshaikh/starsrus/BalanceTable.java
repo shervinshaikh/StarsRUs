@@ -39,16 +39,16 @@ public class BalanceTable extends JPanel {
         	data = DataConnection.getBalances(taxid);
         } catch(SQLException e){ System.out.println("ERROR unable to get balances for account: " + taxid); }
         
-        //int nAccounts2 = (nAccounts - 2)/3;
-        Object[][] data3 = new Object[nAccounts][3];
+        int nAccounts2 = (nAccounts - 2)/3;
+        Object[][] data3 = new Object[nAccounts2][3];
         int j = 0;
         System.out.println("number of accounts: " + nAccounts);
         for(int i=2; i<nAccounts; i+=3){
         	data3[j][0] = data[i][0];
         	data3[j][1] = data[i+1][0];
         	data3[j][2] =data[i+2][0];
+        	j++;
         }
-        j++;
 
         final JTable table = new JTable(data3, columnNames);
         //table.setPreferredScrollableViewportSize(new Dimension(500, 400));

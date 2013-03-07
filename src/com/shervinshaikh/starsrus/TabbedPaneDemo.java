@@ -185,15 +185,15 @@ public class TabbedPaneDemo extends JPanel {
         
         labelUserId = new JLabel("User ID: " + taxid);
         labelMarketBal = new JLabel("Market Balance: " + balances[1][0]);
-        labelStockBal = new JLabel("Stock Balance: " + balances[3][0]);
+        //labelStockBal = new JLabel("Stock Balance: " + balances[3][0]);
 
         labelUserId.setBounds(20,30, 150, 20);
         labelMarketBal.setBounds(20,55,150,20);
-        labelStockBal.setBounds(20,80,150,20);
+        //labelStockBal.setBounds(20,80,150,20);
 
         panel5.add(labelUserId);
         panel5.add(labelMarketBal);
-        panel5.add(labelStockBal);
+        //panel5.add(labelStockBal);
 
         tabbedPane.addTab("Show Balance", panel5);
         tabbedPane.setMnemonicAt(4, KeyEvent.VK_5);
@@ -501,8 +501,8 @@ public class TabbedPaneDemo extends JPanel {
 	        } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
 	        
 	        labelUserId.setText("User ID: " + taxid);
-	        labelMarketBal.setText("Market Balance: " + balances[1]);
-	        labelStockBal.setText("Stock Balance: " + balances[3]);
+	        labelMarketBal.setText("Market Balance: " + balances[1][0]);
+	        //labelStockBal.setText("Stock Balance: " + balances[3]);
 		}
 	
 	}

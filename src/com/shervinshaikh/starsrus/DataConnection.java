@@ -316,6 +316,20 @@ public class DataConnection {
 		return balance;
 	}
 	
+	public static double sellStocks(int taxid, int nshares, String symbol, double price) throws SQLException {
+		int earnings = 0, marketID = 0, stockID = 0, taxID = 0;
+		double stockPrice = 0;
+		String date = getTodaysDate();
+		
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("");
+		
+		
+		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, stockPrice, date, 0.0);
+		return earnings; 
+	}
+	
 	public static void recordTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		
