@@ -492,7 +492,7 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			balanceTable = new BalanceTable();
+			balanceTable.fireTableDataChanged()
 		
 			int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
