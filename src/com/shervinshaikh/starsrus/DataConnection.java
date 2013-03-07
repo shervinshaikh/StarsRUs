@@ -60,7 +60,7 @@ public class DataConnection {
 		//setDate("25-Apr-13");
 		//setStockPrice("SKB", 50.0);
 		
-		getTransactionHistory(1022);
+		//getTransactionHistory(1022);
 	}
 	
 	public static void print_all() throws SQLException {
