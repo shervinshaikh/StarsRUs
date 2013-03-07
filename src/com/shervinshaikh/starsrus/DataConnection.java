@@ -56,13 +56,16 @@ public class DataConnection {
 		//getBalances(1022);
 		
 		//openMarket();
+		//closeMarket();
 		
-		//setDate("25-Apr-13");
-		//setStockPrice("SKB", 50.0);
+		//setDate("18-Apr-13");
+		//setStockPrice("SKB", 45.0);
 		
 		//getTransactionHistory(1022);
 		
-		sellStocks(1022, 2, "SKB", 30);
+		//sellStocks(1022, 2, "SKB", 30);
+		
+		getOwnedSymbols(1022);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -238,6 +241,11 @@ public class DataConnection {
 		int marketID=0, stockID = 0, oldshares = 0, pshares = nshares;
 		String date = "";
 		
+		if(!isMarketOpen()){
+			System.out.println("Market is closed, cannot buy or sell");
+			return -2;
+		}
+		
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
 		
@@ -248,6 +256,7 @@ public class DataConnection {
 			stockPrice = rs.getInt("currentprice");
 			System.out.println("stock Price = " + stockPrice);
 		}
+
 		System.out.println("withdrawing money from MarketAccount");
 		value += stockPrice*(Double.parseDouble("" + nshares));
 		double balance = withdrawMoney(taxid, value);
@@ -322,6 +331,11 @@ public class DataConnection {
 		int marketID = 0, stockID = 0, currentShares = 0, newShares = 0;
 		double currentPrice = 0, earnings = 0;
 		String date = getTodaysDate();
+		
+		if(!isMarketOpen()){
+			System.out.println("Market is closed, cannot buy or sell");
+			return -2;
+		}
 		
 		currentPrice = Double.parseDouble(getStockInfo(symbol)[0].toString());
 		earnings = (currentPrice - buyPrice)*nshares;
@@ -486,6 +500,27 @@ public class DataConnection {
 		// place each stock symbol into the array
 		String[] symbols = new String[nStocks];
 		rs = s.executeQuery("SELECT symbol FROM Stock");
+		for(int i=0; rs.next(); i++){
+			symbols[i] = rs.getString(1);
+		}
+		rs.close();
+		s.close();
+		conn.close();
+		return symbols;
+	}
+	
+	public static String[] getOwnedSymbols(int taxid) throws SQLException {
+		int nStocks = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockAccounts WHERE taxid=" + taxid);
+		if(rs.next()){
+			nStocks = rs.getInt(1);
+			System.out.println("Number of stock accounts: " + nStocks);
+		}
+		
+		String[] symbols = new String[nStocks];
+		rs = s.executeQuery("SELECT symbol FROM StockAccounts WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
 			symbols[i] = rs.getString(1);
 		}
@@ -743,8 +778,16 @@ public class DataConnection {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		ResultSet rs = s.executeQuery("SELECT isOpen FROM Operations");
-		
-		
+		if(rs.next()){
+			if(rs.getInt(1) == 1){
+				return true;
+			}
+			else {
+				return false;
+			}
+		}
+		s.close();
+		rs.close();
 		conn.close();
 		return isOpen;
 	}

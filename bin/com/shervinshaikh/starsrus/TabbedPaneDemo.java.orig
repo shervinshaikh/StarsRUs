@@ -1,10 +1,11 @@
-package com.shervinshaikh.starsrus;
 
 /*
  * TabbedPaneDemo.java requires one additional file:
  *   images/middle.gif.
  */
 
+package com.shervinshaikh.starsrus;
+ 
 import java.awt.*;
 import java.awt.event.*;
 import java.sql.SQLException;
@@ -132,12 +133,6 @@ public class TabbedPaneDemo extends JPanel {
         //sharesB.setText("0");
 
         String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
-        
-        try { 
-        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
-        } catch (SQLException e) { 
-        	System.out.println("ERROR unable to get stock account symbols"); 
-        }
         JList list2 = new JList(userSymbols);
         JScrollPane symbolScroll2 = new JScrollPane(list2);
         symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
@@ -146,8 +141,7 @@ public class TabbedPaneDemo extends JPanel {
         list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JButton sells = new JButton("Sell");
-        //purchase.addActionListener(new BuyListener());
-        // TODO add a sellListener not BuyListener 
+        purchase.addActionListener(new BuyListener());
 
         sharesS.setBounds(105,50, 60, 20);
         selllabel.setBounds(50,50,55,20);
@@ -187,7 +181,6 @@ public class TabbedPaneDemo extends JPanel {
 		
 		JButton refreshBalance = new JButton("Refresh");
 		refreshBalance.addActionListener(new RefreshListener());
-        refreshBalance.addActionListener(new RefreshListener());
 		refreshBalance.setBounds(20,105,150,20);
 		panel5.add(refreshBalance);
 
@@ -436,9 +429,6 @@ public class TabbedPaneDemo extends JPanel {
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough funds to complete purchase");
         	}
-        	else if(v == -2){
-        		JOptionPane.showMessageDialog(null, "Market is closed, cannot buy stocks");
-        	}
     		else{ 
     			JOptionPane.showMessageDialog(null, "Purchase Done!");
     		}
@@ -503,9 +493,14 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-
-
-            int nAccounts = 0;
+<<<<<<< HEAD
+			balanceTable = new BalanceTable();
+=======
+			balanceTable= new BalanceTable();
+>>>>>>> 50e078ebfafc8ae5f5d9ddaf796a5de8bbc8abea
+			balanceTable.repaint();
+			panel5.repaint();
+			int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
 	        
@@ -517,16 +512,6 @@ public class TabbedPaneDemo extends JPanel {
 	        labelUserId.setText("User ID: " + taxid);
 	        labelMarketBal.setText("Market Balance: " + balances[1][0]);
 	        //labelStockBal.setText("Stock Balance: " + balances[3]);
-
-            BalanceTable blah = new BalanceTable();
-            panel5.remove(balanceTable);
-            panel5.add(blah);
-            blah.setOpaque(true);
-            blah.setBounds(0,130,300,300);
-            blah.repaint();
-            balanceTable.repaint();
-            tabbedPane.repaint();
-            panel5.repaint();
 		}
 	
 	}
@@ -557,13 +542,8 @@ public class TabbedPaneDemo extends JPanel {
                 
                 StockTable blah = new StockTable(si[0].toString(), si[1].toString(), si[2].toString(), si[3].toString(), si[4].toString(), si[5].toString(), si[6].toString(), si[7].toString());
                 blah.setOpaque(true); //content panes must be opaque
-
                 panel7.remove(stockInfoPane);
                 panel7.add(blah);
-                tabbedPane.repaint();
-                panel7.repaint();
-                blah.repaint();
-
                 blah.setBounds(0, 60, 600, 300);
                 //if(item.toString() != null)
                 //    JOptionPane.showMessageDialog(null, item.toString());
