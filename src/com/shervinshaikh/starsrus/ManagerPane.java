@@ -61,7 +61,7 @@ public class ManagerPane extends JPanel {
         makeCustomerReport.addActionListener(new makeReportListener());
         p1.add(makeCustomerReport);
         JButton deleteTrans = new JButton("Delete Transactions");
-        deleteTrans.setBounds(0,100,200,20);
+        deleteTrans.setBounds(0,100,280,20);
         deleteTrans.addActionListener(new deleteTransListener());
         p1.add(deleteTrans);
 
