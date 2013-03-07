@@ -23,6 +23,7 @@ public class ManagerPane extends JPanel {
     JTabbedPane tabbedPane;
     JPanel p1;
     String selectedCustomer = "";
+    SpinnerDateModel model;
 
     public ManagerPane(){
 
@@ -82,7 +83,7 @@ public class ManagerPane extends JPanel {
 
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
-        SpinnerDateModel model = new SpinnerDateModel();
+        model = new SpinnerDateModel();
         model.setValue(date);
         JSpinner spinner = new JSpinner(model);
         spinner.setBounds(400,80,120,20);
@@ -198,6 +199,7 @@ public class ManagerPane extends JPanel {
         @Override
         public void stateChanged(ChangeEvent e) {
             Date date = (Date) ((JSpinner) e.getSource()).getValue();
+            //System.out.println("Date: " + date);
             //for (int i = 0; i < labels.length; i++) {
             //    labels[i].setText(formats[i].format(date));
             //}
@@ -208,6 +210,8 @@ public class ManagerPane extends JPanel {
     class dateButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	String date = model.getValue().toString();
+            System.out.println("Date: " + date);
             JOptionPane.showMessageDialog(null,"Change date!");
         }
 
