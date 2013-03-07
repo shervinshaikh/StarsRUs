@@ -491,11 +491,9 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			balanceTable.updateTable();
-            tabbedPane.repaint();
-			balanceTable.repaint();
-			panel5.repaint();
-			int nAccounts = 0;
+
+
+            int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
 	        
@@ -507,6 +505,16 @@ public class TabbedPaneDemo extends JPanel {
 	        labelUserId.setText("User ID: " + taxid);
 	        labelMarketBal.setText("Market Balance: " + balances[1][0]);
 	        //labelStockBal.setText("Stock Balance: " + balances[3]);
+
+            BalanceTable blah = new BalanceTable();
+            panel5.remove(balanceTable);
+            panel5.add(blah);
+            blah.setOpaque(true);
+            blah.setBounds(0,130,300,300);
+            blah.repaint();
+            balanceTable.repaint();
+            tabbedPane.repaint();
+            panel5.repaint();
 		}
 	
 	}
