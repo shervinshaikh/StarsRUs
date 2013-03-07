@@ -492,8 +492,7 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			balanceTable.fireTableDataChanged()
-		
+			balanceTable.updateTable();
 			int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}

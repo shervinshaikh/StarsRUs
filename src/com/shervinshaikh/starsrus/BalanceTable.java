@@ -20,7 +20,8 @@ import javax.swing.JTable;
 public class BalanceTable extends JPanel {
     private boolean DEBUG = false;
     int taxid= 1022;
-
+	JTable table;
+	
     public BalanceTable() {
         super(new GridLayout(1,0));
 
@@ -50,7 +51,7 @@ public class BalanceTable extends JPanel {
         	j++;
         }
 
-        final JTable table = new JTable(data3, columnNames);
+        table = new JTable(data3, columnNames);
         //table.setPreferredScrollableViewportSize(new Dimension(500, 400));
         table.setFillsViewportHeight(true);
 
@@ -68,6 +69,10 @@ public class BalanceTable extends JPanel {
         //Add the scroll pane to this panel.
         add(scrollPane);
     }
+	public void updateTable(){
+		//get data again and remake table
+		
+	}
 
     private void printDebugData(JTable table) {
         int numRows = table.getRowCount();
