@@ -20,7 +20,7 @@ public class TabbedPaneDemo extends JPanel {
     JTextField sharesB;
 	BalanceTable balanceTable;
     StockTable stockInfoPane;
-    JComponent panel7;
+    JComponent panel7,panel5;
     int first_top_date;
     int second_top_date;
     String[] movieInfo;
@@ -161,7 +161,7 @@ public class TabbedPaneDemo extends JPanel {
 
 
         // SHOW BALANCE
-        JComponent panel5 = makeTextPanel("Panel #5");
+        panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
         
@@ -493,7 +493,9 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
-			balanceTable.updateTable();
+			balanceTable = new BalanceTable();
+			balanceTable.repaint();
+			panel5.repaint();
 			int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}

@@ -47,6 +47,7 @@ public class BalanceTable extends JPanel {
         for(int i=2; i<nAccounts; i+=3){
         	data3[j][0] = data[i][0];
         	data3[j][1] = data[i+1][0];
+        	System.out.println("shares: " + data3[j][1]);
         	data3[j][2] =data[i+2][0];
         	j++;
         }
@@ -71,7 +72,33 @@ public class BalanceTable extends JPanel {
     }
 	public void updateTable(){
 		//get data again and remake table
-		
+		Object[][] data = {
+                {"YAHOO", "200", "YHO"}
+        };
+		int nAccounts = 0;
+        try{ nAccounts = DataConnection.getNAccounts(taxid); } catch (SQLException e) { System.out.println("unable to get num accounts");} 
+        //Object[][] data2;// = new Object[nAccounts][1];
+       
+        try{
+        	data = DataConnection.getBalances(taxid);
+        } catch(SQLException e){ System.out.println("ERROR unable to get balances for account: " + taxid); }
+        
+        int nAccounts2 = (nAccounts - 2)/3;
+        Object[][] data3 = new Object[nAccounts2][3];
+        int j = 0;
+        System.out.println("number of accounts: " + nAccounts);
+        for(int i=2; i<nAccounts; i+=3){
+        	data3[j][0] = data[i][0];
+        	data3[j][1] = data[i+1][0];
+        	System.out.println("shares: " + data3[j][1]);
+        	data3[j][2] =data[i+2][0];
+        	j++;
+        }
+        String[] columnNames = {"Stock ID",
+                "Num Owned", "Symbol"};
+        
+        table = new JTable(data3, columnNames);
+        table.setFillsViewportHeight(true);
 	}
 
     private void printDebugData(JTable table) {

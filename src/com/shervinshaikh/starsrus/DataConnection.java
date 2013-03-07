@@ -61,6 +61,8 @@ public class DataConnection {
 		//setStockPrice("SKB", 50.0);
 		
 		//getTransactionHistory(1022);
+		
+		sellStocks(1022, 2, "SKB", 30);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -316,17 +318,56 @@ public class DataConnection {
 		return balance;
 	}
 	
-	public static double sellStocks(int taxid, int nshares, String symbol, double price) throws SQLException {
-		int earnings = 0, marketID = 0, stockID = 0, taxID = 0;
-		double stockPrice = 0;
+	public static double sellStocks(int taxid, int nshares, String symbol, double buyPrice) throws SQLException {
+		int marketID = 0, stockID = 0, currentShares = 0, newShares = 0;
+		double currentPrice = 0, earnings = 0;
 		String date = getTodaysDate();
+		
+		currentPrice = Double.parseDouble(getStockInfo(symbol)[0].toString());
+		earnings = (currentPrice - buyPrice)*nshares;
+		System.out.println("earnings:  " + earnings);
 		
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("");
+		ResultSet rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxid= " + taxid + " AND symbol = '" + symbol + "'");
+		if(rs.next()){
+			currentShares = rs.getInt("nshares");
+			stockID = rs.getInt("stockid");
+		}
+		
+		// if not enough shares in account, end the sell process
+		System.out.println("current shares:" + currentShares + ", selling shares: " + nshares);
+		newShares = currentShares-nshares;
+		if(newShares < 0){
+			System.out.println("Cannot complete sell");
+			return -1;
+		}
+		try{
+		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?";
+		PreparedStatement p = conn.prepareStatement(sql);
+		p.setInt(1, newShares);
+		p.setInt(2,  taxid);
+		p.setString(3,  symbol);
+		System.out.println("getting ready to execute update");
+		p.executeUpdate();
+		System.out.println("table updated");
+		} catch (SQLException e){
+			e.printStackTrace();
+		}
+		
+		// get the Market ID
+		rs = s.executeQuery("SELECT marketid FROM MarketAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			marketID = rs.getInt(1);
+		}
+		
+		// DEPOSIT money into Market Account
+		depositMoney(taxid, earnings-20);
 		
 		
-		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, stockPrice, date, 0.0);
+		// RECORD Transaction
+		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, 0.0);
+		conn.close();
 		return earnings; 
 	}
 	
@@ -387,7 +428,7 @@ public class DataConnection {
 			System.out.println("Trans History for TaxID: " + taxid);
 			System.out.println("stockID: " + trans[i][0] + ", transType: " + trans[i][1] + ", symbol: " + trans[i][2] + ", numShares: " + trans[i][3] + ", price: " + trans[i][4]);
 		}
-		
+		conn.close();
 		return trans;
 	}
 	
@@ -673,6 +714,7 @@ public class DataConnection {
 		PreparedStatement p = conn.prepareStatement("UPDATE operations SET isOpen = 0");
 		p.executeUpdate();
 		System.out.println("Market Closed!");
+		conn.close();
 	}
 	
 	public static void setDate(String date) throws SQLException {
@@ -681,6 +723,7 @@ public class DataConnection {
 		p.setString(1, date);
 		p.executeUpdate();
 		System.out.println("Date updated to " + date);
+		conn.close();
 	}
 
 	public static void setStockPrice(String symbol, Double price) throws SQLException {
@@ -691,6 +734,7 @@ public class DataConnection {
 		System.out.println("about to execute update");
 		p.executeUpdate();
 		System.out.println("New " + symbol + ": $" + price);
+		conn.close();
 	}
 
 
