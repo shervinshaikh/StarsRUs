@@ -18,6 +18,7 @@ public class TabbedPaneDemo extends JPanel {
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
     JTextField sharesB;
+	BalanceTable balanceTable;
     StockTable stockInfoPane;
     JComponent panel7;
     int first_top_date;
@@ -172,7 +173,7 @@ public class TabbedPaneDemo extends JPanel {
         try{ balances = DataConnection.getBalances(taxid);
         } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
 		
-		BalanceTable balanceTable = new BalanceTable();
+		balanceTable = new BalanceTable();
         balanceTable.setOpaque(true); //content panes must be opaque
         panel5.add(balanceTable);
         balanceTable.setBounds(0,130,300,300);
@@ -491,6 +492,8 @@ public class TabbedPaneDemo extends JPanel {
 	class RefreshListener implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent arg0){
+			balanceTable = new BalanceTable();
+		
 			int nAccounts = 0;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
