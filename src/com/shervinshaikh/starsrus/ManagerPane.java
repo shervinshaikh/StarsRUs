@@ -22,6 +22,7 @@ import javax.swing.event.ChangeListener;
 public class ManagerPane extends JPanel {
     JTabbedPane tabbedPane;
     JPanel p1;
+    String selectedCustomer = "";
 
     public ManagerPane(){
 
@@ -134,13 +135,16 @@ public class ManagerPane extends JPanel {
         public void itemStateChanged(ItemEvent event){
             if (event.getStateChange() == ItemEvent.SELECTED) {
                 Object item = event.getItem();
+                selectedCustomer = item.toString();
+
+                //System.out.println(selectedCustomer);
             }
         }
     }
     class genStatementListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            MonthlyStatementBoard msBoard = new MonthlyStatementBoard("NAME HERE");
+            MonthlyStatementBoard msBoard = new MonthlyStatementBoard(selectedCustomer);
             //JOptionPane.showMessageDialog(null, "Generate Statement!");
         }
     }
@@ -249,3 +253,4 @@ public class ManagerPane extends JPanel {
         });
     }
 }
+
