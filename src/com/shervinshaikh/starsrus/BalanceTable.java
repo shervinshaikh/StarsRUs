@@ -25,10 +25,10 @@ public class BalanceTable extends JPanel {
         super(new GridLayout(1,0));
 
         String[] columnNames = {"Stock ID",
-                "Num Owned"};
+                "Num Owned", "Symbol"};
 
         Object[][] data = {
-                {"YAHOO", "200"}
+                {"YAHOO", "200", "YHO"}
         };
         
         int nAccounts = 0;
