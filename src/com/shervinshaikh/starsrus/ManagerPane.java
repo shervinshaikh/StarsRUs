@@ -167,7 +167,8 @@ public class ManagerPane extends JPanel {
     class makeReportListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"make report!");
+            CusReportBoard cusBoard = new CusReportBoard();
+            //JOptionPane.showMessageDialog(null,"make report!");
         }
     }
     class deleteTransListener implements ActionListener{
@@ -253,4 +254,5 @@ public class ManagerPane extends JPanel {
         });
     }
 }
+
 
