@@ -207,7 +207,7 @@ public class TabbedPaneDemo extends JPanel {
         SimpleTableDemo newContentPane = new SimpleTableDemo();
         newContentPane.setOpaque(true); //content panes must be opaque
         panel6.add(newContentPane);
-        newContentPane.setBounds(0,0,400,300);
+        newContentPane.setBounds(0,0,600,350);
         //frame.setContentPane(newContentPane);
 
         //Display the window.
