@@ -26,15 +26,18 @@ import javax.swing.JTable;
 public class MonthlyStatementBoard extends JFrame
 {
 
+	String name, email;
+	double initialBalance, finalBalance, totalEarnings;
+	int commission;
     public MonthlyStatementBoard(String targetName)
     {
 
-    	JLabel nameLabel = new JLabel("Name: " );
-        JLabel emailLabel = new JLabel("Email: ");
-        JLabel iBalLabel = new JLabel("Initial Balance: ");
-        JLabel fBalLabel = new JLabel("Final Balance: ");
-        JLabel totEarningsLabel = new JLabel("Total Earnings: ");
-        JLabel commLabel = new JLabel("Commission: ");
+    	JLabel nameLabel = new JLabel("Name: " + name );
+        JLabel emailLabel = new JLabel("Email: " + email);
+        JLabel iBalLabel = new JLabel("Initial Balance: "+initialBalance);
+        JLabel fBalLabel = new JLabel("Final Balance: "+finalBalance);
+        JLabel totEarningsLabel = new JLabel("Total Earnings: "+totalEarnings);
+        JLabel commLabel = new JLabel("Commission: "+commission);
         
         add(nameLabel);
         add(emailLabel);
@@ -76,8 +79,8 @@ public class MonthlyStatementBoard extends JFrame
 		
 		int nTrans = 0;
 		try{ nTrans = DataConnection.getNumTrans2(targetName); } catch (SQLException e) { System.out.println(e.getMessage()); }
-		String name = data[0][0];
-		String email = data[1][0];
+		name = data[0][0];
+		email = data[1][0];
 		data1 = new String[nTrans][7];
 		for(int i=0; i<nTrans; i++){
 			data1[i][0] = data[i+2][0]; // stockaccountid
@@ -91,12 +94,12 @@ public class MonthlyStatementBoard extends JFrame
 		
 		// TODO
 		// 1. initial & final balance
-		double initialBalance = 0;
-		double finalBalance = 0;
+		initialBalance = 0;
+		finalBalance = 0;
 		// 2. get total earning/loss, including interest, for current month (1 double)
-		double totalEarnings = 0;
+		totalEarnings = 0;
 		// 3. total commission paid
-		int commission = 0;
+		commission = 0;
         
         final JTable table = new JTable(data1, columnNames);
         table.setFillsViewportHeight(true);
