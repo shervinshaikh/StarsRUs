@@ -1,14 +1,15 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/3/13
- * Time: 6:21 PM
- * To change this template use File | Settings | File Templates.
- */
+package loginpage;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 public class Log extends JFrame {
 

@@ -1,13 +1,8 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/3/13
- * Time: 6:21 PM
- * To change this template use File | Settings | File Templates.
- */
-    import javax.swing.*;
-    import java.awt.*;
-    import java.awt.event.*;
+package loginpage;
+
+    import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 
     public class newframe extends JFrame {
