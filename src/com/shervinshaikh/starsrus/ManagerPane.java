@@ -149,6 +149,7 @@ public class ManagerPane extends JPanel {
     class addInterestListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	try{ DataConnection.addInterest(); } catch(SQLException e) {System.out.println("ERROR unable to add interest"); }
             JOptionPane.showMessageDialog(null, "Add Interest!");
         }
     }

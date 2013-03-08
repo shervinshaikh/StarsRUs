@@ -949,7 +949,7 @@ public class DataConnection {
 		return list;
 	}
 	
-	// TODO generate monthly statement
+	// TODO get initial account balance
 	public static String[][] genMonthlyStatement(String name) throws SQLException {
 		String email = "";
 		int taxid = 0;
@@ -1005,10 +1005,11 @@ public class DataConnection {
 		conn.close();
 	}
 	
+	// TODO each Market Account earns 3% interest on average daily balance
 	public static void addInterest() throws SQLException{
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		//Statement s = conn.createStatement();
-		//ResultSet rs = s.executeQuery("DELETE FROM Transactions");
+		//ResultSet rs = s.executeQuery("");
 		
 		
 		System.out.println("Interest added to all accounts");
