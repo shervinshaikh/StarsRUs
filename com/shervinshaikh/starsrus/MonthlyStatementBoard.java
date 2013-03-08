@@ -29,15 +29,16 @@ public class MonthlyStatementBoard extends JFrame
 
 
         setTitle( "Monthly Statement" );
-        setSize( 350,300 );
-        setResizable( false );
+        setSize( 800,400 );
+        setResizable( true );
 
-        String[] columnNames = {"Name",
-                "address",
-                "init balance",
-                "final balance",
-                "total earnings/loss",
-                "commission paid"};
+        String[] columnNames = {"Stock Acct ID",
+                "Transaction Type",
+                "Stock Symbol",
+                "# of shares",
+                "Price",
+                "Date",
+                "Total Earning/Loss"};
         Object[][] data1 = {
                 {}
         };
