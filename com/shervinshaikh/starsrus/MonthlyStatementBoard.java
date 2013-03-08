@@ -62,13 +62,13 @@ public class MonthlyStatementBoard extends JFrame
 		String email = data[1][0];
 		data1 = new String[nTrans][7];
 		for(int i=0; i<nTrans; i++){
-			data1[i][0] = data[i+2][0]; //
-			data1[i][1] = data[i+2][1]; //
-			data1[i][2] = data[i+2][2]; //
-			data1[i][3] = data[i+2][3]; //
-			data1[i][4] = data[i+2][4]; //
-			data1[i][5] = data[i+2][5]; //
-			data1[i][6] = data[i+2][6]; //
+			data1[i][0] = data[i+2][0]; // stockaccountid
+			data1[i][1] = data[i+2][1]; // transaction type
+			data1[i][2] = data[i+2][2]; // stock symbol
+			data1[i][3] = data[i+2][3]; // number of shares
+			data1[i][4] = data[i+2][4]; // price
+			data1[i][5] = data[i+2][5]; // date
+			data1[i][6] = data[i+2][6]; // earnings or losses
 		}
 		
 		// TODO
