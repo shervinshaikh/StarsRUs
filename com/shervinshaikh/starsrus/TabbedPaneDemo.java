@@ -5,54 +5,32 @@ package com.shervinshaikh.starsrus;
  *   images/middle.gif.
  */
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.SQLException;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerModel;
-import javax.swing.SpinnerNumberModel;
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class TabbedPaneDemo extends JPanel {
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
-    JTextField sharesB;
+    JTextField sharesB,sharesS;
 	BalanceTable balanceTable;
     StockTable stockInfoPane;
-    JComponent panel7,panel5;
+    JComponent panel7,panel5,panel6;
+    JScrollPane symbolScroll2;
     int first_top_date;
     int second_top_date;
     String[] movieInfo;
     String[] stockSymbols;
     String movieName;
-    int taxid = 2034;
+    int taxid = 3045;
     Object[][] balances;
     Object si[] = new Object[8];
-    JList list;
+    JList list, list2;
+    SimpleTableDemo newContentPane;
 
     //String prod_date_plus="";
     //String ranking_plus="";
@@ -151,7 +129,7 @@ public class TabbedPaneDemo extends JPanel {
         panel4.setPreferredSize(new Dimension(410, 50));
 
         panel4.setLayout(null);
-        JTextField sharesS = new JTextField(20);
+        sharesS = new JTextField(20);
         JLabel selllabel = new JLabel("# Shares:");
         //sharesB.setText("0");
 
@@ -162,14 +140,16 @@ public class TabbedPaneDemo extends JPanel {
         } catch (SQLException e) { 
         	System.out.println("ERROR unable to get stock account symbols"); 
         }
-        JList list2 = new JList(userSymbols);
-        JScrollPane symbolScroll2 = new JScrollPane(list2);
+        list2 = new JList(userSymbols);
+        symbolScroll2 = new JScrollPane(list2);
         symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         list2.setVisibleRowCount(4);
         list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JButton sells = new JButton("Sell");
+        sells.addActionListener(new SellListener());
+        
         //purchase.addActionListener(new BuyListener());
         // TODO add a sellListener not BuyListener 
 
@@ -233,12 +213,12 @@ public class TabbedPaneDemo extends JPanel {
 
 
         // Transaction HISTORY
-        JComponent panel6 = makeTextPanel("Panel #6");
+        panel6 = makeTextPanel("Panel #6");
         panel6.setPreferredSize(new Dimension(410, 50));
 
         panel6.setLayout(null);
 
-        SimpleTableDemo newContentPane = new SimpleTableDemo(taxid);
+        newContentPane = new SimpleTableDemo(taxid);
         newContentPane.setOpaque(true); //content panes must be opaque
         panel6.add(newContentPane);
         newContentPane.setBounds(0,0,600,350);
@@ -419,7 +399,9 @@ public class TabbedPaneDemo extends JPanel {
                 e1.printStackTrace();
                 System.out.println("ERROR unable to deposite money");
             }
-            JOptionPane.showMessageDialog(null, "Deposit of $" + amount + " Complete!");
+            
+           JOptionPane.showMessageDialog(null, "Deposit of $" + amount + " Complete!");
+           
         }
 
     }
@@ -445,6 +427,7 @@ public class TabbedPaneDemo extends JPanel {
            else {
         	   JOptionPane.showMessageDialog(null, "Unable to complete withdrawal, funds too low");
            }
+           
         }
 
     }
@@ -467,8 +450,40 @@ public class TabbedPaneDemo extends JPanel {
     			JOptionPane.showMessageDialog(null, "Purchase Done!");
     		}
 
+        	
+        	updateSellandHistory();
         }
+        
+        
 
+    }
+    class SellListener implements ActionListener{
+    	
+    	@Override
+    	public void actionPerformed(ActionEvent arg0){
+    		//do sell stuff here
+    		
+    		double v = 0;
+        	try{ 
+        		v = DataConnection.sellStocks(taxid, Integer.parseInt(sharesS.getText()), list2.getSelectedValue().toString(),22);
+        	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks"); }
+        	if(v == -1){
+        		JOptionPane.showMessageDialog(null, "Not enough stocks to complete purchase");
+        	}
+        	else if(v == -2){
+        		JOptionPane.showMessageDialog(null, "Market is closed, cannot sell stocks");
+        	}
+    		else{ 
+    			JOptionPane.showMessageDialog(null, "Sell Done!");
+    		}
+
+    		
+    		
+    		updateSellandHistory();
+    		
+    	}
+    	
+    	
     }
     class reviewButtonListener implements ActionListener {
         @Override
@@ -594,8 +609,39 @@ public class TabbedPaneDemo extends JPanel {
             }
         }
     }
+    
+    private void updateSellandHistory(){
+    	//update history
+    	panel6.remove(newContentPane);
+    	newContentPane = new SimpleTableDemo(taxid);
+    	newContentPane.setOpaque(true);
 
-
+        newContentPane.setBounds(0,0,600,350);
+        
+    	panel6.add(newContentPane);
+    	tabbedPane.revalidate();
+    	panel6.revalidate();
+    	newContentPane.revalidate();
+    	//newContentPane.getRootPanel().revalidate();
+    	
+    	
+    	//update sell box
+    	
+    	String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
+        
+        try { 
+        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
+        } catch (SQLException e) { 
+        	System.out.println("ERROR unable to get stock account symbols"); 
+        }
+        list2 = new JList(userSymbols);
+        symbolScroll2 = new JScrollPane(list2);
+        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list2.setVisibleRowCount(4);
+        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        symbolScroll2.setBounds(50,75,350,150);
+    }
 
 
 

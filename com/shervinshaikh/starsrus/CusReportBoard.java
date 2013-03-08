@@ -21,8 +21,8 @@ public class CusReportBoard extends JFrame
     public CusReportBoard(String name)
     {
         String[] columnNames = {"Stockid",
-                "# of Shares",
-                "Symbols"};
+                "Symbol",
+                "Shares"};
         Object[][] data = {
                 {"A Big Cream", "ABC", new Integer(33)},
                 {"kool kids klub", "KKK", new Integer (70)}
