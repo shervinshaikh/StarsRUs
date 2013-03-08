@@ -6,15 +6,30 @@
  * To change this template use File | Settings | File Templates.
  */
  package com.shervinshaikh.starsrus;
-import java.awt.*;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -82,10 +97,13 @@ public class ManagerPane extends JPanel {
         closeMarket.addActionListener(new closeMarketListener());
         p1.add(openMarket);
         p1.add(closeMarket);
-
-
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
+        
+        
+        try{date = DataConnection.getTodaysDate()} catch(SQLException e) { System.out.println("ERROR getting date"); }
+        System.out.println("date: " + date);
+
         model = new SpinnerDateModel();
         model.setValue(date);
         JSpinner spinner = new JSpinner(model);
@@ -216,9 +234,12 @@ public class ManagerPane extends JPanel {
     class dateButtonListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-        	String date = model.getValue().toString();
-            System.out.println("Date: " + date);
-            JOptionPane.showMessageDialog(null,"Change date!");
+        	Date date = (Date) model.getValue();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
+            String sqlDate = sdf.format(date);
+            System.out.println("date: " + sqlDate);
+            try{ DataConnection.setDate(sqlDate); } catch(SQLException e) { System.out.println(e.getMessage()); }
+            JOptionPane.showMessageDialog(null,"Changed date to " + sqlDate);
         }
 
     }
