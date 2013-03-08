@@ -74,7 +74,7 @@ public class DataConnection {
 		
 		//genDTER();
 		
-		genMonthlyStatement(name);
+		//genMonthlyStatement(name);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -804,6 +804,8 @@ public class DataConnection {
 	}
 	
 	public static void setDate(String date) throws SQLException {
+		recordBalances();
+		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
 		p.setString(1, date);
@@ -989,6 +991,47 @@ public class DataConnection {
 		
 		
 		System.out.println("Interest added to all accounts");
+		conn.close();
+	}
+	
+	public static void recordBalances() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		
+		// get number of custommers
+		int nCustomers = 0;
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+		if(rs.next()){
+			nCustomers = (rs.getInt(1));
+			System.out.println("# of Customer Accounts: " + nCustomers);
+		}
+		// get todays date
+		String date = getTodaysDate();
+		// store taxid, balance, and date in an array
+		String[][] customers = new String[nCustomers][3];
+		rs = s.executeQuery("SELECT taxid, balance FROM MarketAccounts WHERE ismanager = 0");
+		for(int i=0; rs.next(); i++){
+			customers[i][0] = rs.getString(1);
+			customers[i][1] = rs.getString(2);
+			customers[i][2] = date;
+		}
+		
+		// insert values into the database
+		PreparedStatement pstmt;
+		String updateSuppSQL = "INSERT INTO Balances() Values";
+		pstmt = conn.prepareStatement(updateSuppSQL);
+		
+		// Replace the first ? with value
+		pstmt.setDouble(1, value);
+		
+		// Replace the second ? with id
+		pstmt.setInt(2, id);
+		
+		// Execute updates
+		int n = pstmt.executeUpdate();
+		
+		
+		System.out.println("All Balances recorded for today");
 		conn.close();
 	}
 }

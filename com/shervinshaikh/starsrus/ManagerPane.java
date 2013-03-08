@@ -8,8 +8,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
-import java.awt.*;
-import java.awt.event.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
