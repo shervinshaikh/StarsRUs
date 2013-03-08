@@ -16,10 +16,11 @@ import javax.swing.event.ChangeListener;
 public class TabbedPaneDemo extends JPanel {
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
-    JTextField sharesB;
+    JTextField sharesB,sharesS;
 	BalanceTable balanceTable;
     StockTable stockInfoPane;
     JComponent panel7,panel5,panel6;
+    JScrollPane symbolScroll2;
     int first_top_date;
     int second_top_date;
     String[] movieInfo;
@@ -28,7 +29,7 @@ public class TabbedPaneDemo extends JPanel {
     int taxid = 3045;
     Object[][] balances;
     Object si[] = new Object[8];
-    JList list;
+    JList list, list2;
     SimpleTableDemo newContentPane;
 
     //String prod_date_plus="";
@@ -128,7 +129,7 @@ public class TabbedPaneDemo extends JPanel {
         panel4.setPreferredSize(new Dimension(410, 50));
 
         panel4.setLayout(null);
-        JTextField sharesS = new JTextField(20);
+        sharesS = new JTextField(20);
         JLabel selllabel = new JLabel("# Shares:");
         //sharesB.setText("0");
 
@@ -139,8 +140,8 @@ public class TabbedPaneDemo extends JPanel {
         } catch (SQLException e) { 
         	System.out.println("ERROR unable to get stock account symbols"); 
         }
-        JList list2 = new JList(userSymbols);
-        JScrollPane symbolScroll2 = new JScrollPane(list2);
+        list2 = new JList(userSymbols);
+        symbolScroll2 = new JScrollPane(list2);
         symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         list2.setVisibleRowCount(4);
@@ -462,6 +463,21 @@ public class TabbedPaneDemo extends JPanel {
     	public void actionPerformed(ActionEvent arg0){
     		//do sell stuff here
     		
+    		double v = 0;
+        	try{ 
+        		v = DataConnection.sellStocks(taxid, Integer.parseInt(sharesS.getText()), list2.getSelectedValue().toString(),22);
+        	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks"); }
+        	if(v == -1){
+        		JOptionPane.showMessageDialog(null, "Not enough stocks to complete purchase");
+        	}
+        	else if(v == -2){
+        		JOptionPane.showMessageDialog(null, "Market is closed, cannot sell stocks");
+        	}
+    		else{ 
+    			JOptionPane.showMessageDialog(null, "Sell Done!");
+    		}
+
+    		
     		
     		updateSellandHistory();
     		
@@ -608,6 +624,23 @@ public class TabbedPaneDemo extends JPanel {
     	newContentPane.revalidate();
     	//newContentPane.getRootPanel().revalidate();
     	
+    	
+    	//update sell box
+    	
+    	String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
+        
+        try { 
+        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
+        } catch (SQLException e) { 
+        	System.out.println("ERROR unable to get stock account symbols"); 
+        }
+        list2 = new JList(userSymbols);
+        symbolScroll2 = new JScrollPane(list2);
+        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list2.setVisibleRowCount(4);
+        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        symbolScroll2.setBounds(50,75,350,150);
     }
 
 
