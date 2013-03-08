@@ -26,7 +26,8 @@ public class ActiveCustomerBoard extends JFrame
         String[] columnNames = {"Name"};
         Object[][] data = {
                 {"Jack"},
-                {"Kathy"}
+                {"Kathy"},
+                {"Derp"}
         };
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
