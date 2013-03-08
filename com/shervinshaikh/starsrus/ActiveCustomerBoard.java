@@ -1,5 +1,7 @@
 package com.shervinshaikh.starsrus;
 
+import java.sql.SQLException;
+
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,10 +27,11 @@ public class ActiveCustomerBoard extends JFrame
 
         String[] columnNames = {"Name"};
         Object[][] data = {
-                {"Jack"},
-                {"Kathy"},
-                {"Derp"}
+                {}
         };
+        
+        try{ data[0] = DataConnection.getActiveCustomers(); } catch(SQLException e) { System.out.println("ERROR unable to get active customers"); }
+                
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
 

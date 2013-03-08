@@ -52,6 +52,7 @@ public class ManagerPane extends JPanel {
         generateStatement.setBounds(0,80,200,20);
         generateStatement.addActionListener(new genStatementListener());
         p1.add(generateStatement);
+        selectedCustomer = customerPicker.getItemAt(1).toString();
         JButton listActiveCustomers = new JButton("List Active");
         listActiveCustomers.setBounds(0,160,100,20);
         listActiveCustomers.addActionListener(new listActiveListener());
@@ -238,7 +239,7 @@ public class ManagerPane extends JPanel {
         	
         	try{ DataConnection.setStockPrice(stock, price); } catch(SQLException e) { System.out.println("ERROR unable to set stock price"); }
         	
-            JOptionPane.showMessageDialog(null,"set price!");
+            JOptionPane.showMessageDialog(null,"Price of " + stock + " changed to $" + price);
         }
 
     }

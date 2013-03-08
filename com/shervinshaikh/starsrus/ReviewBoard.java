@@ -26,8 +26,7 @@ public class ReviewBoard extends JFrame
         String[] columnNames = {"Author",
                 "Review"};
         String[][] data = {
-                {"Dark Knight", "average"},
-                {"Inception", "good"}
+                {},
         };
         //
         try{
