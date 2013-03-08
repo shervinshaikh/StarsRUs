@@ -1,11 +1,5 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/6/13
- * Time: 2:16 PM
- * To change this template use File | Settings | File Templates.
- */
- package com.shervinshaikh.starsrus;
+package com.shervinshaikh.starsrus;
+ 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
