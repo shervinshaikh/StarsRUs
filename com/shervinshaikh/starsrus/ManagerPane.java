@@ -7,8 +7,6 @@
  */
  package com.shervinshaikh.starsrus;
 import java.awt.*;
-import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.*;
 import java.sql.SQLException;
 import java.util.Calendar;
