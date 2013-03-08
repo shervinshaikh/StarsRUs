@@ -34,7 +34,7 @@ public class DataConnection {
 		//print_all();
 		
 		// TO-DO also create a market account for the person
-		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
+		registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 		
 		//depositMoney(1022, 100);
 		
@@ -73,61 +73,12 @@ public class DataConnection {
 		
 		//getActiveCustomers();
 		
-		genDTER();
+		//genDTER();
 		
 		//genMonthlyStatement(name);
 		
 		//recordBalances();
 	}
-	
-	public static void print_all() throws SQLException {
-		// Connect to the database
-
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		
-		// Create a Statement
-		Statement stmt = conn.createStatement();
-		
-		// Specify the SQL Query to run
-		ResultSet rs = stmt.executeQuery ("SELECT * FROM CS174A.movies");
-		
-		// Iterate through the result and print the data
-		System.out.println("result:");
-		
-		while(rs.next()) {
-			// Get the value from column "columnName" with integer type
-			System.out.println(rs.getInt("M_ID"));
-			// Get the value from column "columnName" with float type
-			System.out.println(rs.getString("M_NAME"));
-			// Get the value from the third column with string type
-			System.out.println(rs.getString(3));
-		}
-		
-		// don't miss this
-		rs.close();
-	}
-	
-	
-	public static int testPreStmt(int id, double value) throws SQLException{
-		PreparedStatement pstmt;
-		String updateSuppSQL = "update tablename set columnName = ? where id = ?";
-		pstmt = conn.prepareStatement(updateSuppSQL);
-		
-		// Replace the first ? with value
-		pstmt.setDouble(1, value);
-		
-		// Replace the second ? with id
-		pstmt.setInt(2, id);
-		
-		// Execute updates
-		int n = pstmt.executeUpdate();
-		System.out.println("updates :" + n );
-		pstmt.close();
-		conn.close();
-		return n;
-	}
-	
-	
 	
 	// TODO create a MarketAccount & place money into it when registering the customer
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
@@ -140,6 +91,19 @@ public class DataConnection {
 				"VALUES(" + taxid + ", '" + ssn + "', '" + phone + "', '" + cname + "', '" + email + "', '" + username +"', '" + pw + "', '" + address + "', '" + state + "', " + ismanager + ")";
 		stmt.executeUpdate(sql);
 		
+		stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT MAX(marketid) FROM MarketAccounts");
+		int marketid = 0;
+		if(rs.next()){
+			marketid = rs.getInt(1) + 1;
+		}
+		System.out.println("new market id:" + marketid);
+		sql = "INSERT INTO MarketAccounts(marketid, taxid, interest, balance, commission)" + 
+				"VALUES("+ marketid + ", "+ taxid + ", 0, 1000, 0)"; // $1,00 for first time market accounts
+		System.out.println("about to create new market account");
+		stmt.executeUpdate(sql);
+		System.out.println("new market account created!");
+		
 			//String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
 		    //		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
 
@@ -148,6 +112,20 @@ public class DataConnection {
 		   
 		conn.close();
 		return true;
+	}
+	
+	public static void createMarketAccount(int taxid) throws SQLException{
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT MAX(marketid) FROM MarketAccounts");
+		int marketid = 0;
+		if(rs.next()){
+			marketid = rs.getInt(1) + 1;
+		}
+		String sql = "INSERT INTO MarketAccounts(marketid, taxid, interest, balance, commission)" + 
+				"VALUES("+ marketid + ", "+ taxid + ", 0, 1000, 0)"; // $1,00 for first time market accounts
+		s.executeUpdate(sql);
+		conn.close();
 	}
 	
 	
