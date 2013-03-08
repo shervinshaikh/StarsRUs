@@ -17,6 +17,8 @@ public class DataConnection {
 	static String strUsername = "cs174a_shervinshaikh";
 	static String strPassword = "computer";
 	
+	
+	// TODO make sure to add commission at the right times
 	public static void main(String[] args) throws SQLException{
 		
 		// 1. Load the Oracle JDBC driver for this program
@@ -957,8 +959,7 @@ public class DataConnection {
 		}
 		return list;
 	}
-	
-	// TODO get initial account balance
+
 	public static String[][] genMonthlyStatement(String name) throws SQLException {
 		String email = "";
 		int taxid = 0;
@@ -995,7 +996,6 @@ public class DataConnection {
 		rs = s.executeQuery("SELECT balance, commission, interest FROM MarketAccounts WHERE taxid=" + taxid);
 		if(rs.next()){
 			ms[0][1] = "" + rs.getDouble("balance"); // final balance
-			// TODO initial balance
 			ms[0][3] = "" + rs.getDouble("commission");
 			ms[0][4] = "" + (rs.getDouble("interest") - rs.getDouble("commission"));
 		}

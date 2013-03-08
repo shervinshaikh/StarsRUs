@@ -43,14 +43,10 @@ public class MonthlyStatementBoard extends JFrame
 			data1[i][4] = data[i+2][4]; // price
 			data1[i][5] = data[i+2][5]; // date
 			data1[i][6] = data[i+2][6]; // earnings or losses
-			interest += Double.parseDouble(data[i+2][6].toString()); // add up all earnings to interest
+			interest += Double.parseDouble(data[i+2][6].toString()); // add up all earnings to (interest - commission)
 		}
-		// TODO
-		// 1. initial & final balance
 		finalBalance = data[0][1].toString();
-		// 2. get total earning/loss, including interest, for current month (1 double)
 		totalEarnings = "" + interest;
-		// 3. total commission paid
 		commission = data[0][3].toString();
 		initialBalance = "" + (Double.parseDouble(finalBalance) - interest);
 		
