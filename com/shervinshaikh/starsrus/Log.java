@@ -1,4 +1,4 @@
-package loginpage;
+package com.shervinshaikh.starsrus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,10 +59,25 @@ public class Log extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 String puname = txuser.getText();
                 String ppaswd = pass.getText();
+                
+                //is the user a manager
+                int isManager=1;
+                
                 if(puname.equals("test") && ppaswd.equals("12345")) {
-                    newframe regFace =new newframe();
-                    regFace.setVisible(true);
-                    dispose();
+                    
+                	if(isManager==0){
+	                	TabbedPaneDemo regFace =new TabbedPaneDemo();
+	                    regFace.setVisible(true);
+	                    regFace.createAndShowGUI();
+	                    dispose();
+                	}
+                	else if(isManager==1){
+                		ManagerPane regFace=  new ManagerPane();
+                		regFace.setVisible(true);
+                		regFace.createAndShowGUI();
+                		dispose();
+                		
+                	}
                 } else {
 
                     JOptionPane.showMessageDialog(null,"Wrong Password / Username");

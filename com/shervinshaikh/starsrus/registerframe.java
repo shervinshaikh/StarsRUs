@@ -1,5 +1,4 @@
-package loginpage;
-
+package com.shervinshaikh.starsrus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
