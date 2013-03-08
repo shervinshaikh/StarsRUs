@@ -259,7 +259,7 @@ public class ManagerPane extends JPanel {
         	String stock = stockNameList.getSelectedItem().toString();
         	double price = Double.parseDouble(inputPrice.getText());
         	
-        	try{ DataConnection.setStockPrice(stock, price); } catch(SQLException e) { System.out.println("ERROR unable to set stock price"); }
+        	try{ DataConnection.setStockPrice(stock, price); } catch(SQLException e) { System.out.println(e.getMessage()); }
         	
             JOptionPane.showMessageDialog(null,"Price of " + stock + " changed to $" + price);
         }

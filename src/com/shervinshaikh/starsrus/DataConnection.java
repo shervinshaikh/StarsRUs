@@ -63,7 +63,7 @@ public class DataConnection {
 		
 		//getTransactionHistory(1022);
 		
-		sellStocks(77777, 2, "SMD", 3);
+		//sellStocks(77777, 2, "SMD", 3);
 		
 		//getOwnedSymbols(1022);
 		
@@ -74,6 +74,8 @@ public class DataConnection {
 		//genMonthlyStatement(name);
 		
 		//recordBalances();
+		
+		setStockPrice("SKB", 30.0);
 	}
 	
 	public static int getTaxID(String username) throws SQLException {
@@ -382,6 +384,8 @@ public class DataConnection {
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, earnings);
+		p.close();
+		rs.close();
 		conn.close();
 		return earnings; 
 	}
@@ -812,11 +816,14 @@ public class DataConnection {
 
 	public static void setStockPrice(String symbol, Double price) throws SQLException {
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		PreparedStatement p = conn.prepareStatement("UPDATE Stock SET currentPrice = ? WHERE Symbol = ?");
-		p.setDouble(1, price);
-		p.setString(2, symbol);
+		Statement p = conn.createStatement();
+		String cprice = "";
+		if(isMarketOpen()) { cprice = ", closePrice = " + price; }
+		String sql = "UPDATE Stock SET currentPrice = " + price + cprice + " WHERE Symbol = '" + symbol + "'";
+		//sql = "UPDATE Stock SET currentPrice = 5 WHERE Symbol = 'SKB'";
+		System.out.println("changing stock price");
 		System.out.println("about to execute update");
-		p.executeUpdate();
+		p.executeUpdate(sql);
 		System.out.println("New " + symbol + ": $" + price);
 		conn.close();
 	}
