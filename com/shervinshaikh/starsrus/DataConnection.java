@@ -160,7 +160,7 @@ public class DataConnection {
 		//System.out.println("Query run");
 		
 		if(rs.next()){
-			int v = rs.getInt("ismanger");
+			int v = rs.getInt("ismanager");
 			if(v == 1){
 				//System.out.println("login successful!");
 				conn.close();
