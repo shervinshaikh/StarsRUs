@@ -69,7 +69,9 @@ public class DataConnection {
 		
 		//getOwnedSymbols(1022);
 		
-		getActiveCustomers();
+		//getActiveCustomers();
+		
+		//genDTER();
 	}
 	public static void print_all() throws SQLException {
 		// Connect to the database
@@ -112,6 +114,7 @@ public class DataConnection {
 		int n = pstmt.executeUpdate();
 		System.out.println("updates :" + n );
 		pstmt.close();
+		conn.close();
 		return n;
 	}
 	
@@ -147,6 +150,7 @@ public class DataConnection {
 		if(rs.next()){
 			if(rs.getInt(1) == 1){
 				//System.out.println("login successful!");
+				conn.close();
 				return true;
 			}
 		}
@@ -239,6 +243,7 @@ public class DataConnection {
 		
 		if(!isMarketOpen()){
 			System.out.println("Market is closed, cannot buy or sell");
+			conn.close();
 			return -2;
 		}
 		
@@ -257,6 +262,7 @@ public class DataConnection {
 		value += stockPrice*(Double.parseDouble("" + nshares));
 		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
+			conn.close();
 			return balance;
 		}
 		System.out.println("withdrawMoney complete!");
@@ -330,6 +336,7 @@ public class DataConnection {
 		
 		if(!isMarketOpen()){
 			System.out.println("Market is closed, cannot buy or sell");
+			conn.close();
 			return -2;
 		}
 		
@@ -350,6 +357,7 @@ public class DataConnection {
 		newShares = currentShares-nshares;
 		if(newShares < 0){
 			System.out.println("Cannot complete sell");
+			conn.close();
 			return -1;
 		}
 		try{
@@ -800,9 +808,11 @@ public class DataConnection {
 		ResultSet rs = s.executeQuery("SELECT isOpen FROM Operations");
 		if(rs.next()){
 			if(rs.getInt(1) == 1){
+				conn.close();
 				return true;
 			}
 			else {
+				conn.close();
 				return false;
 			}
 		}
@@ -881,21 +891,41 @@ public class DataConnection {
 	}
 	
 	// list customers (name, state, earnings) who earned more than $10,000 in the last month
-	public static String[] genDTER() throws SQLException {
+	public static Object[][] genDTER() throws SQLException {
 		int n = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid) WHERE totalEarnings>10000");
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid)");
 		if(rs.next()){
 			n = rs.getInt(1);
-			System.out.println("# Customers wher earnings>$10,000: " + n);
+			System.out.println("# Customers where earnings>$10,000: " + n);
+		}
+		Object[][] customers = new String[n][4];
+		// get the taxid for each customer
+		int taxid[] = new int[n];
+		rs = s.executeQuery("SELECT * FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid)");
+		for(int i=0; rs.next(); i++){
+			taxid[i] = rs.getInt("taxid");
+			customers[i][2] = "" + rs.getDouble("totalearnings");
+			System.out.println("taxid: " + taxid[i] + ", earnings: " + customers[i][2]);
 		}
 		
-		// place each 
-		String[] customers = new String[n];
-		
-		
-		
+		for(int j=0; j<n; j++){
+			// get the names and states of customer
+			rs = s.executeQuery("SELECT cname, state FROM Customer WHERE taxid=" + taxid[j]);
+			if(rs.next()){
+				customers[j][0] = rs.getString("cname");
+				customers[j][1] = rs.getString("state");
+				System.out.println(customers[j][0] + " " + customers[j][1]);
+			}
+			// get interest earned over time period
+			rs = s.executeQuery("SELECT interest FROM MarketAccounts WHERE taxid=" + taxid[j]);
+			if(rs.next()){
+				customers[j][2] = "" + (rs.getDouble(1) + Double.parseDouble(customers[j][2].toString()));
+				System.out.println("total earnings including interest: " + customers[j][2]);
+			}
+		}
+		conn.close();
 		return customers;
 	}
 	
@@ -937,9 +967,23 @@ public class DataConnection {
 		return ms;
 	}
 	
-	// TODO empty the Transactions table
+	// empty the Transactions table
 	public static void deleteTransactions() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		s.executeQuery("DELETE FROM Transactions");
+		System.out.println("all transactions deleted");
+		conn.close();
+	}
+	
+	public static void addInterest() throws SQLException{
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("DELETE FROM Transactions");
 		
+		
+		System.out.println("Interest added to all accounts");
+		conn.close();
 	}
 }
 
