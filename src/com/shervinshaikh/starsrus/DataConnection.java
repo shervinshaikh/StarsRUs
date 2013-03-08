@@ -67,7 +67,7 @@ public class DataConnection {
 		
 		//sellStocks(77777, 2, "SMD", 3);
 		
-		//getOwnedSymbols(1022);
+		getOwnedSymbols(1022);
 		
 		//getActiveCustomers();
 		
@@ -78,6 +78,10 @@ public class DataConnection {
 		//recordBalances();
 		
 		//setStockPrice("SKB", 30.0);
+		
+		//addStockPurchase("SKB", 30.0, 5, 1022);
+		
+		//removeStockPurchases("SKB", 30.0, 3, 1022);
 	}
 	
 	public static int getTaxID(String username) throws SQLException {
@@ -331,7 +335,43 @@ public class DataConnection {
 		conn.close();
 		
 		recordTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
+		addStockPurchase(symbol, stockPrice, pshares, taxid);
 		return balance;
+	}
+	
+	public static void addStockPurchase(String symbol, double price, int shares, int taxid) throws SQLException {
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement s = conn.createStatement();
+		int oldshares = -1;
+		
+		ResultSet rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid =" + taxid + "AND symbol = '" + symbol + "' AND price=" + price);
+		if(rs.next()){
+			oldshares = rs.getInt("nshares");
+			shares += oldshares;
+		}
+		
+		PreparedStatement p;
+		String updateSuppSQL = "";
+		if(oldshares >= 0){ 
+			updateSuppSQL = "UPDATE StockPurchases SET nshares = ? WHERE taxID = ? AND symbol = ? AND price = ?";
+			System.out.println("updating current StockAccount");
+		}
+		else {
+			updateSuppSQL = "INSERT INTO StockPurchases(nshares, taxid, symbol, price) VALUES (?, ?, ?, ?)";
+			System.out.println("Creating new stock purchase");
+		}
+		
+		p = conn.prepareStatement(updateSuppSQL);
+		p.setInt(1, shares);
+		p.setInt(2, taxid);
+		p.setString(3, symbol);
+		p.setDouble(4, price);
+		p.executeUpdate();
+		
+		p.close();
+		conn.close();
+		
+		System.out.println("Added to Stock Purchases");
 	}
 	
 	// TODO what if stock sell for less than $20 (commission) end sale?
@@ -388,10 +428,47 @@ public class DataConnection {
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, earnings);
+		
 		p.close();
 		rs.close();
 		conn.close();
 		return earnings; 
+	}
+	
+	public static int removeStockPurchases(String symbol, double buyPrice, int shares, int taxid) throws SQLException {
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement s = conn.createStatement();
+		int oldshares = -1;
+		
+		ResultSet rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid =" + taxid + "AND symbol = '" + symbol + "' AND price=" + buyPrice);
+		if(rs.next()){
+			oldshares = rs.getInt("nshares");
+			shares = oldshares - shares;
+		}
+		
+		if(shares < 0){
+			conn.close();
+			return -1;
+		}
+		
+		PreparedStatement p;
+		String updateSuppSQL = "";
+		updateSuppSQL = "UPDATE StockPurchases SET nshares = ? WHERE taxID = ? AND symbol = ? AND price = ?";
+		System.out.println("updating current Stock Purchase");
+		
+		p = conn.prepareStatement(updateSuppSQL);
+		p.setInt(1, shares);
+		p.setInt(2, taxid);
+		p.setString(3, symbol);
+		p.setDouble(4, buyPrice);
+		p.executeUpdate();
+		
+		p.close();
+		
+		
+		conn.close();
+		System.out.println("removed stock from stock purchases");
+		return shares;
 	}
 	
 	public static void recordTransaction(int marketid, int stockid, int taxid, String ttype, String symbol, int pshares, double price, String date, double earnings) throws SQLException {
@@ -542,25 +619,48 @@ public class DataConnection {
 		return symbols;
 	}
 	
-	public static String[] getOwnedSymbols(int taxid) throws SQLException {
+	public static String[][] getOwnedSymbols(int taxid) throws SQLException {
 		int nStocks = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockAccounts WHERE taxid=" + taxid);
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockPurchases WHERE taxid=" + taxid);
 		if(rs.next()){
 			nStocks = rs.getInt(1);
-			System.out.println("Number of stock accounts: " + nStocks);
+			System.out.println("Number of stock purchases: " + nStocks);
 		}
 		
-		String[] symbols = new String[nStocks];
-		rs = s.executeQuery("SELECT symbol FROM StockAccounts WHERE taxid=" + taxid);
+		String[][] stocks = new String[nStocks][2];
+		rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
-			symbols[i] = rs.getString(1);
+			stocks[i][0] = rs.getString("symbol"); // symbol
+			stocks[i][1] = "" + rs.getDouble("price"); // buy price
+			System.out.println("Symbol: " + stocks[i][0] + ", Buy Price: " + stocks[i][1]);
 		}
+		
 		rs.close();
 		s.close();
 		conn.close();
-		return symbols;
+		return stocks;
+	}
+	
+	public static double[] getPricesOwnedSymbols(int taxid, String symbol) throws SQLException {
+		int n = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Transactions WHERE taxid=" + taxid + " AND symbol='" + symbol + "'");
+		if(rs.next()){
+			n = rs.getInt(1);
+			System.out.println("Number of purchased prices: " + n);
+		}
+		
+		double[] prices = new double[n];
+		rs = s.executeQuery("SELECT COUNT(*) FROM Transactions WHERE taxid=" + taxid + " AND symbol='" + symbol + "'");
+		if(rs.next()){
+			n = rs.getInt(1);
+			System.out.println("Number of purchased prices: " + n);
+		}
+		
+		return prices;
 	}
 
 	public static String[] getMovies() throws SQLException{

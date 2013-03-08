@@ -111,7 +111,7 @@ public class CustomerPane extends JPanel {
         panel4.setLayout(null);
         sharesS = new JTextField(20);
         JLabel selllabel = new JLabel("# Shares:");
-        String [] userSymbols = {};
+        String[][] userSymbols = {{}};
         try { 
         	userSymbols = DataConnection.getOwnedSymbols(taxid); 
         } catch (SQLException e) { 
