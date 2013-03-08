@@ -843,18 +843,33 @@ public class DataConnection {
 	}
 	
 	// list of customers who have bought or sold at least 1,000 shares in the current month
-	public static String[][] getActiveCustomers() throws SQLException {
-		int numActiveCustomer = 0;
+	public static String[] getActiveCustomers() throws SQLException {
+		int numActiveCustomers = 0;
 		// get number of active customers in current month
-		
-		
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+
+		// get number of market accounts
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+		if(rs.next()){
+			numActiveCustomers = (rs.getInt(1));
+			System.out.println("# of Customer Accounts: " + numActiveCustomers);
+		}
 		// place active customers (cname, taxid) into string array
-		String[][] activeCustomers = new String[numActiveCustomer][2];
+		String[] activeCustomers = new String[numActiveCustomers];
+		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
+		for(int i=0; rs.next(); i++){
+			activeCustomers[i] = rs.getString(1);
+		}
+		rs.close();
+		conn.close();
+		
+		
 		
 		return activeCustomers;
 	}
 	
-	// generate monthly statement
+	// TODO generate monthly statement
 	public static String[][] genMonthlyStatement(String name) throws SQLException {
 		String email = "";
 		int taxid = 0;
@@ -892,7 +907,7 @@ public class DataConnection {
 		return ms;
 	}
 	
-	// empty the Transactions table
+	// TODO empty the Transactions table
 	public static void deleteTransactions() throws SQLException {
 		
 	}

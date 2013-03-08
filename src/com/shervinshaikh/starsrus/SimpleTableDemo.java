@@ -11,9 +11,9 @@ import javax.swing.JTable;
 
 public class SimpleTableDemo extends JPanel {
     private boolean DEBUG = false;
-    int taxid = 1022;
+    //int taxid = 1022;
 
-    public SimpleTableDemo() {
+    public SimpleTableDemo(int taxid) {
         super(new GridLayout(1,0));
 
         String[] columnNames = {"StockID",

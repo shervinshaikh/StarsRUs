@@ -19,10 +19,9 @@ import javax.swing.JTable;
  */
 public class BalanceTable extends JPanel {
     private boolean DEBUG = false;
-    int taxid= 1022;
 	JTable table;
 	
-    public BalanceTable() {
+    public BalanceTable(int taxid) {
         super(new GridLayout(1,0));
 
         String[] columnNames = {"Stock ID",
@@ -70,7 +69,7 @@ public class BalanceTable extends JPanel {
         //Add the scroll pane to this panel.
         add(scrollPane);
     }
-	public void updateTable(){
+	public void updateTable(int taxid){
 		//get data again and remake table
 		Object[][] data = {
                 {"YAHOO", "200", "YHO"}

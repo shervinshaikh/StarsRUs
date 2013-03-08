@@ -25,7 +25,7 @@ public class TabbedPaneDemo extends JPanel {
     String[] movieInfo;
     String[] stockSymbols;
     String movieName;
-    int taxid = 1022;
+    int taxid = 3045;
     Object[][] balances;
     Object si[] = new Object[8];
     JList list;
@@ -180,7 +180,7 @@ public class TabbedPaneDemo extends JPanel {
         try{ balances = DataConnection.getBalances(taxid);
         } catch (SQLException e3){ System.out.println("ERROR getting balances of all accounts");}
 		
-		balanceTable = new BalanceTable();
+		balanceTable = new BalanceTable(taxid);
         balanceTable.setOpaque(true); //content panes must be opaque
         panel5.add(balanceTable);
         balanceTable.setBounds(0,130,300,300);
@@ -214,7 +214,7 @@ public class TabbedPaneDemo extends JPanel {
 
         panel6.setLayout(null);
 
-        SimpleTableDemo newContentPane = new SimpleTableDemo();
+        SimpleTableDemo newContentPane = new SimpleTableDemo(taxid);
         newContentPane.setOpaque(true); //content panes must be opaque
         panel6.add(newContentPane);
         newContentPane.setBounds(0,0,600,350);
@@ -383,13 +383,13 @@ public class TabbedPaneDemo extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Call a function that accesses the database and adds money to account
-            int id = 1022; // TODO get actual ID
+            //int id = 1022; // TODO get actual ID
             double amount = Double.parseDouble(amountD.getText());
 
            // CONNECTION AND DATA INPUT GOES HERE
 
            try {
-                DataConnection.depositMoney(id, amount);
+                DataConnection.depositMoney(taxid, amount);
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -404,13 +404,13 @@ public class TabbedPaneDemo extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-        	int id = 1022; // TODO get actual ID
+        	//int id = 1022; // TODO get actual ID
             double amount = Double.parseDouble(amountW.getText());
 
            // CONNECTION AND DATA INPUT GOES HERE
             double balance = 0;
            try {
-                balance = DataConnection.withdrawMoney(id, amount);
+                balance = DataConnection.withdrawMoney(taxid, amount);
             } catch (SQLException e1) {
                 e1.printStackTrace();
                 System.out.println("ERROR unable to withdraw money");
@@ -431,7 +431,7 @@ public class TabbedPaneDemo extends JPanel {
         public void actionPerformed(ActionEvent arg0) {
         	double v = 0;
         	try{ 
-        		v = DataConnection.buyStocks(1022, Integer.parseInt(sharesB.getText()), list.getSelectedValue().toString());
+        		v = DataConnection.buyStocks(taxid, Integer.parseInt(sharesB.getText()), list.getSelectedValue().toString());
         	} catch (SQLException e) { System.out.println("ERROR unable to buy stocks"); }
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough funds to complete purchase");
@@ -518,7 +518,7 @@ public class TabbedPaneDemo extends JPanel {
 	        labelMarketBal.setText("Market Balance: " + balances[1][0]);
 	        //labelStockBal.setText("Stock Balance: " + balances[3]);
 
-            BalanceTable blah = new BalanceTable();
+            BalanceTable blah = new BalanceTable(taxid);
             panel5.remove(balanceTable);
             panel5.add(blah);
             blah.setOpaque(true);
