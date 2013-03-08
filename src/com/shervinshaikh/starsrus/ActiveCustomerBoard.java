@@ -23,13 +23,10 @@ public class ActiveCustomerBoard extends JFrame
         setSize( 350,300 );
         setResizable( false );
 
-        String[] columnNames = {"Name",
-                "Buy/sell",
-                "Price",
-                "Num Shares"};
+        String[] columnNames = {"Name"};
         Object[][] data = {
-                {"Jack","Buy",new Integer(33),new Integer(100)},
-                {"Kathy","Sell",new Integer(65),new Integer(250)}
+                {"Jack"},
+                {"Kathy"}
         };
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
