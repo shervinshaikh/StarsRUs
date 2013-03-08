@@ -1,31 +1,14 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/6/13
- * Time: 4:12 PM
- * To change this template use File | Settings | File Templates.
- */
- 
- package com.shervinshaikh.starsrus;
+package com.shervinshaikh.starsrus;
+
 import java.awt.GridLayout;
 import java.sql.SQLException;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/6/13
- * Time: 3:46 PM
- * To change this template use File | Settings | File Templates.
- */
-
 public class MonthlyStatementBoard extends JFrame
 {
-
 	String name, email;
 	String initialBalance, finalBalance, totalEarnings, commission;
     public MonthlyStatementBoard(String targetName)

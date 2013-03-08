@@ -16,9 +16,6 @@ public class DataConnection {
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
 	static String strUsername = "cs174a_shervinshaikh";
 	static String strPassword = "computer";
-	//static String cMonth = "Apr";
-	//static String nMonth = "May";
-	//static String name = "Cindy Laugher";
 	
 	public static void main(String[] args) throws SQLException{
 		
@@ -34,11 +31,10 @@ public class DataConnection {
 		//print_all();
 		
 		// TO-DO also create a market account for the person
-		registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
+		//registerCustomer(2034, "606-70-7900", "8056930011", "Cindy Laugher", "cindy@hotmail.com", "cindy", "la", "7000 Hollister SB", "CA");
 		
 		//depositMoney(1022, 100);
 		
-		// TO-DO returns a boolean value
 		// validUser("billy", "cl");
 		
 		// if == -1 then unable to withdraw money
@@ -67,7 +63,7 @@ public class DataConnection {
 		
 		//getTransactionHistory(1022);
 		
-		//sellStocks(1022, 2, "SKB", 30);
+		sellStocks(77777, 2, "SMD", 3);
 		
 		//getOwnedSymbols(1022);
 		
@@ -336,6 +332,7 @@ public class DataConnection {
 		return balance;
 	}
 	
+	// TODO what if stock sell for less than $20 (commission) end sale?
 	public static double sellStocks(int taxid, int nshares, String symbol, double buyPrice) throws SQLException {
 		int marketID = 0, stockID = 0, currentShares = 0, newShares = 0;
 		double currentPrice = 0, earnings = 0;
@@ -367,7 +364,6 @@ public class DataConnection {
 			conn.close();
 			return -1;
 		}
-		try{
 		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?";
 		PreparedStatement p = conn.prepareStatement(sql);
 		p.setInt(1, newShares);
@@ -375,10 +371,6 @@ public class DataConnection {
 		p.setString(3,  symbol);
 		System.out.println("getting ready to execute update");
 		p.executeUpdate();
-		System.out.println("table updated");
-		} catch (SQLException e){
-			e.printStackTrace();
-		}
 		
 		// get the Market ID
 		rs = s.executeQuery("SELECT marketid FROM MarketAccounts WHERE taxid =" + taxid);
@@ -391,7 +383,7 @@ public class DataConnection {
 		
 		
 		// RECORD Transaction
-		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, 0.0);
+		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, earnings);
 		conn.close();
 		return earnings; 
 	}
@@ -411,7 +403,7 @@ public class DataConnection {
 		pstmt2.setString(5, symbol);
 		pstmt2.setInt(6, pshares);
 		pstmt2.setDouble(7, price);
-		pstmt2.setDouble(8, 0);
+		pstmt2.setDouble(8, earnings);
 		pstmt2.executeUpdate();
 
 		pstmt2.close();

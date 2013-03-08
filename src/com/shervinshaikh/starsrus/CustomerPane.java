@@ -9,7 +9,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class CustomerPane extends JPanel {
-	int taxid = Log.taxid;
+	int taxid = 77777; //Log.taxid;
 	int buyPrice = 22;
 	//static String userName;
 	
