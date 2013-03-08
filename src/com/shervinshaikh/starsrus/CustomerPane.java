@@ -111,12 +111,13 @@ public class CustomerPane extends JPanel {
         panel4.setLayout(null);
         sharesS = new JTextField(20);
         JLabel selllabel = new JLabel("# Shares:");
-        String[][] userSymbols = {{}};
+        String[] userSymbols = {};
         try { 
         	userSymbols = DataConnection.getOwnedSymbols(taxid); 
         } catch (SQLException e) { 
         	System.out.println("ERROR unable to get stock account symbols"); 
         }
+        
         list2 = new JList(userSymbols);
         symbolScroll2 = new JScrollPane(list2);
         symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);

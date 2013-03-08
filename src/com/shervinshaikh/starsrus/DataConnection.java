@@ -67,7 +67,7 @@ public class DataConnection {
 		
 		//sellStocks(77777, 2, "SMD", 3);
 		
-		getOwnedSymbols(1022);
+		//getOwnedSymbols(1022);
 		
 		//getActiveCustomers();
 		
@@ -619,24 +619,28 @@ public class DataConnection {
 		return symbols;
 	}
 	
-	public static String[][] getOwnedSymbols(int taxid) throws SQLException {
+	public static String[] getOwnedSymbols(int taxid) throws SQLException {
 		int nStocks = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockPurchases WHERE taxid=" + taxid);
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockAccounts WHERE taxid=" + taxid);
 		if(rs.next()){
 			nStocks = rs.getInt(1);
-			System.out.println("Number of stock purchases: " + nStocks);
+			System.out.println("Number of stock accounts: " + nStocks);
 		}
 		
-		String[][] stocks = new String[nStocks][2];
+//		String[] symbols = new String[nStocks];
+//		rs = s.executeQuery("SELECT symbol FROM StockAccounts WHERE taxid=" + taxid);
+//		for(int i=0; rs.next(); i++){
+//			symbols[i] = rs.getString();
+//		}
+		String[] stocks = new String[nStocks];
 		rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
-			stocks[i][0] = rs.getString("symbol"); // symbol
-			stocks[i][1] = "" + rs.getDouble("price"); // buy price
-			System.out.println("Symbol: " + stocks[i][0] + ", Buy Price: " + stocks[i][1]);
+			stocks[i] = rs.getString("symbol") + ", buy price: " + rs.getDouble("price"); // symbol and buy price
+			//stocks[i] = "" + rs.getDouble("price"); // buy price
+			System.out.println(stocks[i]);
 		}
-		
 		rs.close();
 		s.close();
 		conn.close();
