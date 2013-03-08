@@ -47,12 +47,12 @@ public class MonthlyStatementBoard extends JFrame
 		}
 		// TODO
 		// 1. initial & final balance
-		initialBalance = "0";
 		finalBalance = data[0][1].toString();
 		// 2. get total earning/loss, including interest, for current month (1 double)
 		totalEarnings = "" + interest;
 		// 3. total commission paid
 		commission = data[0][3].toString();
+		initialBalance = "" + (Double.parseDouble(finalBalance) - interest);
 		
 		JLabel nameLabel = new JLabel("Name: " + name );
         JLabel emailLabel = new JLabel("Email: " + email);

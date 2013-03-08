@@ -75,7 +75,7 @@ public class DataConnection {
 		
 		//recordBalances();
 		
-		setStockPrice("SKB", 30.0);
+		//setStockPrice("SKB", 30.0);
 	}
 	
 	public static int getTaxID(String username) throws SQLException {
@@ -381,6 +381,8 @@ public class DataConnection {
 		// DEPOSIT money into Market Account
 		depositMoney(taxid, earnings-20);
 		
+		// ADD COMMISSION
+		addCommission(taxid);
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, earnings);
@@ -995,8 +997,14 @@ public class DataConnection {
 			ms[0][1] = "" + rs.getDouble("balance"); // final balance
 			// TODO initial balance
 			ms[0][3] = "" + rs.getDouble("commission");
-			ms[0][4] = "" + rs.getDouble("interest");
+			ms[0][4] = "" + (rs.getDouble("interest") - rs.getDouble("commission"));
 		}
+		
+		rs = s.executeQuery("SELECT SUM(earnings) FROM Transactions WHERE taxid =" + taxid);
+		if(rs.next()){
+			
+		}
+		
 		
 		rs.close();
 		conn.close();
