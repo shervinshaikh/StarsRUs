@@ -1,6 +1,7 @@
 package com.shervinshaikh.starsrus;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -108,6 +109,19 @@ public class registerframe extends JFrame {
 
                 // DO SOMETHING HERE
                 // AKA: register account into DATABASE
+            	
+            	try {
+					DataConnection.registerCustomer(Integer.parseInt(taxid.getText()), ssn.getText(), phoneno.getText(), 
+							fullname.getText(), email.getText(), user.getText(),
+							pass.getText(), addr.getText(), state.getText());
+				} catch (NumberFormatException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            	
 
                 JOptionPane.showMessageDialog(null,"Account Created!");
 
