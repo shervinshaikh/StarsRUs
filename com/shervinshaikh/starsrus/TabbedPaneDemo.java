@@ -193,7 +193,7 @@ public class TabbedPaneDemo extends JPanel {
 		
 		JButton refreshBalance = new JButton("Refresh");
 		refreshBalance.addActionListener(new RefreshListener());
-        refreshBalance.addActionListener(new RefreshListener());
+        
 		refreshBalance.setBounds(20,105,150,20);
 		panel5.add(refreshBalance);
 
@@ -561,15 +561,16 @@ public class TabbedPaneDemo extends JPanel {
 	        labelMarketBal.setText("Market Balance: " + balances[1][0]);
 	        //labelStockBal.setText("Stock Balance: " + balances[3]);
 
-            BalanceTable blah = new BalanceTable(taxid);
-            panel5.remove(balanceTable);
-            panel5.add(blah);
-            blah.setOpaque(true);
-            blah.setBounds(0,130,300,300);
-            blah.repaint();
-            balanceTable.repaint();
-            tabbedPane.repaint();
-            panel5.repaint();
+	        panel5.remove(balanceTable);
+	        balanceTable = new BalanceTable(taxid);
+	        balanceTable.setOpaque(true); //content panes must be opaque
+	        panel5.add(balanceTable);
+	        balanceTable.setBounds(0,130,300,300);
+	        
+           
+            //balanceTable.repaint();
+            //tabbedPane.repaint();
+            //panel5.repaint();
 		}
 	
 	}
