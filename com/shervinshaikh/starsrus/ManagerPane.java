@@ -95,10 +95,15 @@ public class ManagerPane extends JPanel {
         p1.add(closeMarket);
         Calendar cal = Calendar.getInstance();
         Date date = cal.getTime();
+        String tempdate="";
         
+        try{tempdate = DataConnection.getTodaysDate();} catch(SQLException e) { System.out.println("ERROR getting date"); }
         
-        try{date = DataConnection.getTodaysDate()} catch(SQLException e) { System.out.println("ERROR getting date"); }
-        System.out.println("date: " + date);
+        String tempyear = tempdate.substring(9,13);
+        String tempmonth = tempdate.substring(14,16);
+        String tempday = tempdate.substring(17,19);
+        
+        System.out.println("tempdate: " + tempday);
 
         model = new SpinnerDateModel();
         model.setValue(date);
