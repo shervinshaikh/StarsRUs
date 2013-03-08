@@ -9,11 +9,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 // TODO
-// 1. add interest
-// 2. generate monthly statement
-//		a. initial balance
-//	3. sell
+//	1. add interest
+//	2. sell
 //		a. choose prices of different stocks, record commission
+// DOUBLE CHECK all operations work as stated in the project.pdf as well as think about ways to punch holes into the code
 // TODO
 
 
