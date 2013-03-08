@@ -13,7 +13,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class Log extends JFrame {
-	
 	public static int taxid = 0;
 
     public static void main(String[] args) {
@@ -97,7 +96,6 @@ public class Log extends JFrame {
                     pass.setText("");
                     txuser.requestFocus();
                 }
-
             }
         });
     }
@@ -111,8 +109,5 @@ public class Log extends JFrame {
 
             }
         });
-
-
-
     }
 }

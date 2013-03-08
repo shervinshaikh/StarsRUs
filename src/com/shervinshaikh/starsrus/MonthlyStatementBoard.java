@@ -27,7 +27,6 @@ public class MonthlyStatementBoard extends JFrame
 		try {
 			data = DataConnection.genMonthlyStatement(targetName);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		int nTrans = 0;
@@ -77,21 +76,12 @@ public class MonthlyStatementBoard extends JFrame
         
         final JTable table = new JTable(data1, columnNames);
         table.setFillsViewportHeight(true);
-
         //Create the scroll pane and add the table to it.
         JScrollPane scrollPane = new JScrollPane(table);
-
         //Add the scroll pane to this panel.
         add(scrollPane);
-
-
-
-        //add( new JPanel() );
-
         setVisible( true );
         setLocationRelativeTo( null );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );
     }
-
-
 }

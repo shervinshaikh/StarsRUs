@@ -88,7 +88,6 @@ public class DataConnection {
 		return taxid;
 	}
 	
-	// TODO create a MarketAccount & place money into it when registering the customer
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
 				String username, String pw, String address, String state) throws SQLException{
 		int ismanager = 0;
@@ -137,7 +136,6 @@ public class DataConnection {
 	}
 	
 	
-	// TODO check to see if person is a manager
 	public static int validUser(String username, String pw) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
@@ -511,7 +509,6 @@ public class DataConnection {
 	}
 	
 	
-	// TODO double check
 	public static String[] getStockSymbols() throws SQLException{
 		System.out.println("running getStockSymbols");
 		int nStocks = 0;
@@ -783,8 +780,7 @@ public class DataConnection {
 	
 
 	// TEST, DEBUG, DEMO OPERATIONS
-	
-	// TODO test all of the methods below, ex: open Market just sits at executeUpdate
+	//
 	public static void openMarket() throws SQLException {
 		System.out.println("About to connect");
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
@@ -806,8 +802,6 @@ public class DataConnection {
 	}
 	
 	public static void setDate(String date) throws SQLException {
-		//recordBalances();
-		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
 		p.setString(1, date);
@@ -992,7 +986,7 @@ public class DataConnection {
 		rs = s.executeQuery("SELECT balance, commission, interest FROM MarketAccounts WHERE taxid=" + taxid);
 		if(rs.next()){
 			ms[0][1] = "" + rs.getDouble("balance"); // final balance
-			// initial balance
+			// TODO initial balance
 			ms[0][3] = "" + rs.getDouble("commission");
 			ms[0][4] = "" + rs.getDouble("interest");
 		}

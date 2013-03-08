@@ -18,7 +18,6 @@ public class RegisterFrame extends JFrame {
 		RegisterFrame frameTabel = new RegisterFrame();
     }
 
-
     JLabel namel = new JLabel("Full name");
     JLabel statel = new JLabel("State");
     JLabel phonel = new JLabel("Phone");
@@ -71,7 +70,6 @@ public class RegisterFrame extends JFrame {
         bregister.setBounds(105,340,85,20);
         bback.setBounds(105,360,85,20);
 
-
         panel.add(namel);
         panel.add(statel);
         panel.add(phonel);
@@ -100,19 +98,12 @@ public class RegisterFrame extends JFrame {
         setVisible(true);
         actionregister();
         actionback();
-
-
     }
 
     public void actionregister(){
         bregister.addActionListener(new ActionListener(){
             @SuppressWarnings("deprecation")
 			public void actionPerformed(ActionEvent ae){
-
-
-                // DO SOMETHING HERE
-                // AKA: register account into DATABASE
-            	
             	try {
 					DataConnection.registerCustomer(Integer.parseInt(taxid.getText()), ssn.getText(), phoneno.getText(), 
 							fullname.getText(), email.getText(), user.getText(),
@@ -124,11 +115,7 @@ public class RegisterFrame extends JFrame {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	
-
                 JOptionPane.showMessageDialog(null,"Account Created!");
-
-
                 Log logFace = new Log();
                 logFace.setVisible(true);
                 dispose();
@@ -137,6 +124,7 @@ public class RegisterFrame extends JFrame {
         });
 
     }
+    
     public void actionback(){
 
         bback.addActionListener(new ActionListener(){
@@ -144,9 +132,8 @@ public class RegisterFrame extends JFrame {
                 Log logFace = new Log();
                 logFace.setVisible(true);
                 dispose();
-
             }
         });
-
     }
+    
 }

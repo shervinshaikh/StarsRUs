@@ -39,13 +39,6 @@ public class ManagerPane extends JPanel {
     @SuppressWarnings("deprecation")
 	public ManagerPane(){
     	super(new GridLayout(1,1));
-    	
-    	
-//    	System.out.println("balances recording soon");
-//    	try{ 
-//    		DataConnection.recordBalances(); 
-//    		System.out.println("balances");
-//    	} catch(SQLException e) { System.out.println(e.getMessage()); }
 
         tabbedPane = new JTabbedPane();
         tabbedPane.setPreferredSize(new Dimension(600, 400));
@@ -147,14 +140,6 @@ public class ManagerPane extends JPanel {
         tabbedPane.addTab("Manager Interface", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
-
-
-
-
-
-
-
-
         //Add the tabbed pane to this panel.
         add(tabbedPane);
         //The following line enables to use scrolling tabs.
@@ -173,8 +158,6 @@ public class ManagerPane extends JPanel {
             if (event.getStateChange() == ItemEvent.SELECTED) {
                 Object item = event.getItem();
                 selectedCustomer = item.toString();
-
-                //System.out.println(selectedCustomer);
             }
         }
     }
@@ -279,7 +262,6 @@ public class ManagerPane extends JPanel {
         	
             JOptionPane.showMessageDialog(null,"Price of " + stock + " changed to $" + price);
         }
-
     }
 
 

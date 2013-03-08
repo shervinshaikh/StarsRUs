@@ -1,20 +1,13 @@
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/5/13
- * Time: 10:33 PM
- * To change this template use File | Settings | File Templates.
- */
- 
- package com.shervinshaikh.starsrus;
+package com.shervinshaikh.starsrus;
+
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+
 public class TopMovieBoard extends JFrame
 {
-
     public TopMovieBoard(int starting_date, int ending_date)
     {
         setTitle( "Top Movies" );
@@ -23,12 +16,9 @@ public class TopMovieBoard extends JFrame
 
         String[] columnNames = {"Movie Name"};
         String[][] data = {
-                {"Kathy"},
-                {"Jane"},
-                {"Joe"}
+                {}
         };
-        
-        
+
        try{
         	data = DataConnection.topMovies(starting_date, ending_date);
         } catch (SQLException e){
@@ -43,11 +33,6 @@ public class TopMovieBoard extends JFrame
 
         //Add the scroll pane to this panel.
         add(scrollPane);
-
-
-
-        //add( new JPanel() );
-
         setVisible( true );
         setLocationRelativeTo( null );
         setDefaultCloseOperation( DISPOSE_ON_CLOSE );

@@ -8,10 +8,18 @@ import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+// TODO
+// 1. add interest
+// 2. generate monthly statement
+//		a. initial balance
+//	3. sell
+//		a. choose prices of different stocks, record commission
+// TODO
+
+
 public class CustomerPane extends JPanel {
-	int taxid = 77777; //Log.taxid;
+	int taxid = Log.taxid;
 	int buyPrice = 22;
-	//static String userName;
 	
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
@@ -147,9 +155,7 @@ public class CustomerPane extends JPanel {
 
         JButton sells = new JButton("Sell");
         sells.addActionListener(new SellListener());
-        
-        //purchase.addActionListener(new BuyListener());
-        // TODO add a sellListener not BuyListener 
+
 
         sharesS.setBounds(105,50, 60, 20);
         selllabel.setBounds(50,50,55,20);
@@ -384,15 +390,11 @@ public class CustomerPane extends JPanel {
         @Override
         public void actionPerformed(ActionEvent e) {
             // Call a function that accesses the database and adds money to account
-            //int id = 1022; // TODO get actual ID
             double amount = Double.parseDouble(amountD.getText());
-
-           // CONNECTION AND DATA INPUT GOES HERE
 
            try {
                 DataConnection.depositMoney(taxid, amount);
             } catch (SQLException e1) {
-                // TODO Auto-generated catch block
                 e1.printStackTrace();
                 System.out.println("ERROR unable to deposite money");
             }
@@ -407,10 +409,7 @@ public class CustomerPane extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent arg0) {
-        	//int id = 1022; // TODO get actual ID
             double amount = Double.parseDouble(amountW.getText());
-
-           // CONNECTION AND DATA INPUT GOES HERE
             double balance = 0;
            try {
                 balance = DataConnection.withdrawMoney(taxid, amount);
@@ -418,7 +417,7 @@ public class CustomerPane extends JPanel {
                 e1.printStackTrace();
                 System.out.println("ERROR unable to withdraw money");
             }
-           if(balance > 0){
+           if(balance >= 0){
         	   JOptionPane.showMessageDialog(null, "Withdrawal of $" + amount + " Complete!");
            }
            else {
