@@ -9,7 +9,6 @@ package com.shervinshaikh.starsrus;
  */
  
  
- package com.shervinshaikh.starsrus;
  
 import javax.swing.JFrame;
 import javax.swing.JPanel;
