@@ -637,7 +637,7 @@ public class DataConnection {
 		String[] stocks = new String[nStocks];
 		rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
-			stocks[i] = rs.getString("symbol") + ", buy price: " + rs.getDouble("price"); // symbol and buy price
+			stocks[i] = rs.getString("symbol") + ", buy price: " + rs.getDouble("price") + ", # shares: " + rs.getInt("nshares"); // symbol and buy price
 			//stocks[i] = "" + rs.getDouble("price"); // buy price
 			System.out.println(stocks[i]);
 		}
