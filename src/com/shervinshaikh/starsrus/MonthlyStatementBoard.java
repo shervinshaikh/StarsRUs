@@ -27,16 +27,56 @@ public class MonthlyStatementBoard extends JFrame
 {
 
 	String name, email;
-	double initialBalance, finalBalance, totalEarnings;
-	int commission;
+	String initialBalance, finalBalance, totalEarnings, commission;
     public MonthlyStatementBoard(String targetName)
     {
-
-    	JLabel nameLabel = new JLabel("Name: " + name );
+        String[] columnNames = {"Stock Acct ID",
+                "Transaction Type",
+                "Stock Symbol",
+                "# of shares",
+                "Price",
+                "Date",
+                "Total Earning/Loss"};
+        Object[][] data1 = {
+                {}
+        };
+        String[][] data = {{}};
+		try {
+			data = DataConnection.genMonthlyStatement(targetName);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int nTrans = 0;
+		try{ nTrans = DataConnection.getNumTrans2(targetName); } catch (SQLException e) { System.out.println(e.getMessage()); }
+		name = data[0][0];
+		email = data[1][0];
+		double interest = Double.parseDouble(data[0][4].toString());
+		data1 = new String[nTrans][7];
+		for(int i=0; i<nTrans; i++){
+			data1[i][0] = data[i+2][0]; // stockaccountid
+			data1[i][1] = data[i+2][1]; // transaction type
+			data1[i][2] = data[i+2][2]; // stock symbol
+			data1[i][3] = data[i+2][3]; // number of shares
+			data1[i][4] = data[i+2][4]; // price
+			data1[i][5] = data[i+2][5]; // date
+			data1[i][6] = data[i+2][6]; // earnings or losses
+			interest += Double.parseDouble(data[i+2][6].toString()); // add up all earnings to interest
+		}
+		// TODO
+		// 1. initial & final balance
+		initialBalance = "0";
+		finalBalance = data[0][1].toString();
+		// 2. get total earning/loss, including interest, for current month (1 double)
+		totalEarnings = "" + interest;
+		// 3. total commission paid
+		commission = data[0][3].toString();
+		
+		JLabel nameLabel = new JLabel("Name: " + name );
         JLabel emailLabel = new JLabel("Email: " + email);
         JLabel iBalLabel = new JLabel("Initial Balance: "+initialBalance);
         JLabel fBalLabel = new JLabel("Final Balance: "+finalBalance);
-        JLabel totEarningsLabel = new JLabel("Total Earnings: "+totalEarnings);
+        JLabel totEarningsLabel = new JLabel("Total Earnings/Losses: "+totalEarnings);
         JLabel commLabel = new JLabel("Commission: "+commission);
         
         add(nameLabel);
@@ -51,55 +91,6 @@ public class MonthlyStatementBoard extends JFrame
         setTitle( "Monthly Statement" );
         setSize( 800,600 );
         setResizable( true );
-
-        String[] columnNames = {"Stock Acct ID",
-                "Transaction Type",
-                "Stock Symbol",
-                "# of shares",
-                "Price",
-                "Date",
-                "Total Earning/Loss"};
-        Object[][] data1 = {
-                {}
-        };
-        
-        String[][] data = {{"Name",
-            "address",
-            "init balance",
-            "final balance",
-            "total earnings/loss",
-            "commission paid"}};
-
-		try {
-			data = DataConnection.genMonthlyStatement(targetName);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		int nTrans = 0;
-		try{ nTrans = DataConnection.getNumTrans2(targetName); } catch (SQLException e) { System.out.println(e.getMessage()); }
-		name = data[0][0];
-		email = data[1][0];
-		data1 = new String[nTrans][7];
-		for(int i=0; i<nTrans; i++){
-			data1[i][0] = data[i+2][0]; // stockaccountid
-			data1[i][1] = data[i+2][1]; // transaction type
-			data1[i][2] = data[i+2][2]; // stock symbol
-			data1[i][3] = data[i+2][3]; // number of shares
-			data1[i][4] = data[i+2][4]; // price
-			data1[i][5] = data[i+2][5]; // date
-			data1[i][6] = data[i+2][6]; // earnings or losses
-		}
-		
-		// TODO
-		// 1. initial & final balance
-		initialBalance = 0;
-		finalBalance = 0;
-		// 2. get total earning/loss, including interest, for current month (1 double)
-		totalEarnings = 0;
-		// 3. total commission paid
-		commission = 0;
         
         final JTable table = new JTable(data1, columnNames);
         table.setFillsViewportHeight(true);

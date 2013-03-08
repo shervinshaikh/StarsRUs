@@ -1006,6 +1006,15 @@ public class DataConnection {
 			ms[i+2][6] = transactions[i][6];
 		}
 		
+		// get initial & final balance, total commission paid, get total earning/loss, including interest, for current month
+		rs = s.executeQuery("SELECT balance, commission, interest FROM MarketAccounts WHERE taxid=" + taxid);
+		if(rs.next()){
+			ms[0][1] = "" + rs.getDouble("balance"); // final balance
+			// initial balance
+			ms[0][3] = "" + rs.getDouble("commission");
+			ms[0][4] = "" + rs.getDouble("interest");
+		}
+		
 		rs.close();
 		conn.close();
 		return ms;
