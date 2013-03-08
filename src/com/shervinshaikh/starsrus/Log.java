@@ -17,7 +17,8 @@ public class Log extends JFrame {
 	public static int taxid = 0;
 
     public static void main(String[] args) {
-        Log frameTabel = new Log();
+        @SuppressWarnings("unused")
+		Log frameTable = new Log();
     }
 
     JLabel userl = new JLabel("Username");
@@ -59,7 +60,8 @@ public class Log extends JFrame {
 
     public void actionlogin(){
         blogin.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
+            @SuppressWarnings("static-access")
+			public void actionPerformed(ActionEvent ae) {
                 String puname = txuser.getText();
                 @SuppressWarnings("deprecation")
 				String ppaswd = pass.getText();
@@ -103,7 +105,7 @@ public class Log extends JFrame {
     public void actionreg() {
         bregister.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent ae){
-                registerframe regFace =new registerframe();
+                RegisterFrame regFace = new RegisterFrame();
                 regFace.setVisible(true);
                 dispose();
 

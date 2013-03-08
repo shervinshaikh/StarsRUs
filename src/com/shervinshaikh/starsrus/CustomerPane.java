@@ -28,7 +28,7 @@ public class CustomerPane extends JPanel {
     Object[][] balances;
     Object si[] = new Object[8];
     JList list, list2;
-    SimpleTableDemo newContentPane;
+    TransactionHistoryTable newContentPane;
 
     //String prod_date_plus="";
     //String ranking_plus="";
@@ -216,7 +216,7 @@ public class CustomerPane extends JPanel {
 
         panel6.setLayout(null);
 
-        newContentPane = new SimpleTableDemo(taxid);
+        newContentPane = new TransactionHistoryTable(taxid);
         newContentPane.setOpaque(true); //content panes must be opaque
         panel6.add(newContentPane);
         newContentPane.setBounds(0,0,600,350);
@@ -615,7 +615,7 @@ public class CustomerPane extends JPanel {
     private void updateSellandHistory(){
     	//update history
     	panel6.remove(newContentPane);
-    	newContentPane = new SimpleTableDemo(taxid);
+    	newContentPane = new TransactionHistoryTable(taxid);
     	newContentPane.setOpaque(true);
 
         newContentPane.setBounds(0,0,600,350);

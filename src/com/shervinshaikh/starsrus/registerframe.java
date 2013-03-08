@@ -12,10 +12,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class registerframe extends JFrame {
+public class RegisterFrame extends JFrame {
     public static void main(String[] args) {
         @SuppressWarnings("unused")
-		registerframe frameTabel = new registerframe();
+		RegisterFrame frameTabel = new RegisterFrame();
     }
 
 
@@ -42,7 +42,7 @@ public class registerframe extends JFrame {
     JTextField ssn = new JTextField(11);
     JPasswordField pass = new JPasswordField(30);
 
-    registerframe(){
+    RegisterFrame(){
         super("Register new account");
         setSize(300,450);
         setLocation(500,280);
