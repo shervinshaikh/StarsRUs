@@ -69,7 +69,7 @@ public class DataConnection {
 		
 		//getOwnedSymbols(1022);
 		
-		//getActiveCustomers();
+		getActiveCustomers();
 		
 		//genDTER();
 		
@@ -991,19 +991,41 @@ public class DataConnection {
 		// get number of active customers in current month
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
+		Statement s2 = conn.createStatement();
 
-		// get number of market accounts
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+//		// get number of market accounts
+//		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+//		if(rs.next()){
+//			numActiveCustomers = (rs.getInt(1));
+//			System.out.println("# of Active Customers: " + numActiveCustomers);
+//		}
+//		// place active customers (cname, taxid) into string array
+//		
+//		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
+//		for(int i=0; rs.next(); i++){
+//			activeCustomers[i] = rs.getString(1);
+//		}
+		
+		
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM( SELECT taxid, SUM(nshares) AS active FROM Transactions GROUP By taxid) WHERE active > 1000");
 		if(rs.next()){
-			numActiveCustomers = (rs.getInt(1));
-			System.out.println("# of Active Customers: " + numActiveCustomers);
+			numActiveCustomers = rs.getInt(1);
+			System.out.println("count of ac: " + numActiveCustomers);
 		}
-		// place active customers (cname, taxid) into string array
 		String[] activeCustomers = new String[numActiveCustomers];
-		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
-		for(int i=0; rs.next(); i++){
-			activeCustomers[i] = rs.getString(1);
+		int[] taxids = new int[numActiveCustomers];
+		rs = s.executeQuery("SELECT taxid FROM( SELECT taxid, SUM(nshares) AS active FROM Transactions GROUP By taxid) WHERE active > 1000");
+		for(int i=0; i<2; i++){
+			rs.next();
+			taxids[i] = rs.getInt(1);	
+			System.out.println(taxids[i]);
+			ResultSet rs2 = s2.executeQuery("SELECT cname FROM Customer WHERE taxid=" + taxids[i]);
+			rs2.next();
+			activeCustomers[i] = rs2.getString(1);
+			System.out.println(activeCustomers[i]);
 		}
+				
+				
 		rs.close();
 		conn.close();
 		return activeCustomers;
