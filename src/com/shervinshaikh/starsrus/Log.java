@@ -13,6 +13,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class Log extends JFrame {
+	
+	public static int taxid = 0;
 
     public static void main(String[] args) {
         Log frameTabel = new Log();
@@ -66,6 +68,7 @@ public class Log extends JFrame {
                 int userStatus=0;
 				try {
 					userStatus = DataConnection.validUser(puname,ppaswd);
+					taxid = DataConnection.getTaxID(puname);
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
@@ -73,7 +76,7 @@ public class Log extends JFrame {
                 if(userStatus!=0) {
                     
                 	if(userStatus==1){
-	                	TabbedPaneDemo regFace = new TabbedPaneDemo();
+	                	CustomerPane regFace = new CustomerPane();
 	                    regFace.setVisible(true);
 	                    regFace.createAndShowGUI();
 	                    dispose();

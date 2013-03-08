@@ -144,7 +144,7 @@ public class ManagerPane extends JPanel {
         setPrice.addActionListener(new SetPriceListener());
         p1.add(setPrice);
 
-        tabbedPane.addTab("Main menu", p1);
+        tabbedPane.addTab("Manager Interface", p1);
         tabbedPane.setMnemonicAt(0, KeyEvent.VK_1);
 
 

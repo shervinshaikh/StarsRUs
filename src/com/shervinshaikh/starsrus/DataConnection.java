@@ -16,9 +16,9 @@ public class DataConnection {
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
 	static String strUsername = "cs174a_shervinshaikh";
 	static String strPassword = "computer";
-	static String cMonth = "Apr";
-	static String nMonth = "May";
-	static String name = "Cindy Laugher";
+	//static String cMonth = "Apr";
+	//static String nMonth = "May";
+	//static String name = "Cindy Laugher";
 	
 	public static void main(String[] args) throws SQLException{
 		
@@ -78,6 +78,18 @@ public class DataConnection {
 		//genMonthlyStatement(name);
 		
 		//recordBalances();
+	}
+	
+	public static int getTaxID(String username) throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		int taxid = 0;
+		ResultSet rs = s.executeQuery("SELECT taxid FROM Customer WHERE username='" + username + "'");
+		if(rs.next()){
+			taxid = rs.getInt(1);
+		}
+		conn.close();
+		return taxid;
 	}
 	
 	// TODO create a MarketAccount & place money into it when registering the customer
@@ -415,7 +427,7 @@ public class DataConnection {
 			taxid = rs.getInt(1);
 		}
 		int nTrans = getNumTrans(taxid);
-		
+		conn.close();
 		return nTrans;
 	}
 
