@@ -49,7 +49,7 @@ public class Customer implements ActionListener {
 		deposit.setLayout(new BoxLayout(deposit, BoxLayout.Y_AXIS));
 		deposit.add(submit);
 		
-		frame.add(new TabbedPaneDemo(), BorderLayout.CENTER);
+		//frame.add(new TabbedPaneDemo(), BorderLayout.CENTER);
 		//frame.getContentPane().add(BorderLayout.WEST, buttons);
 		//frame.getContentPane().add(BorderLayout.CENTER, deposit);
 		//frame.getContentPane().add(BorderLayout.SOUTH, withdrawB);

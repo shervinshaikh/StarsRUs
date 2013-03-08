@@ -73,9 +73,9 @@ public class Log extends JFrame {
                 if(userStatus!=0) {
                     
                 	if(userStatus==1){
-	                	TabbedPaneDemo regFace =new TabbedPaneDemo();
+	                	TabbedPaneDemo regFace =new TabbedPaneDemo(puname);
 	                    regFace.setVisible(true);
-	                    regFace.createAndShowGUI();
+	                    regFace.createAndShowGUI(puname);
 	                    dispose();
                 	}
                 	else if(userStatus==2){

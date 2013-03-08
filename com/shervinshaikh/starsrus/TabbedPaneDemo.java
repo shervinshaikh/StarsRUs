@@ -44,7 +44,7 @@ public class TabbedPaneDemo extends JPanel {
     JLabel labelStockBal;
 
 
-    public TabbedPaneDemo() {
+    public TabbedPaneDemo(String username) {
 
         super(new GridLayout(1, 1));
         
@@ -655,13 +655,13 @@ public class TabbedPaneDemo extends JPanel {
      * this method should be invoked from
      * the event dispatch thread.
      */
-    public static void createAndShowGUI() {
+    public static void createAndShowGUI(String puname) {
         //Create and set up the window.
         JFrame frame = new JFrame("TabbedPaneDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Add content to the window.
-        frame.add(new TabbedPaneDemo(), BorderLayout.CENTER);
+        frame.add(new TabbedPaneDemo(puname), BorderLayout.CENTER);
 
         //Display the window.
         frame.pack();
@@ -675,7 +675,7 @@ public class TabbedPaneDemo extends JPanel {
             public void run() {
                 //Turn off metal's use of bold fonts
                 UIManager.put("swing.boldMetal", Boolean.FALSE);
-                createAndShowGUI();
+                //createAndShowGUI();
             }
         });
     }
