@@ -1022,10 +1022,10 @@ public class DataConnection {
 		pstmt = conn.prepareStatement(updateSuppSQL);
 		
 		// Replace the first ? with value
-		pstmt.setDouble(1, value);
+		//pstmt.setDouble(1, value);
 		
 		// Replace the second ? with id
-		pstmt.setInt(2, id);
+		//pstmt.setInt(2, id);
 		
 		// Execute updates
 		int n = pstmt.executeUpdate();
