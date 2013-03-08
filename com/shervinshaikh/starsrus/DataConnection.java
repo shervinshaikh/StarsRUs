@@ -245,7 +245,7 @@ public class DataConnection {
 	public static double buyStocks(int taxid, int nshares, String symbol) throws SQLException{
 		double value = 20;
 		double stockPrice = 0;
-		int marketID=0, stockID = 0, oldshares = 0, pshares = nshares;
+		int marketID=0, stockID = 0, oldshares = -1, pshares = nshares;
 		String date = "";
 		
 		if(!isMarketOpen()){
@@ -299,7 +299,7 @@ public class DataConnection {
 		// UPDATE StockAccounts with new nshares values
 		PreparedStatement pstmt;
 		String updateSuppSQL;
-		if(oldshares > 0){ 
+		if(oldshares >= 0){ 
 			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = ?";
 			System.out.println("updating current StockAccount");
 		}
