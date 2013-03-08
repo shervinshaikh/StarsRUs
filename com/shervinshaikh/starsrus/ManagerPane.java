@@ -112,6 +112,8 @@ public class ManagerPane extends JPanel {
         model = new SpinnerDateModel();
         model.setValue(date);
         JSpinner spinner = new JSpinner(model);
+        spinner.setEditor(new JSpinner.DateEditor(spinner, "dd-MM-yy"));
+
         spinner.setBounds(400,80,120,20);
         spinner.addChangeListener(new dateListener());
         p1.add(spinner);
