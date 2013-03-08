@@ -7,7 +7,20 @@
     </list>
     <ignored path="StarsRUs.iws" />
     <ignored path=".idea/workspace.xml" />
-    <file path="/Dummy.txt" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362632454756" ignored="false" />
+    <file path="/Dummy.txt" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362714776628" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/ActiveCustomerBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/BalanceTable.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715706799" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/ChildExample.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/CusReportBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715706799" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/Customer.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/MonthlyStatementBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/ManagerPane.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/ReportBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/StockTable.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/ReviewBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/SimpleTableDemo.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/TopMovieBoard.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
+    <file path="$USER_HOME$/workspace/starsrus/src/TabbedPaneDemo.java" changelist="f988b2c2-9b74-4072-a90f-a289839bbc43" time="1362715658167" ignored="false" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -66,10 +79,10 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="TopMovieBoard.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="TopMovieBoard.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/TopMovieBoard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="13" selection-start="323" selection-end="323" vertical-scroll-proportion="0.12927757">
+            <state line="14" column="13" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -78,26 +91,39 @@
       <file leaf-file-name="ManagerPane.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ManagerPane.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="13" selection-start="486" selection-end="486" vertical-scroll-proportion="0.0">
+            <state line="32" column="23" selection-start="748" selection-end="748" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="HelloWorld.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/HelloWorld.java">
+      <file leaf-file-name="MonthlyStatementBoard.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/MonthlyStatementBoard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="6" column="13" selection-start="97" selection-end="97" vertical-scroll-proportion="0.0">
+            <state line="22" column="13" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="GuiApp1.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/GuiApp1.java">
+      <file leaf-file-name="ReportBoard.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReportBoard.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="14" column="13" selection-start="429" selection-end="429" vertical-scroll-proportion="0.0">
-              <folding />
+            <state line="36" column="10" selection-start="739" selection-end="739" vertical-scroll-proportion="0.97137403">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ReviewBoard.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReviewBoard.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="26" selection-start="309" selection-end="309" vertical-scroll-proportion="0.0">
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -106,24 +132,6 @@
         <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/DataConnection.java">
           <provider selected="true" editor-type-id="text-editor">
             <state line="10" column="13" selection-start="230" selection-end="230" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Customer.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/Customer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="11" column="13" selection-start="256" selection-end="256" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ChildExample.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ChildExample.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="7" column="6" selection-start="111" selection-end="111" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -171,6 +179,13 @@
       <MyDateState />
     </option>
   </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/src/com/shervinshaikh/starsrus/TopMovieBoard.java" />
+      </list>
+    </option>
+  </component>
   <component name="ProjectFrameBounds">
     <option name="x" value="10" />
     <option name="y" value="10" />
@@ -203,8 +218,8 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -249,6 +264,7 @@
     <property name="GoToFile.includeJavaFiles" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="MemberChooser.sorted" value="false" />
+    <property name="last_opened_file_path" value="$USER_HOME$/workspace/starsrus/src/DataConnection.java" />
     <property name="MemberChooser.showClasses" value="true" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="MemberChooser.copyJavadoc" value="false" />
@@ -266,19 +282,6 @@
       <option name="SHMEM_ADDRESS" value="javadebug" />
       <option name="HOST" value="localhost" />
       <option name="PORT" value="5005" />
-      <method />
-    </configuration>
-    <configuration default="true" type="Applet" factoryName="Applet">
-      <module name="" />
-      <option name="MAIN_CLASS_NAME" />
-      <option name="HTML_FILE_NAME" />
-      <option name="HTML_USED" value="false" />
-      <option name="WIDTH" value="400" />
-      <option name="HEIGHT" value="300" />
-      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
-      <option name="VM_PARAMETERS" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="TestNG" factoryName="TestNG">
@@ -306,6 +309,19 @@
       <envs />
       <properties />
       <listeners />
+      <method />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <module name="" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
       <method />
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -438,13 +454,6 @@
     <breakpoint-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/TabbedPaneDemo.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="16" column="13" selection-start="314" selection-end="314" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/StockTable.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="20" column="13" selection-start="448" selection-end="448" vertical-scroll-proportion="0.0">
@@ -455,34 +464,6 @@
     <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/SimpleTableDemo.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="11" column="13" selection-start="266" selection-end="266" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReviewBoard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="13" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReportBoard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="13" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/MonthlyStatementBoard.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="22" column="13" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ManagerPane.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="13" selection-start="486" selection-end="486" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -545,8 +526,47 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/TopMovieBoard.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="14" column="13" selection-start="323" selection-end="323" vertical-scroll-proportion="0.12927757">
+        <state line="14" column="13" selection-start="323" selection-end="323" vertical-scroll-proportion="0.0">
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ManagerPane.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="23" selection-start="748" selection-end="748" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/MonthlyStatementBoard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="13" selection-start="471" selection-end="471" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReviewBoard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="26" selection-start="309" selection-end="309" vertical-scroll-proportion="0.0">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/workspace/starsrus/src/DataConnection.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/shervinshaikh/starsrus/ReportBoard.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="10" selection-start="739" selection-end="739" vertical-scroll-proportion="0.97137403">
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
