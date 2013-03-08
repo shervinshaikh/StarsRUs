@@ -103,6 +103,7 @@ public class ManagerPane extends JPanel {
         String tempmonth = tempdate.substring(14,16);
         String tempday = tempdate.substring(17,19);
         
+        
         System.out.println("tempdate: " + tempday);
 
         model = new SpinnerDateModel();

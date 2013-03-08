@@ -7,9 +7,11 @@
  */
  
  package com.shervinshaikh.starsrus;
+import java.awt.GridLayout;
 import java.sql.SQLException;
 
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -27,9 +29,24 @@ public class MonthlyStatementBoard extends JFrame
     public MonthlyStatementBoard(String targetName)
     {
 
+    	JLabel nameLabel = new JLabel("Name: " );
+        JLabel emailLabel = new JLabel("Email: ");
+        JLabel iBalLabel = new JLabel("Initial Balance: ");
+        JLabel fBalLabel = new JLabel("Final Balance: ");
+        JLabel totEarningsLabel = new JLabel("Total Earnings: ");
+        JLabel commLabel = new JLabel("Commission: ");
+        
+        add(nameLabel);
+        add(emailLabel);
+        add(iBalLabel);
+        add(fBalLabel);
+        add(totEarningsLabel);
+        add(commLabel);
+        
+        setLayout(new GridLayout(7,1));
 
         setTitle( "Monthly Statement" );
-        setSize( 800,400 );
+        setSize( 800,600 );
         setResizable( true );
 
         String[] columnNames = {"Stock Acct ID",
