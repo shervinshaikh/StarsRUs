@@ -16,6 +16,7 @@ import javax.swing.event.ChangeListener;
 public class TabbedPaneDemo extends JPanel {
 	int taxid = 2034;
 	int buyPrice = 22;
+	//static String userName;
 	
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
@@ -655,20 +656,25 @@ public class TabbedPaneDemo extends JPanel {
      * this method should be invoked from
      * the event dispatch thread.
      */
-    public static void createAndShowGUI(String puname) {
+    public static void createAndShowGUI(String inpName) {
+    	//userName = inpName;
+    	//do whatever is necessary with username here
+    	
+    	
+
         //Create and set up the window.
         JFrame frame = new JFrame("TabbedPaneDemo");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         //Add content to the window.
-        frame.add(new TabbedPaneDemo(puname), BorderLayout.CENTER);
+        //frame.add(new TabbedPaneDemo(puname), BorderLayout.CENTER);
 
         //Display the window.
         frame.pack();
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         //Schedule a job for the event dispatch thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {
@@ -678,5 +684,5 @@ public class TabbedPaneDemo extends JPanel {
                 //createAndShowGUI();
             }
         });
-    }
+    }*/
 }
