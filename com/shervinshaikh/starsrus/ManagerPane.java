@@ -37,8 +37,14 @@ public class ManagerPane extends JPanel {
     JTextField inputPrice;
 
     public ManagerPane(){
-
-        super(new GridLayout(1,1));
+    	super(new GridLayout(1,1));
+    	
+    	
+    	System.out.println("balances recording soon");
+    	try{ 
+    		DataConnection.recordBalances(); 
+    		System.out.println("balances recorded");
+    	} catch(SQLException e) { System.out.println(e.getMessage()); }
 
         tabbedPane = new JTabbedPane();
         tabbedPane.setPreferredSize(new Dimension(600, 400));

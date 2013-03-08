@@ -1,6 +1,7 @@
 package com.shervinshaikh.starsrus;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -75,6 +76,8 @@ public class DataConnection {
 		//genDTER();
 		
 		//genMonthlyStatement(name);
+		
+		recordBalances();
 	}
 	
 	public static void print_all() throws SQLException {
@@ -149,24 +152,29 @@ public class DataConnection {
 	
 	
 	// TODO check to see if person is a manager
-	public static boolean validUser(String username, String pw) throws SQLException{
+	public static int validUser(String username, String pw) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement stmt = conn.createStatement();
 		//System.out.println("connection complete");
-		ResultSet rs = stmt.executeQuery("SELECT COUNT(*) FROM Customer WHERE username ='" + username + "' AND pw='" + pw + "'");
+		ResultSet rs = stmt.executeQuery("SELECT * FROM Customer WHERE username ='" + username + "' AND pw='" + pw + "'");
 		//System.out.println("Query run");
 		
 		if(rs.next()){
-			if(rs.getInt(1) == 1){
+			int v = rs.getInt("ismanger");
+			if(v == 1){
 				//System.out.println("login successful!");
 				conn.close();
-				return true;
+				return 2;
+			}
+			else if(v == 0){
+				conn.close();
+				return 1;
 			}
 		}
 		
 		rs.close();
 		conn.close();
-		return false;
+		return 0;
 	}
 
 	public static double depositMoney(int taxid, double value) throws SQLException{
@@ -480,9 +488,21 @@ public class DataConnection {
 		if(rs.next()){
 			date = rs.getString(1);
 		}
-		
 		conn.close();
 		return "to_date('" + date + "', 'yyyy/mm/dd hh24:mi:ss')";
+	}
+	
+	public static Date getTodaysDate2() throws SQLException{
+		Date date = null;
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement stmt = conn.createStatement();
+		ResultSet rs = stmt.executeQuery("SELECT cDate FROM Operations");
+		if(rs.next()){
+			date = rs.getDate(1);
+		}
+		System.out.println(date);
+		conn.close();
+		return date;
 	}
 	
 	public static void addCommission(int taxid) throws SQLException{
@@ -804,7 +824,7 @@ public class DataConnection {
 	}
 	
 	public static void setDate(String date) throws SQLException {
-		recordBalances();
+		//recordBalances();
 		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
@@ -995,42 +1015,55 @@ public class DataConnection {
 	}
 	
 	public static void recordBalances() throws SQLException {
+		// get todays date
+		String date = getTodaysDate();
+		System.out.println(date);
+		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		
-		// get number of custommers
+		ResultSet rs = s.executeQuery("SELECT MAX(bdate) FROM Balances");
+		if(rs.next()){
+			if(rs.getString(1) == date){
+				System.out.println("already in database");
+				conn.close();
+				return;
+			}
+		}
+		
+		// get number of customers
 		int nCustomers = 0;
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
+		rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
 		if(rs.next()){
 			nCustomers = (rs.getInt(1));
 			System.out.println("# of Customer Accounts: " + nCustomers);
 		}
-		// get todays date
-		String date = getTodaysDate();
-		// store taxid, balance, and date in an array
-		String[][] customers = new String[nCustomers][3];
-		rs = s.executeQuery("SELECT taxid, balance FROM MarketAccounts WHERE ismanager = 0");
+		System.out.println("about to store taxid");
+		// store taxid
+		String[][] customers = new String[nCustomers][2];
+		rs = s.executeQuery("SELECT taxid FROM Customer WHERE ismanager = 0");
 		for(int i=0; rs.next(); i++){
 			customers[i][0] = rs.getString(1);
-			customers[i][1] = rs.getString(2);
-			customers[i][2] = date;
 		}
-		
+		System.out.println("about to store balance");
+		// store balance
+		for(int i=0; i<nCustomers; i++){
+			rs = s.executeQuery("SELECT balance FROM MarketAccounts WHERE taxid=" + customers[i][0]);
+			if(rs.next()){
+				customers[i][1] = rs.getString(1);
+			}
+		}
+		System.out.println("getting ready to insert");
 		// insert values into the database
-		PreparedStatement pstmt;
-		String updateSuppSQL = "INSERT INTO Balances() Values";
-		pstmt = conn.prepareStatement(updateSuppSQL);
+		PreparedStatement p;
+		String updateSuppSQL = "INSERT INTO Balances(taxid, balance, bdate) Values(?, ?, "+ date + ")";
+		p = conn.prepareStatement(updateSuppSQL);
 		
-		// Replace the first ? with value
-		//pstmt.setDouble(1, value);
-		
-		// Replace the second ? with id
-		//pstmt.setInt(2, id);
-		
-		// Execute updates
-		int n = pstmt.executeUpdate();
-		
-		
+		for(int i=0; i<nCustomers; i++){
+			p.setInt(1, Integer.parseInt(customers[i][0]));
+			p.setDouble(2,  Double.parseDouble(customers[i][1]));
+		}
+
 		System.out.println("All Balances recorded for today");
 		conn.close();
 	}
