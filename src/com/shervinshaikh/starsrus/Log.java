@@ -66,20 +66,19 @@ public class Log extends JFrame {
 				try {
 					userStatus = DataConnection.validUser(puname,ppaswd);
 				} catch (SQLException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
                 
                 if(userStatus!=0) {
                     
                 	if(userStatus==1){
-	                	TabbedPaneDemo regFace =new TabbedPaneDemo();
+	                	TabbedPaneDemo regFace = new TabbedPaneDemo();
 	                    regFace.setVisible(true);
 	                    regFace.createAndShowGUI();
 	                    dispose();
                 	}
                 	else if(userStatus==2){
-                		ManagerPane regFace=  new ManagerPane();
+                		ManagerPane regFace = new ManagerPane();
                 		regFace.setVisible(true);
                 		regFace.createAndShowGUI();
                 		dispose();
