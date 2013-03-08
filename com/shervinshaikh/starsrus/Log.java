@@ -2,6 +2,7 @@ package com.shervinshaikh.starsrus;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -61,17 +62,23 @@ public class Log extends JFrame {
                 String ppaswd = pass.getText();
                 
                 //is the user a manager
-                int isManager=1;
+                int userStatus=0;
+				try {
+					userStatus = DataConnection.validUser(puname,ppaswd);
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 
-                if(puname.equals("test") && ppaswd.equals("12345")) {
+                if(userStatus!=0) {
                     
-                	if(isManager==0){
+                	if(userStatus==1){
 	                	TabbedPaneDemo regFace =new TabbedPaneDemo();
 	                    regFace.setVisible(true);
 	                    regFace.createAndShowGUI();
 	                    dispose();
                 	}
-                	else if(isManager==1){
+                	else if(userStatus==2){
                 		ManagerPane regFace=  new ManagerPane();
                 		regFace.setVisible(true);
                 		regFace.createAndShowGUI();
