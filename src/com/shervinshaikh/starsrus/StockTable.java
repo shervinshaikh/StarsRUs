@@ -1,13 +1,4 @@
 package com.shervinshaikh.starsrus;
-
-/**
- * Created with IntelliJ IDEA.
- * User: Sprite
- * Date: 3/5/13
- * Time: 7:16 PM
- * To change this template use File | Settings | File Templates.
- */
-
  
 import javax.swing.JFrame;
 import javax.swing.JPanel;
