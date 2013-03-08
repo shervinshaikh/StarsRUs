@@ -352,7 +352,9 @@ public class CustomerPane extends JPanel {
     		double v = 0;
         	try{
         		int nshares = Integer.parseInt(sharesS.getText());
-        		String symbol = list2.getSelectedValue().toString();
+        		String symbol = list2.getSelectedValue().toString().substring(0,3);
+        		double buyPrice = Double.parseDouble(list2.getSelectedValue().toString().substring(16,20));
+        		System.out.println("symbol: " + symbol + ", buy price: " + buyPrice);
         		
         		System.out.println("#shares selling: " + nshares + " of " + symbol);
         		v = DataConnection.sellStocks(taxid, nshares, symbol, buyPrice);

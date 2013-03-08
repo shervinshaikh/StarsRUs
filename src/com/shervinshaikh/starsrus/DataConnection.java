@@ -428,7 +428,7 @@ public class DataConnection {
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, newShares, currentPrice, date, earnings);
-		
+		removeStockPurchases(symbol, buyPrice, nshares, taxid);
 		p.close();
 		rs.close();
 		conn.close();
