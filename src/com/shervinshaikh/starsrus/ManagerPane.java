@@ -36,15 +36,16 @@ public class ManagerPane extends JPanel {
     JComboBox stockNameList;
     JTextField inputPrice;
 
-    public ManagerPane(){
+    @SuppressWarnings("deprecation")
+	public ManagerPane(){
     	super(new GridLayout(1,1));
     	
     	
-    	System.out.println("balances recording soon");
-    	try{ 
-    		DataConnection.recordBalances(); 
-    		System.out.println("balances recorded");
-    	} catch(SQLException e) { System.out.println(e.getMessage()); }
+//    	System.out.println("balances recording soon");
+//    	try{ 
+//    		DataConnection.recordBalances(); 
+//    		System.out.println("balances");
+//    	} catch(SQLException e) { System.out.println(e.getMessage()); }
 
         tabbedPane = new JTabbedPane();
         tabbedPane.setPreferredSize(new Dimension(600, 400));
@@ -180,13 +181,15 @@ public class ManagerPane extends JPanel {
     class genStatementListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            MonthlyStatementBoard msBoard = new MonthlyStatementBoard(selectedCustomer);
+            @SuppressWarnings("unused")
+			MonthlyStatementBoard msBoard = new MonthlyStatementBoard(selectedCustomer);
             //JOptionPane.showMessageDialog(null, "Generate Statement!");
         }
     }
     class listActiveListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	@SuppressWarnings("unused")
             ActiveCustomerBoard activeTab = new ActiveCustomerBoard();
 
             //JOptionPane.showMessageDialog(null,"List stuff!");
@@ -195,6 +198,7 @@ public class ManagerPane extends JPanel {
     class genDTERListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	@SuppressWarnings("unused")
             ReportBoard repBoard = new ReportBoard();
 
             //JOptionPane.showMessageDialog(null,"gen DTER!");
@@ -203,6 +207,7 @@ public class ManagerPane extends JPanel {
     class makeReportListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	@SuppressWarnings("unused")
             CusReportBoard cusBoard = new CusReportBoard(selectedCustomer);
             //JOptionPane.showMessageDialog(null,"make report!");
         }
@@ -233,6 +238,7 @@ public class ManagerPane extends JPanel {
     class dateListener implements ChangeListener{
         @Override
         public void stateChanged(ChangeEvent e) {
+        	@SuppressWarnings("unused")
             Date date = (Date) ((JSpinner) e.getSource()).getValue();
             //System.out.println("Date: " + date);
             //for (int i = 0; i < labels.length; i++) {
@@ -258,9 +264,9 @@ public class ManagerPane extends JPanel {
     class StockNameListener implements ItemListener{
         @Override
         public void itemStateChanged(ItemEvent event){
-            if (event.getStateChange() == ItemEvent.SELECTED) {
-                Object item = event.getItem();
-            }
+//            if (event.getStateChange() == ItemEvent.SELECTED) {
+//                Object item = event.getItem();
+//            }
         }
     }
     class SetPriceListener implements ActionListener{

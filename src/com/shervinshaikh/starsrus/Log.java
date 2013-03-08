@@ -59,7 +59,8 @@ public class Log extends JFrame {
         blogin.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 String puname = txuser.getText();
-                String ppaswd = pass.getText();
+                @SuppressWarnings("deprecation")
+				String ppaswd = pass.getText();
                 
                 //is the user a manager
                 int userStatus=0;

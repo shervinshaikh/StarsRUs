@@ -246,7 +246,6 @@ public class TabbedPaneDemo extends JPanel {
 
         JLabel selectStockLabel = new JLabel("Select stock:");
 
-        String[] petStrings = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
         //try{ stockSymbols = DataConnection.getStockSymbols();
         //} catch (SQLException e){ System.out.println("ERROR getting Stock Symbols");}
 
@@ -493,7 +492,8 @@ public class TabbedPaneDemo extends JPanel {
     class reviewButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-            ReviewBoard revBoard = new ReviewBoard(movieName);
+            @SuppressWarnings("unused")
+			ReviewBoard revBoard = new ReviewBoard(movieName);
             // DO STUFF HERE
             
         }
@@ -502,7 +502,8 @@ public class TabbedPaneDemo extends JPanel {
     class topMovButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-            TopMovieBoard topBoard = new TopMovieBoard(first_top_date, second_top_date);
+            @SuppressWarnings("unused")
+			TopMovieBoard topBoard = new TopMovieBoard(first_top_date, second_top_date);
             //do stuff here
         }
     }
@@ -674,15 +675,15 @@ public class TabbedPaneDemo extends JPanel {
         frame.setVisible(true);
     }
 
-    public static void main(String[] args) {
-        //Schedule a job for the event dispatch thread:
-        //creating and showing this application's GUI.
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                //Turn off metal's use of bold fonts
-                UIManager.put("swing.boldMetal", Boolean.FALSE);
-                createAndShowGUI();
-            }
-        });
-    }
+//    public static void main(String[] args) {
+//        //Schedule a job for the event dispatch thread:
+//        //creating and showing this application's GUI.
+//        SwingUtilities.invokeLater(new Runnable() {
+//            public void run() {
+//                //Turn off metal's use of bold fonts
+//                UIManager.put("swing.boldMetal", Boolean.FALSE);
+//                createAndShowGUI();
+//            }
+//        });
+//    }
 }

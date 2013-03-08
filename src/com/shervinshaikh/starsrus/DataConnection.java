@@ -923,38 +923,54 @@ public class DataConnection {
 		int n = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid)");
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions GROUP BY taxid)"); // WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON')
 		if(rs.next()){
 			n = rs.getInt(1);
-			System.out.println("# Customers where earnings>$10,000: " + n);
 		}
-		Object[][] customers = new String[n][4];
+		Object[][] customers = new Object[n][3];
 		// get the taxid for each customer
 		int taxid[] = new int[n];
-		rs = s.executeQuery("SELECT * FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid)");
+		rs = s.executeQuery("SELECT * FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions GROUP BY taxid)"); // WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON')
 		for(int i=0; rs.next(); i++){
 			taxid[i] = rs.getInt("taxid");
 			customers[i][2] = "" + rs.getDouble("totalearnings");
 			System.out.println("taxid: " + taxid[i] + ", earnings: " + customers[i][2]);
 		}
-		
+		int count = 0;
 		for(int j=0; j<n; j++){
 			// get the names and states of customer
 			rs = s.executeQuery("SELECT cname, state FROM Customer WHERE taxid=" + taxid[j]);
 			if(rs.next()){
 				customers[j][0] = rs.getString("cname");
 				customers[j][1] = rs.getString("state");
-				System.out.println(customers[j][0] + " " + customers[j][1]);
+				System.out.print(customers[j][0] + " " + customers[j][1]);
 			}
 			// get interest earned over time period
 			rs = s.executeQuery("SELECT interest FROM MarketAccounts WHERE taxid=" + taxid[j]);
+			double totalEarnings;
 			if(rs.next()){
-				customers[j][2] = "" + (rs.getDouble(1) + Double.parseDouble(customers[j][2].toString()));
-				System.out.println("total earnings including interest: " + customers[j][2]);
+				totalEarnings = (rs.getDouble(1) + Double.parseDouble(customers[j][2].toString()));
+				customers[j][2] = "" + totalEarnings;
+				System.out.println(", total earnings including interest: " + customers[j][2]);
+				if(totalEarnings > 10000){
+					count++;
+				}
 			}
+			System.out.println(count);
 		}
 		conn.close();
-		return customers;
+		Object[][] list  = new Object[count][3];
+		System.out.println("Customers in list: ");
+		for(int i=0, j=0; j<n && i<count; j++){
+			System.out.println(Double.parseDouble(customers[j][2].toString()));
+			if(Double.parseDouble(customers[j][2].toString()) > 10000){
+				list[i][0] = customers[j][0];  // Customer name
+				list[i][1] = customers[j][1];  // Customer State
+				list[i][2] = customers[j][2];  // Customer earnings (buy/sell + interest)
+				i++;
+			}	
+		}
+		return list;
 	}
 	
 	// TODO generate monthly statement
@@ -1006,8 +1022,8 @@ public class DataConnection {
 	
 	public static void addInterest() throws SQLException{
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("DELETE FROM Transactions");
+		//Statement s = conn.createStatement();
+		//ResultSet rs = s.executeQuery("DELETE FROM Transactions");
 		
 		
 		System.out.println("Interest added to all accounts");

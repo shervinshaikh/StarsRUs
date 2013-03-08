@@ -1,4 +1,5 @@
 package com.shervinshaikh.starsrus;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -13,7 +14,8 @@ import javax.swing.JTextField;
 
 public class registerframe extends JFrame {
     public static void main(String[] args) {
-        registerframe frameTabel = new registerframe();
+        @SuppressWarnings("unused")
+		registerframe frameTabel = new registerframe();
     }
 
 
@@ -104,7 +106,8 @@ public class registerframe extends JFrame {
 
     public void actionregister(){
         bregister.addActionListener(new ActionListener(){
-            public void actionPerformed(ActionEvent ae){
+            @SuppressWarnings("deprecation")
+			public void actionPerformed(ActionEvent ae){
 
 
                 // DO SOMETHING HERE
