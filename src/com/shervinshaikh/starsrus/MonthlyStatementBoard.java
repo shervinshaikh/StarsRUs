@@ -7,10 +7,11 @@
  */
  
  package com.shervinshaikh.starsrus;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -37,10 +38,25 @@ public class MonthlyStatementBoard extends JFrame
                 "final balance",
                 "total earnings/loss",
                 "commission paid"};
-        Object[][] data = {
+        Object[][] data1 = {
                 {"Jack","12345 blah lane", new Integer(200), new Integer(300), new Integer(100),new Integer(20)}
         };
-        final JTable table = new JTable(data, columnNames);
+        
+        String[][] data = {{"Name",
+            "address",
+            "init balance",
+            "final balance",
+            "total earnings/loss",
+            "commission paid"}};
+        System.out.println("name of person: " + targetName);
+		try {
+			data = DataConnection.genMonthlyStatement(targetName);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        final JTable table = new JTable(data1, columnNames);
         table.setFillsViewportHeight(true);
 
         //Create the scroll pane and add the table to it.

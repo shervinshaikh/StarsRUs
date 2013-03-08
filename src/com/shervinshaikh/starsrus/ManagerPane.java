@@ -24,6 +24,8 @@ public class ManagerPane extends JPanel {
     JPanel p1;
     String selectedCustomer = "";
     SpinnerDateModel model;
+    JComboBox stockNameList;
+    JTextField inputPrice;
 
     public ManagerPane(){
 
@@ -96,12 +98,14 @@ public class ManagerPane extends JPanel {
 
 
         String[] stockSymbols = { "Yahoo", "Google", "Apple", "Qualcomm", "Microsoft" };
-        JComboBox stockNameList = new JComboBox(stockSymbols);
+        try { stockSymbols = DataConnection.getStockSymbols(); } catch(SQLException e) {System.out.println("ERROR unable to get stock symbols");}
+        
+        stockNameList = new JComboBox(stockSymbols);
         stockNameList.setBounds(400,180,100,20);
         stockNameList.addItemListener(new StockNameListener());
         p1.add(stockNameList);
 
-        JTextField inputPrice = new JTextField(20);
+        inputPrice = new JTextField(20);
         inputPrice.setBounds(400,200,100,20);
         p1.add(inputPrice);
         JButton setPrice = new JButton("Set Price");
@@ -169,7 +173,7 @@ public class ManagerPane extends JPanel {
     class makeReportListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            CusReportBoard cusBoard = new CusReportBoard();
+            CusReportBoard cusBoard = new CusReportBoard(selectedCustomer);
             //JOptionPane.showMessageDialog(null,"make report!");
         }
     }
@@ -228,6 +232,11 @@ public class ManagerPane extends JPanel {
     class SetPriceListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
+        	String stock = stockNameList.getSelectedItem().toString();
+        	double price = Double.parseDouble(inputPrice.getText());
+        	
+        	try{ DataConnection.setStockPrice(stock, price); } catch(SQLException e) { System.out.println("ERROR unable to set stock price"); }
+        	
             JOptionPane.showMessageDialog(null,"set price!");
         }
 

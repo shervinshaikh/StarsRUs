@@ -193,8 +193,6 @@ public class DataConnection {
 	}
 	
 
-	
-	// TO-DO fix!!!
 	// if cannot be done then return -1
 	public static double withdrawMoney(int taxid, double value) throws SQLException{
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
@@ -652,7 +650,19 @@ public class DataConnection {
 		return movies;
 	}
 
-
+	public static Object[][] getBalances2(String name) throws SQLException {
+		int taxid = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT taxid FROM Customer WHERE cname='" + name + "'");
+		if(rs.next()){
+			taxid = rs.getInt(1);
+		}
+		rs.close();
+		conn.close();
+		return getBalances(taxid);
+	}
+	
 	public static Object[][] getBalances(int taxid) throws SQLException{
 		int nAccounts = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
@@ -666,7 +676,7 @@ public class DataConnection {
 		if(rs.next()){
 			b[0][0] = 0.0 + rs.getInt(1);
 			b[1][0] = rs.getDouble(2);
-			System.out.println("Market Account ID: " + b[0] + "; Balance $" + b[1]);
+			System.out.println("Market Account ID: " + b[0][0] + "; Balance $" + b[1][0]);
 		}
 		// place stock accounts IDs & Balances into doubles array
 		rs = s.executeQuery("SELECT * FROM StockAccounts WHERE taxID =" + taxid);
@@ -680,6 +690,19 @@ public class DataConnection {
 		return b;
 	}
 
+	public static int getNAccounts2(String name) throws SQLException{
+		int taxid = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT taxid FROM Customer WHERE cname='" + name + "'");
+		if(rs.next()){
+			taxid = rs.getInt(1);
+		}
+		rs.close();
+		conn.close();
+		return getNAccounts(taxid);
+	}
+	
 	public static int getNAccounts(int taxid) throws SQLException{
 		int nAccounts = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
@@ -813,7 +836,9 @@ public class DataConnection {
 		for(int i=0; rs.next(); i++){
 			customers[i] = rs.getString(1);
 		}
-		
+
+		rs.close();
+		conn.close();
 		return customers;
 	}
 	
@@ -827,6 +852,44 @@ public class DataConnection {
 		String[][] activeCustomers = new String[numActiveCustomer][2];
 		
 		return activeCustomers;
+	}
+	
+	// generate monthly statement
+	public static String[][] genMonthlyStatement(String name) throws SQLException {
+		String email = "";
+		int taxid = 0;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		// get taxid and Email of user
+		ResultSet rs = s.executeQuery("SELECT taxid, email FROM Customer WHERE cname='" + name + "'");
+		if(rs.next()){
+			taxid = rs.getInt("taxID");
+			email = rs.getString("email");
+			System.out.println("name: " + name + ", email: " + email);
+		}
+		
+		String[][] transactions = getTransactionHistory(taxid);
+		int nTrans = getNumTrans(taxid);
+		String[][] ms = new String[nTrans+2][];
+		System.out.println("name of person: " + name);
+		ms[0][0] = name;
+		ms[1][0] = email;
+		System.out.println("name of person: " + name);
+		
+		// place transactions into monthly statement
+		for(int i=0; i<nTrans; i++){
+			ms[i+2][0] = transactions[i][0];
+			ms[i+2][1] = transactions[i][1];
+			ms[i+2][2] = transactions[i][2];
+			ms[i+2][3] = transactions[i][3];
+			ms[i+2][4] = transactions[i][4];
+			ms[i+2][5] = transactions[i][5];
+			ms[i+2][6] = transactions[i][6];
+		}
+		
+		rs.close();
+		conn.close();
+		return ms;
 	}
 	
 	// empty the Transactions table
