@@ -992,7 +992,7 @@ public class DataConnection {
 		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
 		if(rs.next()){
 			numActiveCustomers = (rs.getInt(1));
-			System.out.println("# of Customer Accounts: " + numActiveCustomers);
+			System.out.println("# of Active Customers: " + numActiveCustomers);
 		}
 		// place active customers (cname, taxid) into string array
 		String[] activeCustomers = new String[numActiveCustomers];
