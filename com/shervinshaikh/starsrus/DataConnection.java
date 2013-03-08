@@ -15,8 +15,6 @@ public class DataConnection {
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
 	static String strUsername = "cs174a_shervinshaikh";
 	static String strPassword = "computer";
-	static String  cMonth = "Apr";
-	static String nMonth = "May";
 	
 	public static void main(String[] args) throws SQLException{
 		
@@ -67,10 +65,9 @@ public class DataConnection {
 		
 		//sellStocks(1022, 2, "SKB", 30);
 		
-		//getOwnedSymbols(1022);
-		
-		getActiveCustomers();
+		getOwnedSymbols(1022);
 	}
+	
 	public static void print_all() throws SQLException {
 		// Connect to the database
 
@@ -97,6 +94,8 @@ public class DataConnection {
 		// don't miss this
 		rs.close();
 	}
+	
+	
 	public static int testPreStmt(int id, double value) throws SQLException{
 		PreparedStatement pstmt;
 		String updateSuppSQL = "update tablename set columnName = ? where id = ?";
@@ -114,6 +113,8 @@ public class DataConnection {
 		pstmt.close();
 		return n;
 	}
+	
+	
 	
 	// TODO create a MarketAccount & place money into it when registering the customer
 	public static boolean registerCustomer(int taxid, String ssn, String phone, String cname, String email,
@@ -135,6 +136,7 @@ public class DataConnection {
 		conn.close();
 		return true;
 	}
+	
 	
 	// TODO check to see if person is a manager
 	public static boolean validUser(String username, String pw) throws SQLException{
@@ -751,7 +753,7 @@ public class DataConnection {
 	
 
 	// TEST, DEBUG, DEMO OPERATIONS
-	//
+	
 	// TODO test all of the methods below, ex: open Market just sits at executeUpdate
 	public static void openMarket() throws SQLException {
 		System.out.println("About to connect");
@@ -792,6 +794,7 @@ public class DataConnection {
 		System.out.println("New " + symbol + ": $" + price);
 		conn.close();
 	}
+
 
 	public static boolean isMarketOpen() throws SQLException {
 		boolean isOpen = true;
@@ -842,61 +845,28 @@ public class DataConnection {
 	// list of customers who have bought or sold at least 1,000 shares in the current month
 	public static String[] getActiveCustomers() throws SQLException {
 		int numActiveCustomers = 0;
-
 		// get number of active customers in current month
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		//TODO change these so they work with current month
-		
 
-		// get number of active market accounts
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(nshares) AS totalShares FROM Transactions WHERE tdate BETWEEN to_date('"+ cMonth +"', 'MON') AND to_date('" + nMonth + "', 'MON') GROUP BY taxid) WHERE totalShares > 1000");
+		// get number of market accounts
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
 		if(rs.next()){
 			numActiveCustomers = (rs.getInt(1));
-			System.out.println("# of Active Accounts: " + numActiveCustomers);
+			System.out.println("# of Customer Accounts: " + numActiveCustomers);
 		}
-		
-		// get taxid of all active customers
-		int taxid[] = new int[numActiveCustomers];
-		rs = s.executeQuery("SELECT * FROM (SELECT taxid, SUM(nshares) AS totalShares FROM Transactions WHERE tdate BETWEEN to_date('"+ cMonth +"', 'MON') AND to_date('" + nMonth + "', 'MON') GROUP BY taxid) WHERE totalShares > 1000");
-		for(int i=0; rs.next(); i++){
-			taxid[i] = rs.getInt("taxid");
-		}
-		
-		System.out.println("List of Active Customers: ");
-		// place active customers cname into string array
+		// place active customers (cname, taxid) into string array
 		String[] activeCustomers = new String[numActiveCustomers];
-		for(int j=0; j<numActiveCustomers; j++){
-			rs = s.executeQuery("SELECT cname FROM Customer WHERE taxid=" + taxid[j]);
-			System.out.print(taxid[j] + ": ");
-			if(rs.next()){
-				activeCustomers[j] = rs.getString(1);
-				System.out.println(activeCustomers[j]);
-			}
-
+		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
+		for(int i=0; rs.next(); i++){
+			activeCustomers[i] = rs.getString(1);
 		}
 		rs.close();
 		conn.close();
+		
+		
+		
 		return activeCustomers;
-	}
-	
-	// list customers (name, state, earnings) who earned more than $10,000 in the last month
-	public static String[] genDTER() throws SQLException {
-		int n = 0;
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT taxid, SUM(earnings) AS totalEarnings FROM Transactions WHERE tdate BETWEEN to_date('" + cMonth + "', 'MON') AND to_date('"+ nMonth + "', 'MON') GROUP BY taxid) WHERE totalEarnings>10000");
-		if(rs.next()){
-			n = rs.getInt(1);
-			System.out.println("# Customers wher earnings>$10,000: " + n);
-		}
-		
-		// place each 
-		String[] customers = new String[n];
-		
-		
-		
-		return customers;
 	}
 	
 	// TODO generate monthly statement
