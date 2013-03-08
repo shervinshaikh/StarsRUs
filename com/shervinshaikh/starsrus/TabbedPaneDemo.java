@@ -14,6 +14,9 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class TabbedPaneDemo extends JPanel {
+	int taxid = 3045;
+	int buyPrice = 22;
+	
     JTabbedPane tabbedPane;
     JTextField amountD, amountW;
     JTextField sharesB,sharesS;
@@ -26,7 +29,6 @@ public class TabbedPaneDemo extends JPanel {
     String[] movieInfo;
     String[] stockSymbols;
     String movieName;
-    int taxid = 3045;
     Object[][] balances;
     Object si[] = new Object[8];
     JList list, list2;
@@ -464,9 +466,14 @@ public class TabbedPaneDemo extends JPanel {
     		//do sell stuff here
     		
     		double v = 0;
-        	try{ 
-        		v = DataConnection.sellStocks(taxid, Integer.parseInt(sharesS.getText()), list2.getSelectedValue().toString(),22);
+        	try{
+        		int nshares = Integer.parseInt(sharesS.getText());
+        		String symbol = list2.getSelectedValue().toString();
+        		
+        		System.out.println("#shares selling: " + nshares + " of " + symbol);
+        		v = DataConnection.sellStocks(taxid, nshares, symbol, buyPrice);
         	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks"); }
+        	
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough stocks to complete purchase");
         	}
@@ -474,13 +481,10 @@ public class TabbedPaneDemo extends JPanel {
         		JOptionPane.showMessageDialog(null, "Market is closed, cannot sell stocks");
         	}
     		else{ 
-    			JOptionPane.showMessageDialog(null, "Sell Done!");
+    			JOptionPane.showMessageDialog(null, "Stocks Sold!");
     		}
-
-    		
     		
     		updateSellandHistory();
-    		
     	}
     	
     	
@@ -627,20 +631,20 @@ public class TabbedPaneDemo extends JPanel {
     	
     	//update sell box
     	
-    	String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
-        
-        try { 
-        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
-        } catch (SQLException e) { 
-        	System.out.println("ERROR unable to get stock account symbols"); 
-        }
-        list2 = new JList(userSymbols);
-        symbolScroll2 = new JScrollPane(list2);
-        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        list2.setVisibleRowCount(4);
-        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        symbolScroll2.setBounds(50,75,350,150);
+//    	String [] userSymbols = {"GOOG", "AAPL", "YAHOO"}; // Get values of stocks user owns from database
+//        
+//        try { 
+//        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
+//        } catch (SQLException e) { 
+//        	System.out.println("ERROR unable to get stock account symbols"); 
+//        }
+//        list2 = new JList(userSymbols);
+//        symbolScroll2 = new JScrollPane(list2);
+//        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+//        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        list2.setVisibleRowCount(4);
+//        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+//        symbolScroll2.setBounds(50,75,350,150);
     }
 
 
