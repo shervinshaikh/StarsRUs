@@ -147,6 +147,8 @@ public class TabbedPaneDemo extends JPanel {
         list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         JButton sells = new JButton("Sell");
+        sells.addActionListener(new SellListener());
+        
         //purchase.addActionListener(new BuyListener());
         // TODO add a sellListener not BuyListener 
 
@@ -396,7 +398,9 @@ public class TabbedPaneDemo extends JPanel {
                 e1.printStackTrace();
                 System.out.println("ERROR unable to deposite money");
             }
-            JOptionPane.showMessageDialog(null, "Deposit of $" + amount + " Complete!");
+            
+           JOptionPane.showMessageDialog(null, "Deposit of $" + amount + " Complete!");
+           
         }
 
     }
@@ -422,6 +426,7 @@ public class TabbedPaneDemo extends JPanel {
            else {
         	   JOptionPane.showMessageDialog(null, "Unable to complete withdrawal, funds too low");
            }
+           
         }
 
     }
@@ -450,6 +455,19 @@ public class TabbedPaneDemo extends JPanel {
         
         
 
+    }
+    class SellListener implements ActionListener{
+    	
+    	@Override
+    	public void actionPerformed(ActionEvent arg0){
+    		//do sell stuff here
+    		
+    		
+    		updateSellandHistory();
+    		
+    	}
+    	
+    	
     }
     class reviewButtonListener implements ActionListener {
         @Override
