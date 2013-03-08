@@ -63,7 +63,7 @@ public class ManagerPane extends JPanel {
         generateStatement.setBounds(0,80,200,20);
         generateStatement.addActionListener(new genStatementListener());
         p1.add(generateStatement);
-        selectedCustomer = customerPicker.getItemAt(1).toString();
+        selectedCustomer = customerPicker.getItemAt(0).toString();
         JButton listActiveCustomers = new JButton("List Active");
         listActiveCustomers.setBounds(0,160,100,20);
         listActiveCustomers.addActionListener(new listActiveListener());

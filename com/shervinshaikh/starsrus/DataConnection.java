@@ -17,6 +17,7 @@ public class DataConnection {
 	static String strPassword = "computer";
 	static String cMonth = "Apr";
 	static String nMonth = "May";
+	static String name = "Cindy Laugher";
 	
 	public static void main(String[] args) throws SQLException{
 		
@@ -72,7 +73,8 @@ public class DataConnection {
 		//getActiveCustomers();
 		
 		//genDTER();
-
+		
+		genMonthlyStatement(name);
 	}
 	
 	public static void print_all() throws SQLException {
@@ -416,6 +418,19 @@ public class DataConnection {
 
 		pstmt2.close();
 		conn.close();
+	}
+	
+	public static int getNumTrans2(String name) throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		int taxid = 0;
+		ResultSet rs = s.executeQuery("SELECT taxid FROM Customer WHERE cname='" + name + "'");
+		if(rs.next()){
+			taxid = rs.getInt(1);
+		}
+		int nTrans = getNumTrans(taxid);
+		
+		return nTrans;
 	}
 
 	public static int getNumTrans(int taxid) throws SQLException {
@@ -936,8 +951,8 @@ public class DataConnection {
 		
 		String[][] transactions = getTransactionHistory(taxid);
 		int nTrans = getNumTrans(taxid);
-		String[][] ms = new String[nTrans+2][];
-		System.out.println("name of person: " + name);
+		String[][] ms = new String[nTrans+2][7];
+		System.out.println("name of person: " + name + " email: " + email);
 		ms[0][0] = name;
 		ms[1][0] = email;
 		System.out.println("name of person: " + name);
@@ -977,13 +992,3 @@ public class DataConnection {
 		conn.close();
 	}
 }
-
-
-
-
-
-
-
-
-
-

@@ -14,7 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 public class TabbedPaneDemo extends JPanel {
-	int taxid = 3045;
+	int taxid = 2034;
 	int buyPrice = 22;
 	
     JTabbedPane tabbedPane;
