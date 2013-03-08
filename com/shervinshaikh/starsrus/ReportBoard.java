@@ -7,10 +7,11 @@
  */
  
  package com.shervinshaikh.starsrus;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.sql.SQLException;
+
+import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,13 +33,15 @@ public class ReportBoard extends JFrame
         setResizable( false );
 
         String[] columnNames = {"Name",
-                "earnings",
-                "interest",
-                "residence state"};
-        Object[][] data = {
-                {"Jack",new Integer(400000),new Integer(3),"CA"},
-                {"Kathy",new Integer(1200000),new Integer(5),"NV"}
-        };
+                "Residence State",
+                "Earnings"};
+//        Object[][] data = {
+//                {"Jack",new Integer(400000),new Integer(3),"CA"},
+//                {"Kathy",new Integer(1200000),new Integer(5),"NV"}
+//        };
+        
+        Object[][] data = {{}};
+        try { data = DataConnection.genDTER(); } catch(SQLException e) { System.out.println("ERROR unable to generate DTER"); }
         final JTable table = new JTable(data, columnNames);
         table.setFillsViewportHeight(true);
 

@@ -180,7 +180,8 @@ public class ManagerPane extends JPanel {
     class deleteTransListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-            JOptionPane.showMessageDialog(null,"delete trans!");
+        	try { DataConnection.deleteTransactions(); } catch(SQLException e) { System.out.println("ERROR unable to delete all transactions"); }
+            JOptionPane.showMessageDialog(null,"All Transactions Deleted!");
         }
     }
 
