@@ -25,7 +25,7 @@ public class CustomerPane extends JPanel {
     JTextField sharesB,sharesS;
 	BalanceTable balanceTable;
     StockTable stockInfoPane;
-    JComponent panel7,panel5,panel6;
+    JComponent panel7,panel5,panel6,panel4;
     JScrollPane symbolScroll2;
     int first_top_date;
     int second_top_date;
@@ -106,7 +106,7 @@ public class CustomerPane extends JPanel {
 
         
         // SELL PANEL
-        JComponent panel4 = makeTextPanel("Panel #4");
+        panel4 = makeTextPanel("Panel #4");
         panel4.setPreferredSize(new Dimension(410, 50));
         panel4.setLayout(null);
         sharesS = new JTextField(20);
@@ -489,6 +489,26 @@ public class CustomerPane extends JPanel {
     	tabbedPane.revalidate();
     	panel6.revalidate();
     	newContentPane.revalidate();
+    	
+    	//update sell
+    	String[] userSymbols = {};
+        try { 
+        	userSymbols = DataConnection.getOwnedSymbols(taxid); 
+        } catch (SQLException e) { 
+        	System.out.println("ERROR unable to get stock account symbols"); 
+        }
+        
+        panel4.remove(symbolScroll2);
+        list2 = new JList(userSymbols);
+        symbolScroll2 = new JScrollPane(list2);
+        symbolScroll2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        symbolScroll2.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        list2.setVisibleRowCount(4);
+        list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        symbolScroll2.setBounds(50,75,350,150);
+        panel4.add(symbolScroll2);
+        
     }
 
 
