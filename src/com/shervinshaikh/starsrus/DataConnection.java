@@ -1015,7 +1015,7 @@ public class DataConnection {
 		String[] activeCustomers = new String[numActiveCustomers];
 		int[] taxids = new int[numActiveCustomers];
 		rs = s.executeQuery("SELECT taxid FROM( SELECT taxid, SUM(nshares) AS active FROM Transactions GROUP By taxid) WHERE active > 1000");
-		for(int i=0; i<2; i++){
+		for(int i=0; i<numActiveCustomers; i++){
 			rs.next();
 			taxids[i] = rs.getInt(1);	
 			System.out.println(taxids[i]);
