@@ -45,7 +45,7 @@ public class ManagerPane extends JPanel {
         p1 = new JPanel();
         p1.setLayout(null);
         JButton addInterest = new JButton("Add Interest");
-        addInterest.setBounds(0,20,100,20);
+        addInterest.setBounds(0,20,120,20);
         addInterest.addActionListener(new addInterestListener());
         p1.add(addInterest);
 
