@@ -9,7 +9,6 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -233,14 +232,15 @@ public class ManagerPane extends JPanel {
     }
 
     class dateButtonListener implements ActionListener{
-        @Override
+        @SuppressWarnings("deprecation")
+		@Override
         public void actionPerformed(ActionEvent arg0){
         	Date date = (Date) model.getValue();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
-            String sqlDate = sdf.format(date);
-            System.out.println("date: " + sqlDate);
-            try{ DataConnection.setDate(sqlDate); } catch(SQLException e) { System.out.println(e.getMessage()); }
-            JOptionPane.showMessageDialog(null,"Changed date to " + sqlDate);
+            //SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yy");
+            //String sqlDate = sdf.format(date);
+            //System.out.println("date: " + sqlDate);
+            try{ DataConnection.setDate(date); } catch(SQLException e) { System.out.println(e.getMessage()); }
+            JOptionPane.showMessageDialog(null,"Changed date to " + date.toLocaleString().substring(0,13));
         }
 
     }
