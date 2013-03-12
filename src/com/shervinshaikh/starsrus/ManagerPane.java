@@ -198,7 +198,7 @@ public class ManagerPane extends JPanel {
     class deleteTransListener implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent arg0){
-        	try { DataConnection.deleteTransactions(); } catch(SQLException e) { System.out.println("ERROR unable to delete all transactions"); }
+        	try { DataConnection.deleteTransactions(); } catch(SQLException e) { System.out.println(e.getMessage()); }
             JOptionPane.showMessageDialog(null,"All Transactions Deleted!");
         }
     }

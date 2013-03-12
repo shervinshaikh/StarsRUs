@@ -29,6 +29,8 @@ public class DataConnection {
 		e.printStackTrace();
 		}
 		
+		addInterest();
+		
 		// 2. Test functions for each query
 		//print_all();
 		
@@ -1146,21 +1148,63 @@ public class DataConnection {
 		return ms;
 	}
 	
-	// empty the Transactions table
+	// empty the Transactions & Balances table
 	public static void deleteTransactions() throws SQLException {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		s.executeQuery("DELETE FROM Transactions");
 		System.out.println("all transactions deleted");
 		conn.close();
+		//deleteBalances();
+	}
+	
+	public static void deleteBalances() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s2 = conn.createStatement();
+		s2.executeQuery("DELETE FROM Balances");
+		System.out.println("all balances deleted");
+		conn.close();
 	}
 	
 	// TODO each Market Account earns 3% interest on average daily balance
 	public static void addInterest() throws SQLException{
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		//Statement s = conn.createStatement();
-		//ResultSet rs = s.executeQuery("");
+		int nDays = 30;
+		Date date = getTodaysDate2();
 		
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		int count = 0;
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM (SELECT DISTINCT taxid FROM Balances)");
+		if(rs.next()){
+			count = rs.getInt(1);
+		}
+		
+		double[][] interest = new double[count][3];
+		rs = s.executeQuery("SELECT taxid, SUM(balance) AS totalBalance FROM Balances GROUP BY taxid");
+		for(int i=0; i<count; i++){
+			if(rs.next()){
+				interest[i][0] = rs.getInt("taxid");
+				interest[i][1] = (rs.getDouble("totalBalance") / nDays)*0.03;
+			}
+		}
+		
+		for(int i=0; i<count; i++){
+			rs = s.executeQuery("SELECT interest, balance FROM MarketAccounts WHERE taxid=" + interest[i][0]);
+			if(rs.next()){
+				interest[i][1] += rs.getInt("interest");
+				interest[i][2] = rs.getDouble("balance");
+			}
+		}
+		
+		// store interest in market account and add to balance
+		String sql = "UPDATE MarketAccounts SET interest=?, balance=? WHERE taxid=?";
+		PreparedStatement p = conn.prepareStatement(sql);
+		for (int i=0; i<count; i++){
+			p.setDouble(1, interest[i][1]);
+			p.setDouble(2, interest[i][2]);
+			p.setInt(3, (int) interest[i][0]);
+			p.executeUpdate();
+		}
 		
 		System.out.println("Interest added to all accounts");
 		conn.close();
