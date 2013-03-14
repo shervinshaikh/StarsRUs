@@ -630,7 +630,7 @@ public class DataConnection {
 		int nStocks = 0;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockAccounts WHERE taxid=" + taxid);
+		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM StockPurchases WHERE taxid=" + taxid);
 		if(rs.next()){
 			nStocks = rs.getInt(1);
 			System.out.println("Number of stock accounts: " + nStocks);
