@@ -426,7 +426,7 @@ public class DataConnection {
 		}
 		
 		// DEPOSIT money into Market Account
-		depositMoney(taxid, earnings-20);
+		depositMoney(taxid, (currentPrice*nshares)-20);
 		
 		// ADD COMMISSION
 		addCommission(taxid);
