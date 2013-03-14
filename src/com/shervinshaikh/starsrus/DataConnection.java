@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Calendar;
 
 
 public class DataConnection {
@@ -16,9 +17,7 @@ public class DataConnection {
 	static String strConn = "jdbc:oracle:thin:@uml.cs.ucsb.edu:1521:xe";
 	static String strUsername = "cs174a_shervinshaikh";
 	static String strPassword = "computer";
-	
-	
-	// TODO make sure to add commission at the right times
+
 	public static void main(String[] args) throws SQLException{
 		
 		// 1. Load the Oracle JDBC driver for this program
@@ -379,7 +378,7 @@ public class DataConnection {
 		System.out.println("Added to Stock Purchases");
 	}
 	
-	// TODO what if stock sell for less than $20 (commission) end sale?
+	// what if stock sell for less than $20 (commission) end sale?
 	public static double sellStocks(int taxid, int nshares, String symbol, double buyPrice) throws SQLException {
 		int marketID = 0, stockID = 0, currentShares = 0, newShares = 0;
 		double currentPrice = 0, earnings = 0;
@@ -1166,10 +1165,14 @@ public class DataConnection {
 		conn.close();
 	}
 	
-	// TODO each Market Account earns 3% interest on average daily balance
+	@SuppressWarnings("deprecation")
 	public static void addInterest() throws SQLException{
-		int nDays = 30;
-		//Date date = getTodaysDate2();
+		int nDays = 0;
+		Date date = getTodaysDate2();
+		Calendar cal = Calendar.getInstance();
+		cal.set(date.getYear(), date.getMonth(), date.getDate());
+		nDays = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+		System.out.println("Number of days in current month: " + nDays);
 		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
@@ -1210,7 +1213,6 @@ public class DataConnection {
 		conn.close();
 	}
 	
-	// TODO complete function
 	@SuppressWarnings("deprecation")
 	public static void recordBalances(Date ndate) throws SQLException {
 		// get todays date

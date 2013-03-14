@@ -10,7 +10,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.StringTokenizer;
-
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -29,13 +28,6 @@ import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
-// TODO
-//	1. add interest
-//	2. sell
-//		a. choose prices of different stocks, record commission
-// DOUBLE CHECK all operations work as stated in the project.pdf as well as think about ways to punch holes into the code
-// TODO
 
 
 public class CustomerPane extends JPanel {
