@@ -425,18 +425,25 @@ public class DataConnection {
 		p.executeUpdate();
 		
 		// DEPOSIT money into Market Account
-		depositMoney(taxid, (currentPrice*nshares)-20);
+		depositMoney(taxid, (currentPrice*nshares)); // removed subtracting commission
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, currentPrice, date, earnings);
-		
-		// ADD COMMISSION
-		addCommission(taxid);
 		
 		p.close();
 		rs.close();
 		conn.close();
 		return earnings; 
+	}
+	
+	// when selling multiple stocks of different prices run this function to add commission and remove it from the account
+	public static void completePurchase(int taxid){
+		try{
+			addCommission(taxid);
+			withdrawMoney(taxid, 20);  // removes commission from their balance
+		} catch(SQLException e){
+			System.out.println(e.getMessage());
+		}
 	}
 	
 	public static int removeStockPurchases(String symbol, double buyPrice, int shares, int taxid) throws SQLException {
@@ -1057,6 +1064,7 @@ public class DataConnection {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		s.executeQuery("DELETE FROM Transactions");
+		s.executeQuery("UPDATE MarketAccounts Set Commission = 0");
 		System.out.println("all transactions deleted");
 		conn.close();
 	}
