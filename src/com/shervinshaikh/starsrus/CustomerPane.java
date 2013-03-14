@@ -139,15 +139,19 @@ public class CustomerPane extends JPanel {
         list2.setVisibleRowCount(4);
         list2.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         JButton sells = new JButton("Sell");
+        JButton compTrans = new JButton("Complete Transaction");
         sells.addActionListener(new SellListener());
+        compTrans.addActionListener(new CompTransaction());
         sharesS.setBounds(105,50, 60, 20);
         selllabel.setBounds(50,50,55,20);
         symbolScroll2.setBounds(50,75,350,150);
         sells.setBounds(410,180,90,30);
+        compTrans.setBounds(410,220,180,30);
         panel4.add(selllabel);
         panel4.add(sharesS);
         panel4.add(symbolScroll2);
         panel4.add(sells);
+        panel4.add(compTrans);
         tabbedPane.addTab("Sell", panel4);
         tabbedPane.setMnemonicAt(3, KeyEvent.VK_4);
 
@@ -157,7 +161,7 @@ public class CustomerPane extends JPanel {
         panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
-        int nAccounts = 0;
+        int nAccounts = 2;
         try{ nAccounts = DataConnection.getNAccounts(taxid);
         } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}       
         balances = new Object[nAccounts][1];
@@ -394,6 +398,16 @@ public class CustomerPane extends JPanel {
     	
     	
     }
+    //TODO
+    class CompTransaction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent arg0){
+        	DataConnection.completePurchase(taxid);
+			
+            //do stuff here
+        }
+    }
+
     class reviewButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
@@ -455,7 +469,7 @@ public class CustomerPane extends JPanel {
 		public void actionPerformed(ActionEvent arg0){
 
 
-            int nAccounts = 0;
+            int nAccounts = 2;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
 	        
