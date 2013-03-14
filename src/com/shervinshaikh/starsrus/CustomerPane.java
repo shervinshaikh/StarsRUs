@@ -161,7 +161,7 @@ public class CustomerPane extends JPanel {
         panel5 = makeTextPanel("Panel #5");
         panel5.setPreferredSize(new Dimension(410, 50));
         panel5.setLayout(null);
-        int nAccounts = 0;
+        int nAccounts = 2;
         try{ nAccounts = DataConnection.getNAccounts(taxid);
         } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}       
         balances = new Object[nAccounts][1];
@@ -469,7 +469,7 @@ public class CustomerPane extends JPanel {
 		public void actionPerformed(ActionEvent arg0){
 
 
-            int nAccounts = 0;
+            int nAccounts = 2;
 	        try{ nAccounts = DataConnection.getNAccounts(taxid);
 	        } catch (SQLException e2){ System.out.println("ERROR getting number of Accounts");}
 	        

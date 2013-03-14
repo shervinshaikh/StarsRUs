@@ -809,7 +809,7 @@ public class DataConnection {
 	}
 	
 	public static Object[][] getBalances(int taxid) throws SQLException{
-		int nAccounts = 0;
+		int nAccounts = 2;
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 
