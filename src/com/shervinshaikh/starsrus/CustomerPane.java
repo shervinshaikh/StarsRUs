@@ -1,10 +1,32 @@
 package com.shervinshaikh.starsrus;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import java.util.StringTokenizer;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -352,8 +374,12 @@ public class CustomerPane extends JPanel {
     		double v = 0;
         	try{
         		int nshares = Integer.parseInt(sharesS.getText());
-        		String symbol = list2.getSelectedValue().toString().substring(0,3);
-        		double buyPrice = Double.parseDouble(list2.getSelectedValue().toString().substring(16,20));
+        		String str = (list2.getSelectedValue().toString().substring(16,25));
+        		StringTokenizer st = new StringTokenizer(str, ",");
+        		if(st.hasMoreElements()){
+        			str = (String) st.nextElement();
+        		}
+        		double buyPrice = Double.parseDouble(str);
         		System.out.println("symbol: " + symbol + ", buy price: " + buyPrice);
         		
         		System.out.println("#shares selling: " + nshares + " of " + symbol);

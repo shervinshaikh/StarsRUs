@@ -1169,7 +1169,7 @@ public class DataConnection {
 	// TODO each Market Account earns 3% interest on average daily balance
 	public static void addInterest() throws SQLException{
 		int nDays = 30;
-		Date date = getTodaysDate2();
+		//Date date = getTodaysDate2();
 		
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
