@@ -427,11 +427,11 @@ public class DataConnection {
 		// DEPOSIT money into Market Account
 		depositMoney(taxid, (currentPrice*nshares)-20);
 		
-		// ADD COMMISSION
-		addCommission(taxid);
-		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, currentPrice, date, earnings);
+		
+		// ADD COMMISSION
+		addCommission(taxid);
 		
 		p.close();
 		rs.close();
