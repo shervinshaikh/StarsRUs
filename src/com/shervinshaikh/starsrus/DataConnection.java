@@ -742,10 +742,10 @@ public class DataConnection {
 			movieInfo[1]= rs.getString(2);
 			movieInfo[2]= "" + rs.getInt(3);
 			movieInfo[3]= "" + rs.getDouble(4);
-			System.out.println("id:" + movieInfo[0]);
-			System.out.println("name:" + movieInfo[1]);
-			System.out.println("production year:" + movieInfo[2]);
-			System.out.println("ranking:" + movieInfo[3]);
+			//System.out.println("id:" + movieInfo[0]);
+			//System.out.println("name:" + movieInfo[1]);
+			//System.out.println("production year:" + movieInfo[2]);
+			//System.out.println("ranking:" + movieInfo[3]);
 		}
 
 		conn.close();
