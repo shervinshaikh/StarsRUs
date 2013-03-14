@@ -30,7 +30,7 @@ public class DataConnection {
 		
 		//addInterest();
 		
-		deleteBalances();
+		//deleteBalances();
 		
 		// 2. Test functions for each query
 		//print_all();
@@ -124,13 +124,7 @@ public class DataConnection {
 		System.out.println("about to create new market account");
 		stmt.executeUpdate(sql);
 		System.out.println("new market account created!");
-		
-			//String sql = "INSERT INTO Stock(symbol, currentprice, closeprice, sname, dob, mtitle, srole, syear, contract) " 
-		    //		  + "VALUES ('STC', 32.50, 32.50, 'Tom Cruise', '03-JUL-62', 'Jerry Maguire', 'Actor', 1996, 5000000)";
-
-		      //sql = "INSERT INTO Registration " + "VALUES (101, 'Mahnaz', 'Fatma', 25)";
-		      //stmt.executeUpdate(sql);
-		   
+		 
 		conn.close();
 		return true;
 	}
@@ -638,12 +632,7 @@ public class DataConnection {
 			nStocks = rs.getInt(1);
 			System.out.println("Number of stock accounts: " + nStocks);
 		}
-		
-//		String[] symbols = new String[nStocks];
-//		rs = s.executeQuery("SELECT symbol FROM StockAccounts WHERE taxid=" + taxid);
-//		for(int i=0; rs.next(); i++){
-//			symbols[i] = rs.getString();
-//		}
+
 		String[] stocks = new String[nStocks];
 		rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid=" + taxid);
 		for(int i=0; rs.next(); i++){
@@ -1006,20 +995,6 @@ public class DataConnection {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		Statement s2 = conn.createStatement();
-
-//		// get number of market accounts
-//		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM Customer WHERE ismanager = 0");
-//		if(rs.next()){
-//			numActiveCustomers = (rs.getInt(1));
-//			System.out.println("# of Active Customers: " + numActiveCustomers);
-//		}
-//		// place active customers (cname, taxid) into string array
-//		
-//		rs = s.executeQuery("SELECT cname FROM Customer WHERE ismanager = 0");
-//		for(int i=0; rs.next(); i++){
-//			activeCustomers[i] = rs.getString(1);
-//		}
-		
 		
 		ResultSet rs = s.executeQuery("SELECT COUNT(*) FROM( SELECT taxid, SUM(nshares) AS active FROM Transactions GROUP By taxid) WHERE active > 1000");
 		if(rs.next()){
@@ -1145,22 +1120,21 @@ public class DataConnection {
 			
 		}
 		
-		
 		rs.close();
 		conn.close();
 		return ms;
 	}
 	
-	// empty the Transactions & Balances table
+	// empty the Transactions table for a new month
 	public static void deleteTransactions() throws SQLException {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		s.executeQuery("DELETE FROM Transactions");
 		System.out.println("all transactions deleted");
 		conn.close();
-		//deleteBalances();
 	}
 	
+	// empty the balances table for a new month of interest calculations
 	public static void deleteBalances() throws SQLException {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s2 = conn.createStatement();
@@ -1208,7 +1182,7 @@ public class DataConnection {
 		PreparedStatement p = conn.prepareStatement(sql);
 		for (int i=0; i<count; i++){
 			p.setDouble(1, interest[i][1]);
-			p.setDouble(2, interest[i][2]);
+			p.setDouble(2, interest[i][2]+interest[i][1]);
 			p.setInt(3, (int) interest[i][0]);
 			p.executeUpdate();
 		}
@@ -1248,11 +1222,6 @@ public class DataConnection {
 		
 		// store taxid
 		String[][] customers = new String[nCustomers][2];
-//		rs = s.executeQuery("SELECT taxid FROM Customer WHERE ismanager = 0");
-//		for(int i=0; rs.next(); i++){
-//			customers[i][0] = rs.getString(1);
-//		}
-//		System.out.println("about to store balance");
 		
 		// store balance
 		rs = s.executeQuery("SELECT taxid, balance FROM MarketAccounts");
@@ -1268,11 +1237,6 @@ public class DataConnection {
 		PreparedStatement p;
 		String updateSuppSQL = "INSERT INTO Balances(taxid, balance, bdate) Values(?, ?, ?)";
 		p = conn.prepareStatement(updateSuppSQL);
-		//SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyy-MM-dd" );
-//		Calendar cal1 = Calendar.getInstance();
-//		cal1.setTime(date);
-//		Calendar cal2 = Calendar.getInstance();
-//		cal2.setTime(ndate);
 		System.out.println(date);
 		System.out.println(ndate);
 		
