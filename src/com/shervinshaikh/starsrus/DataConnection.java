@@ -28,7 +28,9 @@ public class DataConnection {
 		e.printStackTrace();
 		}
 		
-		addInterest();
+		//addInterest();
+		
+		deleteBalances();
 		
 		// 2. Test functions for each query
 		//print_all();
