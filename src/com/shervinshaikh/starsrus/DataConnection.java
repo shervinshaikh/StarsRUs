@@ -219,7 +219,7 @@ public class DataConnection {
 		if(rs.next()){
 			amount = rs.getInt(1);
 			System.out.println("current balance is: "+ amount + " value is at: " + value);
-			amount -= value;
+			amount = amount - value;
 			System.out.println("new balance is: " + amount);
 		}
 		
@@ -273,7 +273,7 @@ public class DataConnection {
 
 		System.out.println("withdrawing money from MarketAccount");
 		value += stockPrice*(Double.parseDouble("" + nshares));
-		double balance = withdrawMoney(taxid, value);
+		double balance = withdrawMoney(taxid, value+20);
 		if(balance == -1){
 			conn.close();
 			return balance;
@@ -401,15 +401,25 @@ public class DataConnection {
 			currentShares = rs.getInt("nshares");
 			stockID = rs.getInt("stockid");
 		}
+		// get the Market ID
+		rs = s.executeQuery("SELECT marketid FROM MarketAccounts WHERE taxid =" + taxid);
+		if(rs.next()){
+			marketID = rs.getInt(1);
+		}
 		
 		// if not enough shares in account, end the sell process
 		System.out.println("current shares:" + currentShares + ", selling shares: " + nshares);
 		newShares = currentShares-nshares;
-		if(newShares < 0){
+		
+		// update stockpurchases table
+		int possible = removeStockPurchases(symbol, buyPrice, nshares, taxid);
+		
+		if(newShares < 0 || possible == -1){
 			System.out.println("Cannot complete sell");
 			conn.close();
 			return -1;
 		}
+		
 		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?";
 		PreparedStatement p = conn.prepareStatement(sql);
 		p.setInt(1, newShares);
@@ -417,12 +427,6 @@ public class DataConnection {
 		p.setString(3,  symbol);
 		System.out.println("getting ready to execute update");
 		p.executeUpdate();
-		
-		// get the Market ID
-		rs = s.executeQuery("SELECT marketid FROM MarketAccounts WHERE taxid =" + taxid);
-		if(rs.next()){
-			marketID = rs.getInt(1);
-		}
 		
 		// DEPOSIT money into Market Account
 		depositMoney(taxid, (currentPrice*nshares)-20);
@@ -432,7 +436,7 @@ public class DataConnection {
 		
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, currentPrice, date, earnings);
-		removeStockPurchases(symbol, buyPrice, nshares, taxid);
+		
 		p.close();
 		rs.close();
 		conn.close();
@@ -466,10 +470,8 @@ public class DataConnection {
 		p.setString(3, symbol);
 		p.setDouble(4, buyPrice);
 		p.executeUpdate();
-		
-		p.close();
-		
-		
+
+		p.close();		
 		conn.close();
 		System.out.println("removed stock from stock purchases");
 		return shares;
