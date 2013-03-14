@@ -45,7 +45,7 @@ public class ManagerPane extends JPanel {
         p1 = new JPanel();
         p1.setLayout(null);
         JButton addInterest = new JButton("Add Interest");
-        addInterest.setBounds(0,20,120,20);
+        addInterest.setBounds(0,20,150,20);
         addInterest.addActionListener(new addInterestListener());
         p1.add(addInterest);
 
@@ -57,16 +57,16 @@ public class ManagerPane extends JPanel {
         customerPicker.setBounds(0,60,100,20);
         p1.add(customerPicker);
         JButton generateStatement = new JButton("Gen Monthly Statement");
-        generateStatement.setBounds(0,80,200,20);
+        generateStatement.setBounds(0,80,220,20);
         generateStatement.addActionListener(new genStatementListener());
         p1.add(generateStatement);
         selectedCustomer = customerPicker.getItemAt(0).toString();
         JButton listActiveCustomers = new JButton("List Active");
-        listActiveCustomers.setBounds(0,160,100,20);
+        listActiveCustomers.setBounds(0,160,200,20);
         listActiveCustomers.addActionListener(new listActiveListener());
         p1.add(listActiveCustomers);
         JButton genDTER = new JButton("Gen DTER");
-        genDTER.setBounds(0,200,100,20);
+        genDTER.setBounds(0,200,200,20);
         genDTER.addActionListener(new genDTERListener());
         p1.add(genDTER);
         JButton makeCustomerReport = new JButton("Gen customer report");

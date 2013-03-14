@@ -182,7 +182,7 @@ public class CustomerPane extends JPanel {
         labelUserId = new JLabel("User ID: " + taxid);
         labelMarketBal = new JLabel("Market Balance: " + balances[1][0]);
         labelUserId.setBounds(20,30, 150, 20);
-        labelMarketBal.setBounds(20,55,150,20);
+        labelMarketBal.setBounds(20,55,200,20);
         panel5.add(labelUserId);
         panel5.add(labelMarketBal);
         tabbedPane.addTab("Show Balance", panel5);
@@ -244,7 +244,7 @@ public class CustomerPane extends JPanel {
         movRanking.setBounds(0,40,150,20);
         JButton viewReviews = new JButton("Get Reviews");
         viewReviews.addActionListener(new reviewButtonListener());
-        viewReviews.setBounds(0, 260, 120, 20);
+        viewReviews.setBounds(0, 260, 150, 20);
         JButton viewTopMovies = new JButton("Top Movies");
         viewTopMovies.addActionListener(new topMovButtonListener());
         viewTopMovies.setBounds(0,300,120,20);
