@@ -374,6 +374,7 @@ public class CustomerPane extends JPanel {
     		double v = 0;
         	try{
         		int nshares = Integer.parseInt(sharesS.getText());
+        		String symbol = list2.getSelectedValue().toString().substring(0,3);
         		String str = (list2.getSelectedValue().toString().substring(16,25));
         		StringTokenizer st = new StringTokenizer(str, ",");
         		if(st.hasMoreElements()){
