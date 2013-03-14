@@ -231,7 +231,10 @@ public class CustomerPane extends JPanel {
         movieName = movieOptions[0];
         // movieInfo[4] = {id, name, prod year, ranking}
         try{ movieInfo = DataConnection.getMovieInfo(movieOptions[0]); }
-                catch (SQLException e){ System.out.println("Error getting movie info for " + movieOptions[0]);}
+                catch (SQLException e){ 
+                	System.out.println("Error getting movie info for " + movieOptions[0]);
+                	System.out.println(e.getMessage());
+                }
         JLabel movTitleLabel = new JLabel("Title:" );
         movTitleLabel.setBounds(0,0,50,20);
         movProdYear = new JLabel("Production year: " + movieInfo[2]);
