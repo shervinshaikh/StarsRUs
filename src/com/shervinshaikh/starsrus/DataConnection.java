@@ -887,79 +887,6 @@ public class DataConnection {
 		return data;
 	}
 
-
-	
-
-	// TEST, DEBUG, DEMO OPERATIONS
-	//
-	public static void openMarket() throws SQLException {
-		System.out.println("About to connect");
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		System.out.println("connected and now creating statement");
-		Statement s = conn.createStatement();
-		System.out.println("about to execute update");
-		s.executeUpdate("UPDATE Operations SET isOpen = 1");
-		System.out.println("Market Opened!");
-		s.close();
-		conn.close();
-	}
-
-	public static void closeMarket() throws SQLException {
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		PreparedStatement p = conn.prepareStatement("UPDATE operations SET isOpen = 0");
-		p.executeUpdate();
-		System.out.println("Market Closed!");
-		conn.close();
-	}
-	
-	public static void setDate(java.util.Date date) throws SQLException {
-		
-		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
-		// record the balances for all market accounts from cDate in operations until day before the given date
-		recordBalances(sqlDate);
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
-		p.setDate(1, sqlDate);
-		p.executeUpdate();
-		System.out.println("Date updated to " + date);
-		conn.close();
-	}
-
-	public static void setStockPrice(String symbol, Double price) throws SQLException {
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		Statement p = conn.createStatement();
-		String cprice = "";
-		if(isMarketOpen()) { cprice = ", closePrice = " + price; }
-		String sql = "UPDATE Stock SET currentPrice = " + price + cprice + " WHERE Symbol = '" + symbol + "'";
-		//sql = "UPDATE Stock SET currentPrice = 5 WHERE Symbol = 'SKB'";
-		System.out.println("changing stock price");
-		System.out.println("about to execute update");
-		p.executeUpdate(sql);
-		System.out.println("New " + symbol + ": $" + price);
-		conn.close();
-	}
-
-
-	public static boolean isMarketOpen() throws SQLException {
-		boolean isOpen = true;
-		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
-		Statement s = conn.createStatement();
-		ResultSet rs = s.executeQuery("SELECT isOpen FROM Operations");
-		if(rs.next()){
-			if(rs.getInt(1) == 1){
-				conn.close();
-				return true;
-			}
-			else {
-				conn.close();
-				return false;
-			}
-		}
-		s.close();
-		rs.close();
-		conn.close();
-		return isOpen;
-	}
 	
 	
 	// MANAGER INTERFACE
@@ -1256,5 +1183,76 @@ public class DataConnection {
 
 		System.out.println("All Balances recorded for today");
 		conn.close();
+	}
+	
+	
+	// TEST, DEBUG, DEMO OPERATIONS
+	//
+	public static void openMarket() throws SQLException {
+		System.out.println("About to connect");
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		System.out.println("connected and now creating statement");
+		Statement s = conn.createStatement();
+		System.out.println("about to execute update");
+		s.executeUpdate("UPDATE Operations SET isOpen = 1");
+		System.out.println("Market Opened!");
+		s.close();
+		conn.close();
+	}
+
+	public static void closeMarket() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		PreparedStatement p = conn.prepareStatement("UPDATE operations SET isOpen = 0");
+		p.executeUpdate();
+		System.out.println("Market Closed!");
+		conn.close();
+	}
+	
+	public static void setDate(java.util.Date date) throws SQLException {
+		
+		java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+		// record the balances for all market accounts from cDate in operations until day before the given date
+		recordBalances(sqlDate);
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		PreparedStatement p = conn.prepareStatement("UPDATE operations SET cDate = ?");
+		p.setDate(1, sqlDate);
+		p.executeUpdate();
+		System.out.println("Date updated to " + date);
+		conn.close();
+	}
+
+	public static void setStockPrice(String symbol, Double price) throws SQLException {
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement p = conn.createStatement();
+		String cprice = "";
+		if(isMarketOpen()) { cprice = ", closePrice = " + price; }
+		String sql = "UPDATE Stock SET currentPrice = " + price + cprice + " WHERE Symbol = '" + symbol + "'";
+		//sql = "UPDATE Stock SET currentPrice = 5 WHERE Symbol = 'SKB'";
+		System.out.println("changing stock price");
+		System.out.println("about to execute update");
+		p.executeUpdate(sql);
+		System.out.println("New " + symbol + ": $" + price);
+		conn.close();
+	}
+
+	public static boolean isMarketOpen() throws SQLException {
+		boolean isOpen = true;
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		ResultSet rs = s.executeQuery("SELECT isOpen FROM Operations");
+		if(rs.next()){
+			if(rs.getInt(1) == 1){
+				conn.close();
+				return true;
+			}
+			else {
+				conn.close();
+				return false;
+			}
+		}
+		s.close();
+		rs.close();
+		conn.close();
+		return isOpen;
 	}
 }
