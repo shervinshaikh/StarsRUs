@@ -30,7 +30,7 @@ public class DataConnection {
 		
 		//addInterest();
 		
-		//deleteBalances();
+		//deleteTransactions();
 		
 		// 2. Test functions for each query
 		//print_all();
@@ -1064,8 +1064,15 @@ public class DataConnection {
 		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
 		Statement s = conn.createStatement();
 		s.executeQuery("DELETE FROM Transactions");
-		s.executeQuery("UPDATE MarketAccounts Set Commission = 0");
 		System.out.println("all transactions deleted");
+		conn.close();
+	}
+	
+	public static void deleteCommission() throws SQLException {
+		conn = DriverManager.getConnection(strConn, strUsername, strPassword);
+		Statement s = conn.createStatement();
+		s.executeQuery("UPDATE MarketAccounts Set Commission = 0");
+		System.out.println("all commission values deleted");
 		conn.close();
 	}
 	

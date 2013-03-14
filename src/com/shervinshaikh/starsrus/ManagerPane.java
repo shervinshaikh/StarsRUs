@@ -201,6 +201,7 @@ public class ManagerPane extends JPanel {
         	try { 
         		DataConnection.deleteTransactions(); 
         		DataConnection.deleteBalances();
+        		DataConnection.deleteCommission();
         	} catch(SQLException e) { System.out.println(e.getMessage()); }
             JOptionPane.showMessageDialog(null,"All Transactions Deleted!");
         }

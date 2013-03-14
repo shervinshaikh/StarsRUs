@@ -402,7 +402,7 @@ public class CustomerPane extends JPanel {
     class CompTransaction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent arg0){
-           
+        	DataConnection.completePurchase(taxid);
 			
             //do stuff here
         }
