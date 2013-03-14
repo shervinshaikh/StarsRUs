@@ -387,7 +387,7 @@ public class CustomerPane extends JPanel {
         	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks"); }
         	
         	if(v == -1){
-        		JOptionPane.showMessageDialog(null, "Not enough stocks to complete purchase");
+        		JOptionPane.showMessageDialog(null, "Not enough stocks to complete sell");
         	}
         	else if(v == -2){
         		JOptionPane.showMessageDialog(null, "Market is closed, cannot sell stocks");
