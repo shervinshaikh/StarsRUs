@@ -229,7 +229,7 @@ public class DataConnection {
 		
 		ResultSet rs = stmt.executeQuery("SELECT balance FROM MarketAccounts WHERE taxID=" + taxid);
 		if(rs.next()){
-			amount = rs.getInt(1);
+			amount = rs.getDouble(1);
 			System.out.println("current balance is: "+ amount + " value is at: " + value);
 			amount = amount - value;
 			System.out.println("new balance is: " + amount);
@@ -342,7 +342,6 @@ public class DataConnection {
 		return balance;
 	}
 	
-	// TODO
 	public static int updateStockAccount(int nshares, int taxid, String symbol, int newStockID, int oldshares) throws SQLException {
 		int stockID = -1;
 		// UPDATE StockAccounts with new nshares values
