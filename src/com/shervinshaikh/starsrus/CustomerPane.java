@@ -346,7 +346,7 @@ public class CustomerPane extends JPanel {
         	double v = 0;
         	try{ 
         		v = DataConnection.buyStocks(taxid, Integer.parseInt(sharesB.getText()), list.getSelectedValue().toString());
-        	} catch (SQLException e) { System.out.println("ERROR unable to buy stocks"); }
+        	} catch (SQLException e) { System.out.println("ERROR unable to buy stocks"); System.out.println(e.getMessage());}
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough funds to complete purchase");
         	}

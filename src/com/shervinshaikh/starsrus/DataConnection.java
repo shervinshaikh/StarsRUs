@@ -88,6 +88,10 @@ public class DataConnection {
 		//addStockPurchase("SKB", 30.0, 5, 1022);
 		
 		//removeStockPurchases("SKB", 30.0, 3, 1022);
+		
+		updateStockAccount(30, 1022, "SKB", 1, 23);
+		
+		//addStockPurchase("SKB", 71, 175, 1022);
 	}
 	
 	public static int getTaxID(String username) throws SQLException {
@@ -98,6 +102,8 @@ public class DataConnection {
 		if(rs.next()){
 			taxid = rs.getInt(1);
 		}
+		rs.close();
+		s.close();
 		conn.close();
 		return taxid;
 	}
@@ -124,7 +130,8 @@ public class DataConnection {
 		System.out.println("about to create new market account");
 		stmt.executeUpdate(sql);
 		System.out.println("new market account created!");
-		 
+		rs.close();
+		stmt.close();
 		conn.close();
 		return true;
 	}
@@ -140,6 +147,9 @@ public class DataConnection {
 		String sql = "INSERT INTO MarketAccounts(marketid, taxid, interest, balance, commission)" + 
 				"VALUES("+ marketid + ", "+ taxid + ", 0, 1000, 0)"; // $1,00 for first time market accounts
 		s.executeUpdate(sql);
+		
+		rs.close();
+		s.close();
 		conn.close();
 	}
 	
@@ -155,16 +165,21 @@ public class DataConnection {
 			int v = rs.getInt("ismanager");
 			if(v == 1){
 				//System.out.println("login successful!");
+				rs.close();
+				stmt.close();
 				conn.close();
 				return 2;
 			}
 			else if(v == 0){
+				rs.close();
+				stmt.close();
 				conn.close();
 				return 1;
 			}
 		}
 		
 		rs.close();
+		stmt.close();
 		conn.close();
 		return 0;
 	}
@@ -182,6 +197,7 @@ public class DataConnection {
 			amount += dep;
 		}
 		rs.close();
+		stmt.close();
 		
 		System.out.println("new balance after deposit: " + amount);
 		
@@ -224,6 +240,8 @@ public class DataConnection {
 			conn.close();
 			return -1;
 		}
+		stmt.close();
+		rs.close();
 
 		PreparedStatement pstmt;
 		String updateSuppSQL = "UPDATE MarketAccounts SET balance = ? WHERE taxID = ?";
@@ -236,7 +254,6 @@ public class DataConnection {
 		pstmt.executeUpdate();
 		System.out.println("Account now at:" + amount);
 
-		rs.close();
 		pstmt.close();
 		conn.close();
 		
@@ -252,7 +269,6 @@ public class DataConnection {
 		
 		if(!isMarketOpen()){
 			System.out.println("Market is closed, cannot buy or sell");
-			conn.close();
 			return -2;
 		}
 		
@@ -271,6 +287,8 @@ public class DataConnection {
 		value += stockPrice*(Double.parseDouble("" + nshares));
 		double balance = withdrawMoney(taxid, value+20);
 		if(balance == -1){
+			stmt.close();
+			rs.close();
 			conn.close();
 			return balance;
 		}
@@ -298,40 +316,25 @@ public class DataConnection {
 		// Add Commission to MarketAccount
 		addCommission(taxid);
 		
-		// UPDATE StockAccounts with new nshares values
-		PreparedStatement pstmt;
-		String updateSuppSQL;
-		if(oldshares >= 0){ 
-			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = ?";
-			System.out.println("updating current StockAccount");
+		// get new stock id if needed
+		int newStockID = 0;
+		rs = stmt.executeQuery("SELECT MAX(stockID) FROM StockAccounts");
+		if(rs.next()){
+			newStockID = rs.getInt(1) + 1;
+			System.out.println("new stock id = " + newStockID);
 		}
-		else {
-			int newStockID = 1;
-			rs = stmt.executeQuery("SELECT MAX(stockID) FROM StockAccounts");
-			if(rs.next()){
-				newStockID = rs.getInt(1) + 1;
-				System.out.println("new stock id = " + newStockID);
-			}
-			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, ?, " + newStockID + ")";
-			System.out.println("Creating new stock account");
-			stockID = newStockID;
+		
+		// update stock account
+		int stck = updateStockAccount(nshares, taxid, symbol, newStockID, oldshares);
+		if(stck != -1){
+			stockID = stck;
 		}
-		// up
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		pstmt = conn.prepareStatement(updateSuppSQL);
-		// set values in statement
-		pstmt.setInt(1, nshares);
-		pstmt.setInt(2, taxid);
-		pstmt.setString(3, symbol);
-		// Execute update
-		pstmt.executeUpdate();
 
 		// get current date
 		date = getTodaysDate();
 		
 		rs.close();
 		stmt.close();
-		pstmt.close();
 		conn.close();
 		
 		recordTransaction(marketID, stockID, taxid, "buy", symbol, pshares, stockPrice, date, 0.0);
@@ -339,18 +342,43 @@ public class DataConnection {
 		return balance;
 	}
 	
-	public static void addStockPurchase(String symbol, double price, int shares, int taxid) throws SQLException {
+	// TODO
+	public static int updateStockAccount(int nshares, int taxid, String symbol, int newStockID, int oldshares) throws SQLException {
+		int stockID = -1;
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
-		Statement s = conn.createStatement();
-		int oldshares = -1;
-		
-		ResultSet rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid =" + taxid + "AND symbol = '" + symbol + "' AND price=" + price);
-		if(rs.next()){
-			oldshares = rs.getInt("nshares");
-			shares += oldshares;
+		// UPDATE StockAccounts with new nshares values
+		String updateSuppSQL;
+		if(oldshares >= 0){ 
+			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = ?";
+			System.out.println("updating current StockAccount");
 		}
+		else {
+			//int newStockID = 1;
+			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, ?, " + newStockID + ")";
+			System.out.println("Creating new stock account");
+			stockID = newStockID;
+		}
+		// up
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		System.out.println("connected");
+		PreparedStatement pstmt = conn.prepareStatement(updateSuppSQL);
+		// set values in statement
+		pstmt.setInt(1, nshares);
+		pstmt.setInt(2, taxid);
+		pstmt.setString(3, symbol);
+		System.out.println("about to execute");
+		// Execute update
+		pstmt.executeUpdate();
+		System.out.println("query executed");
+		pstmt.close();
+		conn.close();
+		return stockID;
+	}
+	
+	public static void addStockPurchase(String symbol, double price, int shares, int taxid) throws SQLException {
+		int oldshares = getNShares(taxid, symbol, price);
+		shares += oldshares;
 		
-		PreparedStatement p;
 		String updateSuppSQL = "";
 		if(oldshares >= 0){ 
 			updateSuppSQL = "UPDATE StockPurchases SET nshares = ? WHERE taxID = ? AND symbol = ? AND price = ?";
@@ -360,8 +388,8 @@ public class DataConnection {
 			updateSuppSQL = "INSERT INTO StockPurchases(nshares, taxid, symbol, price) VALUES (?, ?, ?, ?)";
 			System.out.println("Creating new stock purchase");
 		}
-		
-		p = conn.prepareStatement(updateSuppSQL);
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		PreparedStatement p = conn.prepareStatement(updateSuppSQL);
 		p.setInt(1, shares);
 		p.setInt(2, taxid);
 		p.setString(3, symbol);
@@ -370,8 +398,22 @@ public class DataConnection {
 		
 		p.close();
 		conn.close();
-		
 		System.out.println("Added to Stock Purchases");
+	}
+	
+	public static int getNShares(int taxid, String symbol, double price) throws SQLException {
+		int shares = 0;
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		Statement s = conn.createStatement();
+		
+		ResultSet rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid =" + taxid + "AND symbol = '" + symbol + "' AND price=" + price);
+		if(rs.next()){
+			shares = rs.getInt("nshares");
+		}
+		
+		s.close();
+		conn.close();
+		return shares;
 	}
 	
 	// what if stock sell for less than $20 (commission) end sale?
@@ -445,6 +487,7 @@ public class DataConnection {
 		
 		p.close();
 		conn.close();
+		return;
 	}
 	
 	// when selling multiple stocks of different prices run this function to add commission and remove it from the account
