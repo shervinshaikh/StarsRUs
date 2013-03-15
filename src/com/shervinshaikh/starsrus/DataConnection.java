@@ -345,15 +345,13 @@ public class DataConnection {
 	// TODO
 	public static int updateStockAccount(int nshares, int taxid, String symbol, int newStockID, int oldshares) throws SQLException {
 		int stockID = -1;
-		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		// UPDATE StockAccounts with new nshares values
-		String updateSuppSQL;
+		String updateSuppSQL = "";
 		if(oldshares >= 0){ 
 			updateSuppSQL = "UPDATE StockAccounts SET nshares = ? WHERE taxID = ? AND symbol = ?";
 			System.out.println("updating current StockAccount");
 		}
 		else {
-			//int newStockID = 1;
 			updateSuppSQL = "INSERT INTO StockAccounts (nshares, taxID, symbol, stockID) VALUES (?, ?, ?, " + newStockID + ")";
 			System.out.println("Creating new stock account");
 			stockID = newStockID;
@@ -361,16 +359,16 @@ public class DataConnection {
 		// up
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		System.out.println("connected");
-		PreparedStatement pstmt = conn.prepareStatement(updateSuppSQL);
+		PreparedStatement p = conn.prepareStatement(updateSuppSQL);
 		// set values in statement
-		pstmt.setInt(1, nshares);
-		pstmt.setInt(2, taxid);
-		pstmt.setString(3, symbol);
+		p.setInt(1, nshares);
+		p.setInt(2, taxid);
+		p.setString(3, symbol);
 		System.out.println("about to execute");
 		// Execute update
-		pstmt.executeUpdate();
+		p.executeUpdate();
 		System.out.println("query executed");
-		pstmt.close();
+		p.close();
 		conn.close();
 		return stockID;
 	}
