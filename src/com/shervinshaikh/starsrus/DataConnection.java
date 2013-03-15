@@ -375,7 +375,10 @@ public class DataConnection {
 	
 	public static void addStockPurchase(String symbol, double price, int shares, int taxid) throws SQLException {
 		int oldshares = getNShares(taxid, symbol, price);
-		shares += oldshares;
+		System.out.println("old shares: " + oldshares);
+		if(oldshares != -1){
+			shares += oldshares;
+		}
 		
 		String updateSuppSQL = "";
 		if(oldshares >= 0){ 
