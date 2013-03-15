@@ -285,7 +285,7 @@ public class DataConnection {
 
 		System.out.println("withdrawing money from MarketAccount");
 		value += stockPrice*(Double.parseDouble("" + nshares));
-		double balance = withdrawMoney(taxid, value+20);
+		double balance = withdrawMoney(taxid, value);
 		if(balance == -1){
 			stmt.close();
 			rs.close();
