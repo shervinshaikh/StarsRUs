@@ -415,14 +415,20 @@ public class DataConnection {
 			conn.close();
 			return -1;
 		}
+		System.out.println("about to update stock accounts table");
 		
-		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?";
-		PreparedStatement p = conn.prepareStatement(sql);
-		p.setInt(1, newShares);
-		p.setInt(2,  taxid);
-		p.setString(3,  symbol);
-		System.out.println("getting ready to execute update");
-		p.executeUpdate();
+//		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?" ;
+//		System.out.println("string created");
+//		PreparedStatement p = conn.prepareStatement(sql);
+//		System.out.println("statement prepared");
+//		p.setInt(1, newShares);
+//		p.setInt(2,  taxid);
+//		p.setString(3,  symbol);
+//		System.out.println("getting ready to execute update");
+//		p.executeUpdate();
+		
+		// UPDATE Stock Accounts table
+		updateStockAccounts(newShares, taxid, symbol);
 		
 		// DEPOSIT money into Market Account
 		depositMoney(taxid, (currentPrice*nshares)-20);
@@ -433,10 +439,27 @@ public class DataConnection {
 		// ADD COMMISSION
 		addCommission(taxid);
 		
-		p.close();
+		//p.close();
 		rs.close();
 		conn.close();
 		return earnings; 
+	}
+	
+	public static void updateStockAccounts(int shares, int taxid, String symbol) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		
+		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?" ;
+		System.out.println("string created");
+		PreparedStatement p = conn.prepareStatement(sql);
+		System.out.println("statement prepared");
+		p.setInt(1, shares);
+		p.setInt(2,  taxid);
+		p.setString(3,  symbol);
+		System.out.println("getting ready to execute update");
+		p.executeUpdate();
+		
+		p.close();
+		conn.close();
 	}
 	
 	public static int removeStockPurchases(String symbol, double buyPrice, int shares, int taxid) throws SQLException {

@@ -377,7 +377,8 @@ public class CustomerPane extends JPanel {
         		
         		System.out.println("#shares selling: " + nshares + " of " + symbol);
         		v = DataConnection.sellStocks(taxid, nshares, symbol, buyPrice);
-        	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks"); }
+        	} catch (SQLException e) { System.out.println("ERROR unable to sell stocks");
+        		System.out.println(e.getMessage());}
         	
         	if(v == -1){
         		JOptionPane.showMessageDialog(null, "Not enough stocks to complete purchase");
