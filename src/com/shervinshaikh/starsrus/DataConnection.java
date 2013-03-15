@@ -416,13 +416,8 @@ public class DataConnection {
 			return -1;
 		}
 		
-		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?";
-		PreparedStatement p = conn.prepareStatement(sql);
-		p.setInt(1, newShares);
-		p.setInt(2,  taxid);
-		p.setString(3,  symbol);
-		System.out.println("getting ready to execute update");
-		p.executeUpdate();
+		// update stock account outside in another function
+		updateStockAccounts(newShares, taxid, symbol);
 		
 		// DEPOSIT money into Market Account
 		depositMoney(taxid, (currentPrice*nshares)); // removed subtracting commission
@@ -430,10 +425,26 @@ public class DataConnection {
 		// RECORD Transaction
 		recordTransaction(marketID, stockID, taxid, "sell", symbol, nshares, currentPrice, date, earnings);
 		
-		p.close();
 		rs.close();
 		conn.close();
 		return earnings; 
+	}
+
+	public static void updateStockAccounts(int shares, int taxid, String symbol) throws SQLException{
+		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
+		
+		String sql = "UPDATE StockAccounts SET nshares = ? WHERE taxid = ? AND symbol = ?" ;
+		System.out.println("string created");
+		PreparedStatement p = conn.prepareStatement(sql);
+		System.out.println("statement prepared");
+		p.setInt(1, shares);
+		p.setInt(2,  taxid);
+		p.setString(3,  symbol);
+		System.out.println("getting ready to execute update");
+		p.executeUpdate();
+		
+		p.close();
+		conn.close();
 	}
 	
 	// when selling multiple stocks of different prices run this function to add commission and remove it from the account
