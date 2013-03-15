@@ -89,9 +89,9 @@ public class DataConnection {
 		
 		//removeStockPurchases("SKB", 30.0, 3, 1022);
 		
-		updateStockAccount(30, 1022, "SKB", 1, 23);
+		//updateStockAccount(30, 1022, "SKB", 1, 23);
 		
-		//addStockPurchase("SKB", 71, 175, 1022);
+		//addStockPurchase("STC", 32.5, 20, 1022);
 	}
 	
 	public static int getTaxID(String username) throws SQLException {
@@ -279,7 +279,7 @@ public class DataConnection {
 		//
 		ResultSet rs = stmt.executeQuery("SELECT * FROM Stock WHERE symbol='" + symbol + "' ");
 		if(rs.next()){
-			stockPrice = rs.getInt("currentprice");
+			stockPrice = rs.getDouble("currentprice");
 			System.out.println("stock Price = " + stockPrice);
 		}
 
@@ -400,13 +400,14 @@ public class DataConnection {
 	}
 	
 	public static int getNShares(int taxid, String symbol, double price) throws SQLException {
-		int shares = 0;
+		int shares = -1;
 		conn = DriverManager.getConnection(strConn,strUsername,strPassword);
 		Statement s = conn.createStatement();
 		
 		ResultSet rs = s.executeQuery("SELECT * FROM StockPurchases WHERE taxid =" + taxid + "AND symbol = '" + symbol + "' AND price=" + price);
 		if(rs.next()){
 			shares = rs.getInt("nshares");
+			System.out.println("number of " + symbol + ":" + shares);
 		}
 		
 		s.close();
@@ -552,6 +553,7 @@ public class DataConnection {
 
 		pstmt2.close();
 		conn.close();
+		System.out.println("transaction recorded!");
 	}
 	
 	public static int getNumTrans2(String name) throws SQLException {
